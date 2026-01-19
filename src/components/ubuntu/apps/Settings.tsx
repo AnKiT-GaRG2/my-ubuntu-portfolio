@@ -114,7 +114,7 @@ export function Settings() {
   return (
     <div className="h-full flex bg-ubuntu-window">
       {/* Sidebar */}
-      <div className="w-64 bg-muted/10 border-r border-border p-2 space-y-1">
+      <div className="w-64 bg-muted/10 border-r border-border p-2 space-y-1 overflow-y-auto">
         {settingsCategories.map((item) => (
           <button
             key={item.id}
