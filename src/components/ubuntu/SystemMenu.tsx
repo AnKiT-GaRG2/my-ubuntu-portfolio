@@ -3,9 +3,10 @@ import { useState } from 'react';
 
 interface SystemMenuProps {
   onClose: () => void;
+  onLock?: () => void;
 }
 
-export function SystemMenu({ onClose }: SystemMenuProps) {
+export function SystemMenu({ onClose, onLock }: SystemMenuProps) {
   const [volumeLevel, setVolumeLevel] = useState(75);
   const [brightnessLevel, setBrightnessLevel] = useState(80);
 
@@ -90,7 +91,7 @@ export function SystemMenu({ onClose }: SystemMenuProps) {
             label="Lock"
             onClick={() => {
               console.log('Lock Screen');
-              onClose();
+              onLock?.();
             }}
           />
           <MenuItem 

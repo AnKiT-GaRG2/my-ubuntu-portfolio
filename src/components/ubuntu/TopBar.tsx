@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { Wifi, Volume2, Battery, ChevronDown } from 'lucide-react';
 import { SystemMenu } from './SystemMenu';
 
-export function TopBar() {
+interface TopBarProps {
+  onLock?: () => void;
+}
+
+export function TopBar({ onLock }: TopBarProps) {
   const [time, setTime] = useState(new Date());
   const [showSystemMenu, setShowSystemMenu] = useState(false);
 
@@ -55,7 +59,16 @@ export function TopBar() {
       </div>
 
       {/* System Menu */}
-      {showSystemMenu && <SystemMenu onClose={() => setShowSystemMenu(false)} />}
+      {showSystemMenu && (
+        <SystemMenu 
+          onClose={() => setShowSystemMenu(false)} 
+          onLock={() => {
+            console.log('TopBar onLock called');
+            setShowSystemMenu(false);
+            onLock?.();
+          }}
+        />
+      )}
     </>
   );
 }

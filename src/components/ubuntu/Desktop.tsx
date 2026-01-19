@@ -10,7 +10,9 @@ import { Files } from './apps/Files';
 import { Settings } from './apps/Settings';
 import { Calculator } from './apps/Calculator';
 import { ContactMe } from './apps/ContactMe';
+import { LockScreen } from './LockScreen';
 import { useWindowManager } from '@/hooks/useWindowManager';
+import { useState, useEffect } from 'react';
 
 const desktopApps = [
   { id: 'about', icon: '/icons/AboutMe.jpg', name: 'About Me', position: { row: 0, col: 0 }, type: 'image' },
@@ -24,6 +26,8 @@ const desktopApps = [
 ];
 
 export function Desktop() {
+  const [isLocked, setIsLocked] = useState(false);
+  
   const {
     windows,
     openWindow,
@@ -34,12 +38,26 @@ export function Desktop() {
     updateWindowPosition,
   } = useWindowManager();
 
+  useEffect(() => {
+    console.log('isLocked state changed:', isLocked);
+  }, [isLocked]);
+
   const handleIconDoubleClick = (app: typeof desktopApps[0]) => {
     if (app.isExternal && app.externalUrl) {
       window.open(app.externalUrl, '_blank', 'noopener,noreferrer');
     } else {
       openWindow(app.id);
     }
+  };
+
+  const handleLockScreen = () => {
+    console.log('handleLockScreen called');
+    setIsLocked(true);
+  };
+
+  const handleUnlock = () => {
+    console.log('handleUnlock called');
+    setIsLocked(false);
   };
 
   const renderWindowContent = (id: string) => {
@@ -75,7 +93,7 @@ export function Desktop() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <TopBar />
+      <TopBar onLock={handleLockScreen} />
 
       {/* Desktop Icons */}
       <div className="absolute inset-0 pt-8 pb-20">
@@ -108,6 +126,9 @@ export function Desktop() {
       ))}
 
       <Dock openWindows={windows} onOpenApp={openWindow} />
+      
+      {/* Lock Screen */}
+      {isLocked && <LockScreen onUnlock={handleUnlock} />}
     </div>
   );
 }

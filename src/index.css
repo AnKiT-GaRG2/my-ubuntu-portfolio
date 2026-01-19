@@ -124,6 +124,33 @@
   animation: windowClose 0.15s ease-in forwards;
 }
 
+/* Lock Screen Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s ease-in forwards;
+}
+
 /* Dock hover effect */
 .dock-icon {
   transition: transform 0.2s ease;
