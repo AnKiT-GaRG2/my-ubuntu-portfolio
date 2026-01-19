@@ -44,6 +44,12 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     position: { x: 300, y: 150 },
     size: { width: 300, height: 450 },
   },
+  contact: {
+    title: 'Contact Me',
+    icon: '✉️',
+    position: { x: 280, y: 110 },
+    size: { width: 650, height: 600 },
+  },
 };
 
 export function useWindowManager() {
