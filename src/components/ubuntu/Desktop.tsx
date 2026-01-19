@@ -17,7 +17,8 @@ const desktopApps = [
   { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', position: { row: 2, col: 0 }, type: 'image' },
   { id: 'vscode', icon: '/icons/Visual_Studio_Code_icon.jpg', name: 'VS Code', position: { row: 3, col: 0 }, type: 'image' },
   { id: 'chrome', icon: '/icons/Google_Chrome_icon.jpg', name: 'Chrome', position: { row: 4, col: 0 }, type: 'image' },
-  { id: 'settings', icon: '/icons/settings.webp', name: 'Settings', position: { row: 0, col: 1 }, type: 'image' },
+  { id: 'settings', icon: '/icons/settings.jpg', name: 'Settings', position: { row: 0, col: 1 }, type: 'image' },
+  { id: 'github', icon: '/icons/github.jpg', name: 'GitHub', position: { row: 1, col: 1 }, type: 'image', isExternal: true, externalUrl: 'https://github.com/AnKiT-GaRG2' },
 ];
 
 export function Desktop() {
@@ -30,6 +31,14 @@ export function Desktop() {
     focusWindow,
     updateWindowPosition,
   } = useWindowManager();
+
+  const handleIconDoubleClick = (app: typeof desktopApps[0]) => {
+    if (app.isExternal && app.externalUrl) {
+      window.open(app.externalUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      openWindow(app.id);
+    }
+  };
 
   const renderWindowContent = (id: string) => {
     switch (id) {
@@ -74,7 +83,7 @@ export function Desktop() {
             name={app.name}
             position={app.position}
             type={app.type as 'emoji' | 'image'}
-            onDoubleClick={() => openWindow(app.id)}
+            onDoubleClick={() => handleIconDoubleClick(app)}
           />
         ))}
       </div>

@@ -14,7 +14,7 @@ const dockApps = [
   { id: 'vscode', icon: '/icons/Visual_Studio_Code_icon.jpg', name: 'VS Code', type: 'image' },
   { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', type: 'image' },
   { id: 'calculator', icon: '/icons/Calculator.jpg', name: 'Calculator', type: 'image' },
-  { id: 'settings', icon: '/icons/settings.webp', name: 'Settings', type: 'image' },
+  { id: 'settings', icon: '/icons/settings.jpg', name: 'Settings', type: 'image' },
 ];
 
 export function Dock({ openWindows, onOpenApp }: DockProps) {

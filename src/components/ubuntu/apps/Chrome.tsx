@@ -1,204 +1,118 @@
-import { useState } from 'react';
-import { ArrowLeft, ArrowRight, RotateCw, Home, Star, MoreVertical, Plus, X } from 'lucide-react';
+import React, { Component } from 'react';
+import { RotateCw, Home } from 'lucide-react';
 
-interface Tab {
-  id: string;
-  title: string;
-  url: string;
+interface ChromeState {
+    url: string;
+    display_url: string;
 }
 
-export function Chrome() {
-  const [tabs, setTabs] = useState<Tab[]>([
-    { id: '1', title: 'GitHub - Portfolio', url: 'https://github.com/username' },
-  ]);
-  const [activeTab, setActiveTab] = useState('1');
-  const [inputUrl, setInputUrl] = useState('https://github.com/username');
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export class Chrome extends Component<{}, ChromeState> {
+    private home_url: string;
 
-  const activeTabData = tabs.find((t) => t.id === activeTab);
-
-  const addTab = () => {
-    const newTab = {
-      id: Date.now().toString(),
-      title: 'New Tab',
-      url: 'about:blank',
-    };
-    setTabs([...tabs, newTab]);
-    setActiveTab(newTab.id);
-    setInputUrl('');
-  };
-
-  const closeTab = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const newTabs = tabs.filter((t) => t.id !== id);
-    if (newTabs.length === 0) {
-      addTab();
-      return;
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    constructor(props: {}) {
+        super(props);
+        this.home_url = 'https://www.google.com/webhp?igu=1';
+        this.state = {
+            url: 'https://www.google.com/webhp?igu=1',
+            display_url: "https://www.google.com",
+        }
     }
-    setTabs(newTabs);
-    if (activeTab === id) {
-      setActiveTab(newTabs[newTabs.length - 1].id);
+
+    componentDidMount() {
+        const lastVisitedUrl = localStorage.getItem("chrome-url");
+        const lastDisplayedUrl = localStorage.getItem("chrome-display-url");
+        if (lastVisitedUrl !== null && lastVisitedUrl !== undefined) {
+            this.setState({ url: lastVisitedUrl, display_url: lastDisplayedUrl || "" }, this.refreshChrome);
+        }
     }
-  };
 
-  return (
-    <div className="h-full flex flex-col bg-[#202124]">
-      {/* Tab Bar */}
-      <div className="h-9 bg-[#35363a] flex items-end px-2 gap-1">
-        {tabs.map((tab) => (
-          <div
-            key={tab.id}
-            onClick={() => {
-              setActiveTab(tab.id);
-              setInputUrl(tab.url);
-            }}
-            className={`h-8 max-w-[200px] flex items-center gap-2 px-3 cursor-pointer rounded-t-lg group ${
-              activeTab === tab.id ? 'bg-[#202124]' : 'bg-[#292a2d] hover:bg-[#3c3d41]'
-            }`}
-          >
-            <img
-              src="https://www.google.com/favicon.ico"
-              alt=""
-              className="w-4 h-4"
-            />
-            <span className="text-xs text-foreground/80 truncate flex-1">
-              {tab.title}
-            </span>
-            <button
-              onClick={(e) => closeTab(tab.id, e)}
-              className="w-4 h-4 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-white/10"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          </div>
-        ))}
-        <button
-          onClick={addTab}
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
-        >
-          <Plus className="w-4 h-4 text-foreground/60" />
-        </button>
-      </div>
+    storeVisitedUrl = (url: string, display_url: string) => {
+        localStorage.setItem("chrome-url", url);
+        localStorage.setItem("chrome-display-url", display_url);
+    }
 
-      {/* Toolbar */}
-      <div className="h-11 bg-[#202124] flex items-center gap-2 px-3">
-        <button className="p-2 rounded-full hover:bg-white/10">
-          <ArrowLeft className="w-4 h-4 text-foreground/50" />
-        </button>
-        <button className="p-2 rounded-full hover:bg-white/10">
-          <ArrowRight className="w-4 h-4 text-foreground/50" />
-        </button>
-        <button className="p-2 rounded-full hover:bg-white/10">
-          <RotateCw className="w-4 h-4 text-foreground/60" />
-        </button>
-        <button className="p-2 rounded-full hover:bg-white/10">
-          <Home className="w-4 h-4 text-foreground/60" />
-        </button>
+    refreshChrome = () => {
+        const iframe = document.getElementById("chrome-screen") as HTMLIFrameElement;
+        if (iframe) {
+            iframe.src += '';
+        }
+    }
 
-        {/* URL Bar */}
-        <div className="flex-1 flex items-center bg-[#35363a] rounded-full px-4 py-1.5">
-          <input
-            type="text"
-            value={inputUrl}
-            onChange={(e) => setInputUrl(e.target.value)}
-            className="flex-1 bg-transparent outline-none text-sm text-foreground/80"
-            placeholder="Search or enter URL"
-          />
-          <Star className="w-4 h-4 text-foreground/50" />
-        </div>
+    goToHome = () => {
+        this.setState({ url: this.home_url, display_url: "https://www.google.com" });
+        this.refreshChrome();
+    }
 
-        <button className="p-2 rounded-full hover:bg-white/10">
-          <MoreVertical className="w-4 h-4 text-foreground/60" />
-        </button>
-      </div>
+    checkKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            let url = e.currentTarget.value;
+            let display_url = "";
 
-      {/* Browser Content */}
-      <div className="flex-1 bg-[#0d1117] overflow-auto">
-        {/* Simulated GitHub Page */}
-        <div className="bg-[#161b22] border-b border-[#30363d]">
-          <div className="max-w-5xl mx-auto px-6 py-4">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center text-2xl">
-                👨‍💻
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold text-foreground">Developer Name</h1>
-                <p className="text-foreground/60">Full Stack Developer | Open Source Enthusiast</p>
-              </div>
-            </div>
-          </div>
-        </div>
+            url = url.trim();
+            if (url.length === 0) return;
 
-        <div className="max-w-5xl mx-auto px-6 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Profile Info */}
-            <div className="space-y-4">
-              <div className="text-foreground/80">
-                <p className="text-sm">🏢 Working @TechCompany</p>
-                <p className="text-sm">📍 San Francisco, CA</p>
-                <p className="text-sm">🔗 myportfolio.dev</p>
-              </div>
+            if (url.indexOf("http://") !== 0 && url.indexOf("https://") !== 0) {
+                url = "https://" + url;
+            }
 
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-2">Organizations</h3>
-                <div className="flex gap-2">
-                  <div className="w-8 h-8 rounded bg-blue-500 flex items-center justify-center text-xs">ORG</div>
-                  <div className="w-8 h-8 rounded bg-green-500 flex items-center justify-center text-xs">OS</div>
-                </div>
-              </div>
-            </div>
+            url = encodeURI(url);
+            display_url = url;
+            if (url.includes("google.com")) { // 😅
+                url = 'https://www.google.com/webhp?igu=1';
+                display_url = "https://www.google.com";
+            }
+            this.setState({ url, display_url: url });
+            this.storeVisitedUrl(url, display_url);
+            const urlBar = document.getElementById("chrome-url-bar") as HTMLInputElement;
+            if (urlBar) urlBar.blur();
+        }
+    }
 
-            {/* Repositories */}
-            <div className="md:col-span-2 space-y-4">
-              <h2 className="text-lg font-semibold text-foreground">Pinned Repositories</h2>
-              
-              {[
-                { name: 'ubuntu-portfolio', desc: 'Ubuntu-themed portfolio website', lang: 'TypeScript', stars: 128 },
-                { name: 'react-components', desc: 'Collection of reusable React components', lang: 'JavaScript', stars: 256 },
-                { name: 'api-starter', desc: 'REST API boilerplate with Node.js', lang: 'JavaScript', stars: 89 },
-                { name: 'ml-projects', desc: 'Machine learning experiments and projects', lang: 'Python', stars: 64 },
-              ].map((repo) => (
-                <div key={repo.name} className="border border-[#30363d] rounded-lg p-4 hover:bg-[#161b22] cursor-pointer">
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-400 font-medium">{repo.name}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full border border-[#30363d] text-foreground/50">
-                      Public
-                    </span>
-                  </div>
-                  <p className="text-sm text-foreground/60 mt-1">{repo.desc}</p>
-                  <div className="flex items-center gap-4 mt-3 text-xs text-foreground/50">
-                    <span className="flex items-center gap-1">
-                      <span className={`w-3 h-3 rounded-full ${repo.lang === 'TypeScript' ? 'bg-blue-400' : repo.lang === 'Python' ? 'bg-yellow-400' : 'bg-yellow-300'}`} />
-                      {repo.lang}
-                    </span>
-                    <span>⭐ {repo.stars}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+    handleDisplayUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ display_url: e.target.value });
+    }
 
-          {/* Contribution Graph */}
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Contribution Activity</h2>
-            <div className="grid grid-cols-52 gap-1">
-              {Array.from({ length: 365 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-3 h-3 rounded-sm ${
-                    Math.random() > 0.7
-                      ? Math.random() > 0.5
-                        ? 'bg-green-700'
-                        : 'bg-green-500'
-                      : Math.random() > 0.8
-                      ? 'bg-green-400'
-                      : 'bg-[#161b22]'
-                  }`}
+    displayUrlBar = () => {
+        return (
+            <div className="w-full pt-0.5 pb-1 flex justify-start items-center text-white text-sm border-b border-gray-900">
+                <button 
+                    onClick={this.refreshChrome} 
+                    className="ml-2 mr-1 p-1.5 flex justify-center items-center rounded-full bg-gray-50 bg-opacity-0 hover:bg-opacity-10 cursor-pointer"
+                    aria-label="Refresh"
+                >
+                    <RotateCw className="w-4 h-4" />
+                </button>
+                <button 
+                    onClick={this.goToHome} 
+                    className="mr-2 ml-1 p-1.5 flex justify-center items-center rounded-full bg-gray-50 bg-opacity-0 hover:bg-opacity-10 cursor-pointer"
+                    aria-label="Home"
+                >
+                    <Home className="w-4 h-4" />
+                </button>
+                <input 
+                    onKeyDown={this.checkKey} 
+                    onChange={this.handleDisplayUrl} 
+                    value={this.state.display_url} 
+                    id="chrome-url-bar" 
+                    className="outline-none bg-gray-700 rounded-full pl-3 py-0.5 mr-3 w-5/6 text-gray-300 focus:text-white" 
+                    type="url" 
+                    spellCheck={false} 
+                    autoComplete="off" 
                 />
-              ))}
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+        );
+    }
+
+    render() {
+        return (
+            <div className="h-full w-full flex flex-col bg-gray-800">
+                {this.displayUrlBar()}
+                <iframe src={this.state.url} className="flex-grow" id="chrome-screen" frameBorder="0" title="Ubuntu Chrome Url"></iframe>
+            </div>
+        )
+    }
 }
+
+export default Chrome;
