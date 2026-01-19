@@ -12,12 +12,12 @@ import { Calculator } from './apps/Calculator';
 import { useWindowManager } from '@/hooks/useWindowManager';
 
 const desktopApps = [
-  { id: 'about', icon: '👤', name: 'About Me', position: { row: 0, col: 0 } },
-  { id: 'files', icon: '📁', name: 'Files', position: { row: 1, col: 0 } },
-  { id: 'terminal', icon: '🖥️', name: 'Terminal', position: { row: 2, col: 0 } },
-  { id: 'vscode', icon: '💻', name: 'VS Code', position: { row: 3, col: 0 } },
-  { id: 'chrome', icon: '🌐', name: 'Chrome', position: { row: 4, col: 0 } },
-  { id: 'settings', icon: '⚙️', name: 'Settings', position: { row: 0, col: 1 } },
+  { id: 'about', icon: '/icons/AboutMe.jpg', name: 'About Me', position: { row: 0, col: 0 }, type: 'image' },
+  { id: 'files', icon: '/icons/files.jpg', name: 'Files', position: { row: 1, col: 0 }, type: 'image' },
+  { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', position: { row: 2, col: 0 }, type: 'image' },
+  { id: 'vscode', icon: '/icons/Visual_Studio_Code_icon.jpg', name: 'VS Code', position: { row: 3, col: 0 }, type: 'image' },
+  { id: 'chrome', icon: '/icons/Google_Chrome_icon.jpg', name: 'Chrome', position: { row: 4, col: 0 }, type: 'image' },
+  { id: 'settings', icon: '/icons/settings.webp', name: 'Settings', position: { row: 0, col: 1 }, type: 'image' },
 ];
 
 export function Desktop() {
@@ -54,9 +54,12 @@ export function Desktop() {
 
   return (
     <div 
-      className="h-screen w-screen overflow-hidden select-none"
+      className="h-screen w-screen overflow-hidden select-none relative"
       style={{
-        background: 'linear-gradient(135deg, #300A24 0%, #1a0515 50%, #2d0a22 100%)',
+        backgroundImage: 'url(/images/ubuntu-bg2.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
       <TopBar />
@@ -70,6 +73,7 @@ export function Desktop() {
             icon={app.icon}
             name={app.name}
             position={app.position}
+            type={app.type as 'emoji' | 'image'}
             onDoubleClick={() => openWindow(app.id)}
           />
         ))}
