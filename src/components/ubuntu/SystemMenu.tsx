@@ -6,9 +6,10 @@ interface SystemMenuProps {
   onLock?: () => void;
   onOpenSettings?: () => void;
   onBrightnessChange?: (level: number) => void;
+  onLogout?: () => void;
 }
 
-export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange }: SystemMenuProps) {
+export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange, onLogout }: SystemMenuProps) {
   const [volumeLevel, setVolumeLevel] = useState(75);
   const [brightnessLevel, setBrightnessLevel] = useState(80);
 
@@ -109,7 +110,8 @@ export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange
             label="Power Off / Log Out"
             hasArrow
             onClick={() => {
-              console.log('Power Options');
+              onLogout?.();
+              onClose();
             }}
           />
         </div>

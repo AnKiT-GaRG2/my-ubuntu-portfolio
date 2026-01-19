@@ -11,6 +11,7 @@ import { Settings } from './apps/Settings';
 import { Calculator } from './apps/Calculator';
 import { ContactMe } from './apps/ContactMe';
 import { LockScreen } from './LockScreen';
+import { LogoutScreen } from './LogoutScreen';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useState, useEffect } from 'react';
 
@@ -27,6 +28,7 @@ const desktopApps = [
 
 export function Desktop() {
   const [isLocked, setIsLocked] = useState(false);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [brightness, setBrightness] = useState(80);
   
   const {
@@ -59,6 +61,16 @@ export function Desktop() {
   const handleUnlock = () => {
     console.log('handleUnlock called');
     setIsLocked(false);
+  };
+
+  const handleLogout = () => {
+    console.log('handleLogout called');
+    setIsLoggedOut(true);
+  };
+
+  const handlePowerOn = () => {
+    console.log('handlePowerOn called');
+    setIsLoggedOut(false);
   };
 
   const handleBrightnessChange = (level: number) => {
@@ -103,6 +115,7 @@ export function Desktop() {
         onLock={handleLockScreen} 
         onOpenSettings={() => openWindow('settings')}
         onBrightnessChange={handleBrightnessChange}
+        onLogout={handleLogout}
       />
 
       {/* Desktop Icons */}
@@ -139,6 +152,9 @@ export function Desktop() {
       
       {/* Lock Screen */}
       {isLocked && <LockScreen onUnlock={handleUnlock} />}
+      
+      {/* Logout Screen */}
+      {isLoggedOut && <LogoutScreen onPowerOn={handlePowerOn} />}
     </div>
   );
 }

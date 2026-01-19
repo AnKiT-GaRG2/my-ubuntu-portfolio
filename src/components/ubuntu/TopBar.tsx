@@ -6,9 +6,10 @@ interface TopBarProps {
   onLock?: () => void;
   onOpenSettings?: () => void;
   onBrightnessChange?: (level: number) => void;
+  onLogout?: () => void;
 }
 
-export function TopBar({ onLock, onOpenSettings, onBrightnessChange }: TopBarProps) {
+export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout }: TopBarProps) {
   const [time, setTime] = useState(new Date());
   const [showSystemMenu, setShowSystemMenu] = useState(false);
 
@@ -74,6 +75,10 @@ export function TopBar({ onLock, onOpenSettings, onBrightnessChange }: TopBarPro
             onOpenSettings?.();
           }}
           onBrightnessChange={onBrightnessChange}
+          onLogout={() => {
+            setShowSystemMenu(false);
+            onLogout?.();
+          }}
         />
       )}
     </>
