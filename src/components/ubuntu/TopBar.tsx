@@ -25,7 +25,7 @@ export function TopBar() {
   };
 
   return (
-    <div className="h-7 bg-ubuntu-dark/90 backdrop-blur-md flex items-center justify-between px-3 text-sm text-foreground/90 select-none">
+    <div className="h-7 bg-black flex items-center justify-between px-3 text-sm text-white select-none">
       <div className="flex items-center gap-4">
         <span className="font-medium">Activities</span>
       </div>
@@ -42,7 +42,7 @@ export function TopBar() {
           <Battery className="w-4 h-4" />
         </div>
         <div className="flex items-center gap-1 hover:bg-white/10 px-2 py-1 rounded cursor-pointer">
-          <span>User</span>
+          
           <ChevronDown className="w-3 h-3" />
         </div>
       </div>
