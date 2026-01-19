@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&family=Ubuntu+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Ubuntu Theme Colors */
+    --background: 320 56% 10%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 14 89% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 320 56% 15%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 14 89% 51%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 25%;
+    --input: 0 0% 20%;
+    --ring: 14 89% 51%;
+
+    --radius: 0.5rem;
+
+    /* Ubuntu specific */
+    --ubuntu-orange: 14 89% 51%;
+    --ubuntu-aubergine: 320 56% 10%;
+    --ubuntu-dark: 0 0% 12%;
+    --ubuntu-window: 0 0% 18%;
+    --ubuntu-window-header: 0 0% 15%;
+    --ubuntu-terminal-bg: 300 7% 11%;
+    --ubuntu-terminal-text: 120 100% 80%;
+    --ubuntu-dock: 0 0% 8%;
+
+    /* Window shadows */
+    --window-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .dark {
+    --background: 320 56% 10%;
+    --foreground: 0 0% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Ubuntu', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--ubuntu-dark));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+/* Ubuntu Mono for terminal */
+.font-ubuntu-mono {
+  font-family: 'Ubuntu Mono', monospace;
+}
+
+/* Window animations */
+@keyframes windowOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes windowClose {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.window-open {
+  animation: windowOpen 0.2s ease-out forwards;
+}
+
+.window-close {
+  animation: windowClose 0.15s ease-in forwards;
+}
+
+/* Dock hover effect */
+.dock-icon {
+  transition: transform 0.2s ease;
+}
+
+.dock-icon:hover {
+  transform: scale(1.2) translateY(-8px);
+}
+
+/* Desktop icon selection */
+.desktop-icon:focus {
+  outline: none;
+}
+
+.desktop-icon.selected .icon-label {
+  background: hsl(var(--primary) / 0.5);
+}
+
+/* Terminal cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.terminal-cursor {
+  animation: blink 1s infinite;
+}
+
+/* VS Code syntax highlighting */
+.syntax-keyword { color: #569cd6; }
+.syntax-string { color: #ce9178; }
+.syntax-function { color: #dcdcaa; }
+.syntax-comment { color: #6a9955; }
+.syntax-number { color: #b5cea8; }
+.syntax-type { color: #4ec9b0; }
+.syntax-variable { color: #9cdcfe; }
