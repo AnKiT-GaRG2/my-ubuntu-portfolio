@@ -27,6 +27,7 @@ const desktopApps = [
 
 export function Desktop() {
   const [isLocked, setIsLocked] = useState(false);
+  const [brightness, setBrightness] = useState(80);
   
   const {
     windows,
@@ -60,6 +61,10 @@ export function Desktop() {
     setIsLocked(false);
   };
 
+  const handleBrightnessChange = (level: number) => {
+    setBrightness(level);
+  };
+
   const renderWindowContent = (id: string) => {
     switch (id) {
       case 'terminal':
@@ -85,15 +90,20 @@ export function Desktop() {
 
   return (
     <div 
-      className="h-screen w-screen overflow-hidden select-none relative"
+      className="h-screen w-screen overflow-hidden select-none relative transition-all duration-300"
       style={{
         backgroundImage: 'url(/images/ubuntu-bg2.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        filter: `brightness(${brightness}%)`,
       }}
     >
-      <TopBar onLock={handleLockScreen} />
+      <TopBar 
+        onLock={handleLockScreen} 
+        onOpenSettings={() => openWindow('settings')}
+        onBrightnessChange={handleBrightnessChange}
+      />
 
       {/* Desktop Icons */}
       <div className="absolute inset-0 pt-8 pb-20">

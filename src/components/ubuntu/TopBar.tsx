@@ -4,9 +4,11 @@ import { SystemMenu } from './SystemMenu';
 
 interface TopBarProps {
   onLock?: () => void;
+  onOpenSettings?: () => void;
+  onBrightnessChange?: (level: number) => void;
 }
 
-export function TopBar({ onLock }: TopBarProps) {
+export function TopBar({ onLock, onOpenSettings, onBrightnessChange }: TopBarProps) {
   const [time, setTime] = useState(new Date());
   const [showSystemMenu, setShowSystemMenu] = useState(false);
 
@@ -67,6 +69,11 @@ export function TopBar({ onLock }: TopBarProps) {
             setShowSystemMenu(false);
             onLock?.();
           }}
+          onOpenSettings={() => {
+            setShowSystemMenu(false);
+            onOpenSettings?.();
+          }}
+          onBrightnessChange={onBrightnessChange}
         />
       )}
     </>

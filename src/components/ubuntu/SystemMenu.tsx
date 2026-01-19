@@ -1,14 +1,21 @@
 import { Headphones, Sun, Wifi, Bluetooth, Power, Lock, Settings, ChevronRight, Volume2, Battery } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface SystemMenuProps {
   onClose: () => void;
   onLock?: () => void;
+  onOpenSettings?: () => void;
+  onBrightnessChange?: (level: number) => void;
 }
 
-export function SystemMenu({ onClose, onLock }: SystemMenuProps) {
+export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange }: SystemMenuProps) {
   const [volumeLevel, setVolumeLevel] = useState(75);
   const [brightnessLevel, setBrightnessLevel] = useState(80);
+
+  useEffect(() => {
+    // Apply brightness change whenever it updates
+    onBrightnessChange?.(brightnessLevel);
+  }, [brightnessLevel, onBrightnessChange]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -45,13 +52,13 @@ export function SystemMenu({ onClose, onLock }: SystemMenuProps) {
             <Sun className="w-5 h-5 text-gray-300" />
             <input
               type="range"
-              min="0"
-              max="100"
+              min="30"
+              max="130"
               value={brightnessLevel}
               onChange={(e) => setBrightnessLevel(Number(e.target.value))}
               className="flex-1 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
               style={{
-                background: `linear-gradient(to right, #60a5fa 0%, #60a5fa ${brightnessLevel}%, #4b5563 ${brightnessLevel}%, #4b5563 100%)`
+                background: `linear-gradient(to right, #60a5fa 0%, #60a5fa ${(brightnessLevel - 20) * 100 / 80}%, #4b5563 ${(brightnessLevel - 20) * 100 / 80}%, #4b5563 100%)`
               }}
             />
           </div>
@@ -60,34 +67,37 @@ export function SystemMenu({ onClose, onLock }: SystemMenuProps) {
         {/* Connection Options */}
         <div className="p-2 border-b border-gray-700">
           <MenuItem 
-            icon={<Wifi className="w-5 h-5" />}
+            icon={<Wifi className="w-4 h-4" />}
             label="Ubuntu Portfolio Network"
             hasArrow
+            disabled
           />
           <MenuItem 
-            icon={<Bluetooth className="w-5 h-5" />}
+            icon={<Bluetooth className="w-4 h-4" />}
             label="Off"
             hasArrow
+            disabled
           />
           <MenuItem 
-            icon={<Battery className="w-5 h-5" />}
+            icon={<Battery className="w-4 h-4" />}
             label="2:40 Remaining (75%)"
             hasArrow
+            disabled
           />
         </div>
 
         {/* System Actions */}
         <div className="p-2">
           <MenuItem 
-            icon={<Settings className="w-5 h-5" />}
+            icon={<Settings className="w-4 h-4" />}
             label="Settings"
             onClick={() => {
-              console.log('Open Settings');
+              onOpenSettings?.();
               onClose();
             }}
           />
           <MenuItem 
-            icon={<Lock className="w-5 h-5" />}
+            icon={<Lock className="w-4 h-4" />}
             label="Lock"
             onClick={() => {
               console.log('Lock Screen');
@@ -95,7 +105,7 @@ export function SystemMenu({ onClose, onLock }: SystemMenuProps) {
             }}
           />
           <MenuItem 
-            icon={<Power className="w-5 h-5" />}
+            icon={<Power className="w-4 h-4" />}
             label="Power Off / Log Out"
             hasArrow
             onClick={() => {
@@ -113,17 +123,23 @@ interface MenuItemProps {
   label: string;
   hasArrow?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-function MenuItem({ icon, label, hasArrow, onClick }: MenuItemProps) {
+function MenuItem({ icon, label, hasArrow, onClick, disabled }: MenuItemProps) {
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-3 px-3 py-2.5 rounded hover:bg-gray-700/50 transition-colors text-left"
+      disabled={disabled}
+      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded transition-colors text-left ${
+        disabled 
+          ? 'opacity-50 cursor-default' 
+          : 'hover:bg-gray-700/50 cursor-pointer'
+      }`}
     >
       <span className="text-gray-300">{icon}</span>
-      <span className="flex-1 text-sm">{label}</span>
-      {hasArrow && <ChevronRight className="w-4 h-4 text-gray-400" />}
+      <span className="flex-1 text-xs">{label}</span>
+      {hasArrow && <ChevronRight className="w-3.5 h-3.5 text-gray-400" />}
     </button>
   );
 }
