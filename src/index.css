@@ -160,3 +160,40 @@
 .syntax-number { color: #b5cea8; }
 .syntax-type { color: #4ec9b0; }
 .syntax-variable { color: #9cdcfe; }
+
+/* System Menu Slider Styling */
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #60a5fa;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+input[type="range"].slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #60a5fa;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+input[type="range"].slider::-webkit-slider-thumb:hover {
+  background: #3b82f6;
+}
+
+input[type="range"].slider::-moz-range-thumb:hover {
+  background: #3b82f6;
+}
