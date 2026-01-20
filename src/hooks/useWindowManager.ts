@@ -57,7 +57,7 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     size: { width: 800, height: 700 },
   },
   chatbot: {
-    title: 'AI Assistant',
+    title: 'AnkiTalk',
     icon: '🤖',
     position: { x: 250, y: 90 },
     size: { width: 900, height: 750 },

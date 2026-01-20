@@ -329,7 +329,7 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
           </div>
           <div>
             <h3 className="text-white font-bold text-lg flex items-center gap-2">
-              Chat with Ankit
+              AnkiTalk
               <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">AI</span>
             </h3>
             <p className="text-white/90 text-xs flex items-center gap-1">
