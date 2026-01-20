@@ -35,10 +35,11 @@ const wallpapers = [
 interface SettingsProps {
   currentBackground?: string;
   onBackgroundChange?: (background: string) => void;
+  initialSection?: string;
 }
 
-export function Settings({ currentBackground = '/images/ubuntu-bg2.jpg', onBackgroundChange }: SettingsProps) {
-  const [activeSection, setActiveSection] = useState('about');
+export function Settings({ currentBackground = '/images/ubuntu-bg2.jpg', onBackgroundChange, initialSection = 'about' }: SettingsProps) {
+  const [activeSection, setActiveSection] = useState(initialSection);
   const [selectedBg, setSelectedBg] = useState(currentBackground);
 
   const handleBackgroundSelect = (bg: string) => {

@@ -155,6 +155,10 @@ export function Desktop() {
     openWindow('files', { initialPath: '/home/guest/Desktop' });
   };
 
+  const handleChangeBackground = () => {
+    openWindow('settings', { initialSection: 'background' });
+  };
+
   const renderWindowContent = (id: string, metadata?: Record<string, string | number | boolean>) => {
     switch (id) {
       case 'terminal':
@@ -168,7 +172,11 @@ export function Desktop() {
       case 'files':
         return <Files initialPath={metadata?.initialPath as string} />;
       case 'settings':
-        return <Settings currentBackground={background} onBackgroundChange={setBackground} />;
+        return <Settings 
+          currentBackground={background} 
+          onBackgroundChange={setBackground}
+          initialSection={metadata?.initialSection as string}
+        />;
       case 'calculator':
         return <Calculator />;
       case 'contact':
@@ -255,6 +263,7 @@ export function Desktop() {
             onNewFolderRequest={handleNewFolderRequest}
             onShowDesktopInFiles={handleShowDesktopInFiles}
             onEnterFullScreen={handleEnterFullScreen}
+            onChangeBackground={handleChangeBackground}
           />
         </>
       )}

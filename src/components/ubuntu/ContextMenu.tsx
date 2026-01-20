@@ -9,9 +9,10 @@ interface ContextMenuProps {
   onNewFolderRequest: () => void;
   onShowDesktopInFiles: () => void;
   onEnterFullScreen: () => void;
+  onChangeBackground: () => void;
 }
 
-export function ContextMenu({ x, y, onClose, onOpenTerminal, onOpenSettings, onNewFolderRequest, onShowDesktopInFiles, onEnterFullScreen }: ContextMenuProps) {
+export function ContextMenu({ x, y, onClose, onOpenTerminal, onOpenSettings, onNewFolderRequest, onShowDesktopInFiles, onEnterFullScreen, onChangeBackground }: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   //console.log('🎨 ContextMenu component rendered at position:', x, y);
@@ -65,7 +66,7 @@ export function ContextMenu({ x, y, onClose, onOpenTerminal, onOpenSettings, onN
       <MenuSeparator />
       <MenuItem label="Show Desktop in Files" onClick={() => { onShowDesktopInFiles(); onClose(); }} />
       <MenuItem label="Open in Terminal" onClick={() => { onOpenTerminal(); onClose(); }} />
-      <MenuItem label="Change Background..." disabled />
+      <MenuItem label="Change Background..." onClick={() => { onChangeBackground(); onClose(); }} />
       <MenuItem label="Display Settings" disabled />
       <MenuItem label="Settings" onClick={() => { onOpenSettings(); onClose(); }} />
       <MenuSeparator />
