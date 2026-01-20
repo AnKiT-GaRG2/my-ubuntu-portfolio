@@ -17,8 +17,15 @@ const COMMANDS = {
   whoami      - Display current user
   pwd         - Print working directory
   ls          - List directory contents
+  cd          - Change directory
   cat         - Display file contents
-  history     - Show command history`,
+  history     - Show command history
+  mkdir       - Create a new directory
+  code        - Open VS Code
+  chrome      - Open Chrome browser
+  open        - Open an application
+  sudo        - Try using sudo (just for fun)
+  exit        - Close terminal (use window controls)`,
 
   about: `
 ╭──────────────────────────────────────────────────────────────╮
@@ -182,26 +189,38 @@ const COMMANDS = {
    \\___/|_.__/ \\__,_|_| |_|\\__|\\__,_|____/ \\___||___/_|\\_\\\\__\\___/| .__/ 
                                                                   | |    
                                                                   |_|    
-  
-  Welcome to my interactive portfolio!
-  
+
+  Welcome to Ankit's interactive portfolio!
+
   Type 'help' to see available commands.
   `,
 };
 
 interface TerminalProps {
   onOpenApp?: (id: string) => void;
+  onCreateFolder?: (name: string) => void;
 }
 
-export function Terminal({ onOpenApp }: TerminalProps) {
+export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
   const [lines, setLines] = useState<TerminalLine[]>([
     { type: 'output', content: COMMANDS.welcome },
   ]);
   const [currentInput, setCurrentInput] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [currentDirectory, setCurrentDirectory] = useState('~');
+  const [currentDirName, setCurrentDirName] = useState('root');
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const childDirectories: { [key: string]: string[] } = {
+    root: ["projects", "skills", "education", "about-me", "contact"],
+    projects: ["ubuntu-portfolio", "react-apps", "web-projects"],
+    skills: ["frontend", "backend", "tools"],
+    frontend: ["React.js", "TypeScript", "Tailwind CSS", "HTML/CSS"],
+    backend: ["Node.js", "Express.js", "Python", "Django"],
+    tools: ["Git", "Docker", "VS Code", "Linux"],
+  };
 
   useEffect(() => {
     if (containerRef.current) {
@@ -214,10 +233,11 @@ export function Terminal({ onOpenApp }: TerminalProps) {
   }, []);
 
   const processCommand = (cmd: string) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
-    const parts = trimmedCmd.split(' ');
-    const command = parts[0];
-    const args = parts.slice(1).join(' ');
+    const trimmedCmd = cmd.trim();
+    const parts = trimmedCmd.split(' ').filter(Boolean);
+    const command = parts[0]?.toLowerCase() || '';
+    const args = parts.slice(1);
+    const rest = args.join(' ');
 
     // Add to history
     if (trimmedCmd) {
@@ -258,7 +278,7 @@ export function Terminal({ onOpenApp }: TerminalProps) {
         setLines([]);
         return;
       case 'echo':
-        output = args || '';
+        output = rest || '';
         break;
       case 'date':
         output = new Date().toString();
@@ -267,37 +287,119 @@ export function Terminal({ onOpenApp }: TerminalProps) {
         output = 'guest@ubuntu-portfolio';
         break;
       case 'pwd':
-        output = '/home/guest';
+        output = currentDirectory.replace('~', '/home/guest');
         break;
-      case 'ls':
-        output = 'Desktop  Documents  Downloads  Music  Pictures  Projects  Videos';
-        break;
-      case 'cat':
-        if (args === 'readme.txt' || args === 'readme') {
-          output = 'Welcome to my portfolio! Type "help" for available commands.';
+      case 'cd':
+        if (args.length === 0 || rest === '') {
+          setCurrentDirectory('~');
+          setCurrentDirName('root');
+        } else if (args.length > 1) {
+          output = 'cd: too many arguments';
+        } else if (rest === '.' || rest === './') {
+          // Stay in current directory
+        } else if (rest === '..' || rest === '../') {
+          if (currentDirectory !== '~') {
+            const parts = currentDirectory.split('/');
+            parts.pop();
+            const newDir = parts.length > 0 ? parts.join('/') : '~';
+            setCurrentDirectory(newDir === '' ? '~' : newDir);
+            setCurrentDirName(parts[parts.length - 1] || 'root');
+          }
+        } else if (childDirectories[currentDirName]?.includes(rest)) {
+          setCurrentDirectory(currentDirectory + '/' + rest);
+          setCurrentDirName(rest);
         } else {
-          output = `cat: ${args || 'no file specified'}: No such file or directory`;
+          output = `cd: ${rest}: No such file or directory`;
+        }
+        break;
+      case 'ls': {
+        const target = args[0] || currentDirName;
+        if (args.length > 1) {
+          output = 'ls: too many arguments';
+        } else if (target in childDirectories) {
+          output = childDirectories[target].map(f => `  ${f}`).join('\n');
+        } else if (currentDirName in childDirectories) {
+          output = childDirectories[currentDirName].map(f => `  ${f}`).join('\n');
+        } else {
+          output = `ls: cannot access '${target}': No such file or directory`;
+        }
+        break;
+      }
+      case 'cat':
+        if (args.length === 0) {
+          output = 'cat: no file specified';
+        } else if (args[0] === 'readme.txt' || args[0] === 'readme' || args[0] === 'README.md') {
+          output = 'Welcome to Ankit\'s portfolio! Type "help" for available commands.';
+        } else {
+          output = `cat: ${args[0]}: No such file or directory`;
         }
         break;
       case 'history':
         output = commandHistory.map((c, i) => `  ${i + 1}  ${c}`).join('\n') || 'No commands in history';
         break;
-      case 'open':
-        if (args === 'vscode' || args === 'code') {
+      case 'mkdir':
+        if (args.length === 0) {
+          output = 'mkdir: missing operand';
+        } else if (args.length > 1) {
+          output = 'mkdir: too many arguments, please create one folder at a time';
+        } else {
+          const folderName = args[0];
+          if (folderName.includes('/') || folderName.includes('\\')) {
+            output = 'mkdir: invalid folder name, no slashes allowed';
+          } else if (folderName.length > 50) {
+            output = 'mkdir: folder name too long (max 50 characters)';
+          } else {
+            onCreateFolder?.(folderName);
+            output = `Created directory: ${folderName}`;
+          }
+        }
+        break;
+      case 'code':
+        if (args.length === 0 || rest === '.') {
           onOpenApp?.('vscode');
-          output = 'Opening Visual Studio Code...';
-        } else if (args === 'chrome' || args === 'browser') {
+          output = 'Opening VS Code...';
+        } else {
+          output = `code: ${rest}: No such file or directory`;
+        }
+        break;
+      case 'chrome':
+        if (args.length === 0 || rest === '.') {
           onOpenApp?.('chrome');
-          output = 'Opening Google Chrome...';
-        } else if (args === 'files') {
+          output = 'Opening Chrome...';
+        } else {
+          output = 'chrome: command not found with arguments';
+        }
+        break;
+      case 'open':
+        if (args.length === 0) {
+          output = 'open: no application specified';
+        } else if (args[0] === 'vscode' || args[0] === 'code') {
+          onOpenApp?.('vscode');
+          output = 'Opening VS Code...';
+        } else if (args[0] === 'chrome' || args[0] === 'browser') {
+          onOpenApp?.('chrome');
+          output = 'Opening Chrome...';
+        } else if (args[0] === 'files') {
           onOpenApp?.('files');
           output = 'Opening Files...';
+        } else if (args[0] === 'settings') {
+          onOpenApp?.('settings');
+          output = 'Opening Settings...';
+        } else if (args[0] === 'about') {
+          onOpenApp?.('about');
+          output = 'Opening About Me...';
+        } else if (args[0] === 'calculator') {
+          onOpenApp?.('calculator');
+          output = 'Opening Calculator...';
+        } else if (args[0] === 'contact') {
+          onOpenApp?.('contact');
+          output = 'Opening Contact Me...';
         } else {
-          output = `open: ${args || 'no app specified'}: Application not found`;
+          output = `open: ${args[0]}: Application not found`;
         }
         break;
       case 'sudo':
-        output = "Nice try! But you don't have sudo privileges here 😄";
+        output = "Nice try! But you don't have sudo privileges here 😄\n[sudo] password for guest: ";
         break;
       case 'exit':
       case 'quit':
@@ -306,7 +408,7 @@ export function Terminal({ onOpenApp }: TerminalProps) {
       case '':
         break;
       default:
-        output = `Command not found: ${command}. Type 'help' for available commands.`;
+        output = `Command not found: ${command}\nType 'help' for available commands.`;
     }
 
     if (output) {
@@ -359,37 +461,43 @@ export function Terminal({ onOpenApp }: TerminalProps) {
   return (
     <div
       ref={containerRef}
-      className="h-full bg-ubuntu-terminal-bg p-4 overflow-y-auto font-ubuntu-mono text-sm cursor-text"
+      className="h-full bg-[#300a24] p-4 overflow-y-auto font-ubuntu-mono text-sm cursor-text"
       onClick={handleContainerClick}
     >
       {lines.map((line, index) => (
         <div key={index} className="whitespace-pre-wrap">
           {line.type === 'input' ? (
-            <div className="flex gap-2">
-              <span className="text-ubuntu-terminal-text">guest@ubuntu-portfolio</span>
-              <span className="text-blue-400">~</span>
-              <span className="text-foreground/80">$ {line.content}</span>
+            <div className="flex gap-1">
+              <span className="text-green-400">Ankit@Dell</span>
+              <span className="text-white">:</span>
+              <span className="text-blue-400">{currentDirectory}</span>
+              <span className="text-white">$</span>
+              <span className="text-white ml-1">{line.content}</span>
             </div>
           ) : (
-            <div className="text-foreground/80">{line.content}</div>
+            <div className="text-white">{line.content}</div>
           )}
         </div>
       ))}
-      <div className="flex gap-2 items-center">
-        <span className="text-ubuntu-terminal-text">guest@ubuntu-portfolio</span>
-        <span className="text-blue-400">~</span>
-        <span className="text-foreground/80">$</span>
-        <input
-          ref={inputRef}
-          type="text"
-          value={currentInput}
-          onChange={(e) => setCurrentInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent outline-none text-foreground/80"
-          autoFocus
-          spellCheck={false}
-        />
-        <span className="terminal-cursor w-2 h-4 bg-foreground/80" />
+      <div className="flex gap-1 items-center">
+        <span className="text-green-400">guest@Dell</span>
+        <span className="text-white">:</span>
+        <span className="text-blue-400">{currentDirectory}</span>
+        <span className="text-white">$</span>
+        <div className="flex-1 relative flex items-center ml-1">
+          <span className="text-white">{currentInput}</span>
+          <span className="inline-block w-2 h-4 bg-white terminal-cursor ml-0.5"></span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={currentInput}
+            onChange={(e) => setCurrentInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="absolute inset-0 opacity-0 cursor-default"
+            autoFocus
+            spellCheck={false}
+          />
+        </div>
       </div>
     </div>
   );

@@ -28,6 +28,7 @@ export function Desktop() {
   const [isLocked, setIsLocked] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [brightness, setBrightness] = useState(80);
+  const [userFolders, setUserFolders] = useState<Array<{ id: string; name: string; position: { row: number; col: number } }>>([]);
   
   const {
     windows,
@@ -75,10 +76,21 @@ export function Desktop() {
     setBrightness(level);
   };
 
+  const handleCreateFolder = (name: string) => {
+    // Calculate position - place on right side below existing apps
+    const maxRow = Math.max(...desktopApps.map(app => app.position.row), ...userFolders.map(f => f.position.row));
+    const newFolder = {
+      id: `folder-${Date.now()}`,
+      name,
+      position: { row: maxRow + 1, col: 0 }
+    };
+    setUserFolders(prev => [...prev, newFolder]);
+  };
+
   const renderWindowContent = (id: string) => {
     switch (id) {
       case 'terminal':
-        return <Terminal onOpenApp={openWindow} />;
+        return <Terminal onOpenApp={openWindow} onCreateFolder={handleCreateFolder} />;
       case 'vscode':
         return <VSCode />;
       case 'chrome':
@@ -127,6 +139,19 @@ export function Desktop() {
             position={app.position}
             type={app.type as 'emoji' | 'image'}
             onDoubleClick={() => handleIconDoubleClick(app)}
+          />
+        ))}
+        
+        {/* User-created folders */}
+        {userFolders.map((folder) => (
+          <DesktopIcon
+            key={folder.id}
+            id={folder.id}
+            icon="/icons/folder.png"
+            name={folder.name}
+            position={folder.position}
+            type="image"
+            onDoubleClick={() => {}}
           />
         ))}
       </div>
