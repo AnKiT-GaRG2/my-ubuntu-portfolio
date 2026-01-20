@@ -76,11 +76,15 @@ export function Settings({
         return (
           <div className="p-6 space-y-6">
             <div className="flex items-center gap-6">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center text-5xl">
-                🖥️
+              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary shadow-lg">
+                <img 
+                  src="/Logout/UbuntuLogout.webp" 
+                  alt="Profile" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Ubuntu Portfolio</h2>
+                <h2 className="text-2xl font-bold text-foreground">Ankit's Ubuntu</h2>
                 <p className="text-muted-foreground">Version 22.04 LTS</p>
               </div>
             </div>
@@ -88,7 +92,7 @@ export function Settings({
             <div className="space-y-4">
               <div className="p-4 bg-muted/20 rounded-lg">
                 <div className="text-sm text-muted-foreground">Device Name</div>
-                <div className="text-foreground">ubuntu-portfolio</div>
+                <div className="text-foreground">HP-Probook-ubuntu</div>
               </div>
               <div className="p-4 bg-muted/20 rounded-lg">
                 <div className="text-sm text-muted-foreground">Memory</div>
@@ -96,11 +100,11 @@ export function Settings({
               </div>
               <div className="p-4 bg-muted/20 rounded-lg">
                 <div className="text-sm text-muted-foreground">Processor</div>
-                <div className="text-foreground">Intel® Core™ i7 @ 3.60GHz</div>
+                <div className="text-foreground">Overthinker i7 Ultra</div>
               </div>
               <div className="p-4 bg-muted/20 rounded-lg">
                 <div className="text-sm text-muted-foreground">Graphics</div>
-                <div className="text-foreground">NVIDIA GeForce RTX 3080</div>
+                <div className="text-foreground">NVIDIA RTX AnxietyBoost</div>
               </div>
               <div className="p-4 bg-muted/20 rounded-lg">
                 <div className="text-sm text-muted-foreground">Disk Capacity</div>
