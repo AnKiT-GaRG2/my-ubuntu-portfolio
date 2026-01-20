@@ -30,6 +30,7 @@ export function Desktop() {
   const [isLocked, setIsLocked] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [brightness, setBrightness] = useState(80);
+  const [background, setBackground] = useState('/images/ubuntu-bg2.jpg');
   const [userFolders, setUserFolders] = useState<Array<{ id: string; name: string; position: { row: number; col: number } }>>([]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
@@ -167,7 +168,7 @@ export function Desktop() {
       case 'files':
         return <Files initialPath={metadata?.initialPath as string} />;
       case 'settings':
-        return <Settings />;
+        return <Settings currentBackground={background} onBackgroundChange={setBackground} />;
       case 'calculator':
         return <Calculator />;
       case 'contact':
@@ -181,7 +182,7 @@ export function Desktop() {
     <div 
       className="h-screen w-screen overflow-hidden select-none relative transition-all duration-300"
       style={{
-        backgroundImage: 'url(/images/ubuntu-bg2.jpg)',
+        backgroundImage: `url(${background})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

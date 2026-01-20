@@ -23,8 +23,28 @@ const settingsCategories: SettingItem[] = [
   { id: 'about', icon: Info, title: 'About' },
 ];
 
-export function Settings() {
+const wallpapers = [
+  '/images/ubuntu-bg.jpg',
+  '/images/ubuntu-bg2.jpg',
+  '/images/ubuntu-bg3.jpg',
+  '/images/ubuntu-bg4.jpg',
+  '/images/ubuntu-bg6.jpg',
+  '/images/ubuntu-bg7.jpg',
+];
+
+interface SettingsProps {
+  currentBackground?: string;
+  onBackgroundChange?: (background: string) => void;
+}
+
+export function Settings({ currentBackground = '/images/ubuntu-bg2.jpg', onBackgroundChange }: SettingsProps) {
   const [activeSection, setActiveSection] = useState('about');
+  const [selectedBg, setSelectedBg] = useState(currentBackground);
+
+  const handleBackgroundSelect = (bg: string) => {
+    setSelectedBg(bg);
+    onBackgroundChange?.(bg);
+  };
 
   const renderContent = () => {
     switch (activeSection) {
@@ -76,7 +96,7 @@ export function Settings() {
               {/* Large preview of current wallpaper */}
               <div className="relative w-full max-w-2xl aspect-video rounded-lg overflow-hidden border border-border shadow-lg">
                 <img 
-                  src="/images/ubuntu-bg2.jpg" 
+                  src={selectedBg} 
                   alt="Current wallpaper preview" 
                   className="w-full h-full object-cover"
                 />
@@ -88,58 +108,30 @@ export function Settings() {
 
               {/* Grid of wallpaper thumbnails */}
               <div className="grid grid-cols-4 gap-3 mt-4">
-                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-primary shadow-md hover:scale-105 transition-transform">
-                  <img 
-                    src="/images/ubuntu-bg.jpg" 
-                    alt="Wallpaper 1" 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                </button>
-
-                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
-                  <img 
-                    src="/images/ubuntu-bg2.jpg" 
-                    alt="Wallpaper 2" 
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-
-                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
-                  <img 
-                    src="/images/ubuntu-bg3.jpg" 
-                    alt="Wallpaper 3" 
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-
-                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
-                  <img 
-                    src="/images/ubuntu-bg4.jpg" 
-                    alt="Wallpaper 4" 
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-
-                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
-                  <img 
-                    src="/images/ubuntu-bg6.jpg" 
-                    alt="Wallpaper 5" 
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-
-                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
-                  <img 
-                    src="/images/ubuntu-bg7.jpg" 
-                    alt="Wallpaper 6" 
-                    className="w-full h-full object-cover"
-                  />
-                </button>
+                {wallpapers.map((wallpaper, index) => (
+                  <button 
+                    key={wallpaper}
+                    onClick={() => handleBackgroundSelect(wallpaper)}
+                    className={`relative aspect-video rounded-lg overflow-hidden border-2 ${
+                      selectedBg === wallpaper 
+                        ? 'border-primary shadow-md' 
+                        : 'border-transparent hover:border-muted-foreground/30'
+                    } hover:scale-105 transition-transform`}
+                  >
+                    <img 
+                      src={wallpaper} 
+                      alt={`Wallpaper ${index + 1}`} 
+                      className="w-full h-full object-cover"
+                    />
+                    {selectedBg === wallpaper && (
+                      <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                ))}
 
                 {/* Add Picture button */}
                 <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-dashed border-muted-foreground/30 bg-muted/10 hover:bg-muted/20 hover:border-muted-foreground/50 transition-all flex items-center justify-center">
