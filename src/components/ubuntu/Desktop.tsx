@@ -12,6 +12,8 @@ import { Calculator } from './apps/Calculator';
 import { ContactMe } from './apps/ContactMe';
 import { LockScreen } from './LockScreen';
 import { LogoutScreen } from './LogoutScreen';
+import { ContextMenu } from './ContextMenu';
+import { NewFolderDialog } from './NewFolderDialog';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useState, useEffect } from 'react';
 
@@ -29,6 +31,22 @@ export function Desktop() {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [brightness, setBrightness] = useState(80);
   const [userFolders, setUserFolders] = useState<Array<{ id: string; name: string; position: { row: number; col: number } }>>([]);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
+  const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  
+  useEffect(() => {
+    console.log('📍 Context menu state changed:', contextMenu);
+  }, [contextMenu]);
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
+  }, []);
   
   const {
     windows,
@@ -77,6 +95,16 @@ export function Desktop() {
   };
 
   const handleCreateFolder = (name: string) => {
+    // Validate folder name
+    if (name.includes('/')) {
+      alert('Folder name cannot contain slashes');
+      return;
+    }
+    if (name.length > 50) {
+      alert('Folder name too long (max 50 characters)');
+      return;
+    }
+    
     // Calculate position - place on right side below existing apps
     const maxRow = Math.max(...desktopApps.map(app => app.position.row), ...userFolders.map(f => f.position.row));
     const newFolder = {
@@ -85,9 +113,48 @@ export function Desktop() {
       position: { row: maxRow + 1, col: 0 }
     };
     setUserFolders(prev => [...prev, newFolder]);
+    setShowNewFolderDialog(false);
   };
 
-  const renderWindowContent = (id: string) => {
+  const handleNewFolderRequest = () => {
+    setShowNewFolderDialog(true);
+  };
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // console.log('🖱️ Right-click detected at:', e.clientX, e.clientY);
+    // console.log('🖱️ Target element:', e.target);
+    // console.log('🖱️ Current target element:', e.currentTarget);
+    const newMenu = { x: e.clientX, y: e.clientY };
+    //console.log('🖱️ Setting context menu state to:', newMenu);
+    setContextMenu(newMenu);
+  };
+
+  const handleCloseContextMenu = () => {
+    //console.log('❌ Closing context menu');
+    setContextMenu(null);
+  };
+
+  const handleEnterFullScreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (error) {
+      console.error('Error toggling fullscreen:', error);
+    }
+  };
+
+  //console.log('Current contextMenu state:', contextMenu);
+
+  const handleShowDesktopInFiles = () => {
+    openWindow('files', { initialPath: '/home/guest/Desktop' });
+  };
+
+  const renderWindowContent = (id: string, metadata?: Record<string, string | number | boolean>) => {
     switch (id) {
       case 'terminal':
         return <Terminal onOpenApp={openWindow} onCreateFolder={handleCreateFolder} />;
@@ -98,7 +165,7 @@ export function Desktop() {
       case 'about':
         return <AboutMe />;
       case 'files':
-        return <Files />;
+        return <Files initialPath={metadata?.initialPath as string} />;
       case 'settings':
         return <Settings />;
       case 'calculator':
@@ -120,6 +187,7 @@ export function Desktop() {
         backgroundRepeat: 'no-repeat',
         filter: `brightness(${brightness}%)`,
       }}
+      onContextMenu={handleContextMenu}
     >
       <TopBar 
         onLock={handleLockScreen} 
@@ -167,11 +235,36 @@ export function Desktop() {
           onFocus={() => focusWindow(window.id)}
           onUpdatePosition={(pos) => updateWindowPosition(window.id, pos)}
         >
-          {renderWindowContent(window.id)}
+          {renderWindowContent(window.id, window.metadata)}
         </Window>
       ))}
 
       <Dock openWindows={windows} onOpenApp={openWindow} />
+      
+      {/* Context Menu */}
+      {contextMenu && (
+        <>
+          {console.log('✅ Rendering ContextMenu component with state:', contextMenu)}
+          <ContextMenu 
+            x={contextMenu.x} 
+            y={contextMenu.y} 
+            onClose={handleCloseContextMenu}
+            onOpenTerminal={() => openWindow('terminal')}
+            onOpenSettings={() => openWindow('settings')}
+            onNewFolderRequest={handleNewFolderRequest}
+            onShowDesktopInFiles={handleShowDesktopInFiles}
+            onEnterFullScreen={handleEnterFullScreen}
+          />
+        </>
+      )}
+
+      {/* New Folder Dialog */}
+      {showNewFolderDialog && (
+        <NewFolderDialog
+          onConfirm={handleCreateFolder}
+          onCancel={() => setShowNewFolderDialog(false)}
+        />
+      )}
       
       {/* Lock Screen */}
       {isLocked && <LockScreen onUnlock={handleUnlock} />}

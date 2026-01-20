@@ -8,6 +8,7 @@ export interface WindowState {
   zIndex: number;
   position: { x: number; y: number };
   size: { width: number; height: number };
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface DesktopApp {

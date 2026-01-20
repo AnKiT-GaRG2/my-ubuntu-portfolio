@@ -56,15 +56,15 @@ export function useWindowManager() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [maxZIndex, setMaxZIndex] = useState(1);
 
-  const openWindow = useCallback((id: string) => {
+  const openWindow = useCallback((id: string, metadata?: Record<string, string | number | boolean>) => {
     setWindows((prev) => {
       const existing = prev.find((w) => w.id === id);
       if (existing) {
-        // Bring to front and unminimize
+        // Bring to front and unminimize, update metadata if provided
         setMaxZIndex((z) => z + 1);
         return prev.map((w) =>
           w.id === id
-            ? { ...w, isOpen: true, isMinimized: false, zIndex: maxZIndex + 1 }
+            ? { ...w, isOpen: true, isMinimized: false, zIndex: maxZIndex + 1, metadata: metadata || w.metadata }
             : w
         );
       }
@@ -83,6 +83,7 @@ export function useWindowManager() {
           isMinimized: false,
           isMaximized: false,
           zIndex: maxZIndex + 1,
+          metadata,
         },
       ];
     });

@@ -54,10 +54,14 @@ const iconMap = {
   code: FileCode,
 };
 
-export function Files() {
-  const [currentPath, setCurrentPath] = useState('/home/guest');
+interface FilesProps {
+  initialPath?: string;
+}
+
+export function Files({ initialPath = '/home/guest' }: FilesProps) {
+  const [currentPath, setCurrentPath] = useState(initialPath);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [history, setHistory] = useState<string[]>(['/home/guest']);
+  const [history, setHistory] = useState<string[]>([initialPath]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const currentFiles = folders[currentPath] || [];
