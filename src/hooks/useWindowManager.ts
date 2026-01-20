@@ -23,8 +23,8 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
   about: {
     title: 'About Me',
     icon: '👤',
-    position: { x: 250, y: 100 },
-    size: { width: 700, height: 600 },
+    position: { x: 150, y: 60 },
+    size: { width: 1100, height: 800 },
   },
   files: {
     title: 'Files',

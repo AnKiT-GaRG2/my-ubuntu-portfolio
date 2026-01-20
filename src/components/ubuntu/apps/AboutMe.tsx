@@ -37,12 +37,12 @@ export function AboutMe() {
       });
 
       if (response.ok) {
-        setSubmitMessage({ type: 'success', text: 'Thank you! Your review has been submitted successfully.' });
+        setSubmitMessage({ type: 'success', text: 'Thanks for your feedback! Your review has been sent to Ankit Garg and will be added to the site soon.' });
         setReviewForm({ name: '', designation: '', comment: '', rating: 5 });
         setTimeout(() => {
           setShowReviewForm(false);
           setSubmitMessage(null);
-        }, 2000);
+        }, 3000);
       } else {
         throw new Error('Failed to submit review');
       }
