@@ -56,6 +56,12 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     position: { x: 200, y: 80 },
     size: { width: 800, height: 700 },
   },
+  chatbot: {
+    title: 'AI Assistant',
+    icon: '🤖',
+    position: { x: 250, y: 90 },
+    size: { width: 900, height: 750 },
+  },
 };
 
 export function useWindowManager() {
