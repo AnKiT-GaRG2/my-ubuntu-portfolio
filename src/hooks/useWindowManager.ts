@@ -50,6 +50,12 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     position: { x: 280, y: 110 },
     size: { width: 750, height: 650 },
   },
+  review: {
+    title: 'Add Review',
+    icon: '⭐',
+    position: { x: 200, y: 80 },
+    size: { width: 800, height: 700 },
+  },
 };
 
 export function useWindowManager() {

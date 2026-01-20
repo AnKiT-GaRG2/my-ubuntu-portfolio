@@ -10,6 +10,7 @@ import { Files } from './apps/Files';
 import { Settings } from './apps/Settings';
 import { Calculator } from './apps/Calculator';
 import { ContactMe } from './apps/ContactMe';
+import { AddReview } from './apps/AddReview';
 import { LockScreen } from './LockScreen';
 import { LogoutScreen } from './LogoutScreen';
 import { ContextMenu } from './ContextMenu';
@@ -23,7 +24,8 @@ const desktopApps = [
   { id: 'vscode', icon: '/icons/Visual_Studio_Code_icon.jpg', name: 'VS Code', position: { row: 2, col: 0 }, type: 'image' },
   { id: 'chrome', icon: '/icons/Google_Chrome_icon.jpg', name: 'Chrome', position: { row: 3, col: 0 }, type: 'image' },
   { id: 'contact', icon: '/icons/contactMe.jpg', name: 'Contact Me', position: { row: 4, col: 0 }, type: 'image' },
-  { id: 'github', icon: '/icons/github.jpg', name: 'GitHub', position: { row: 5, col: 0 }, type: 'image', isExternal: true, externalUrl: 'https://github.com/AnKiT-GaRG2' },
+  { id: 'review', icon: '/icons/reviewapp.jpg', name: 'Add Review', position: { row: 5, col: 0 }, type: 'image' },
+  { id: 'github', icon: '/icons/github.jpg', name: 'GitHub', position: { row: 6, col: 0 }, type: 'image', isExternal: true, externalUrl: 'https://github.com/AnKiT-GaRG2' },
 ];
 
 export function Desktop() {
@@ -234,6 +236,8 @@ export function Desktop() {
         return <Calculator />;
       case 'contact':
         return <ContactMe />;
+      case 'review':
+        return <AddReview />;
       default:
         return <div className="p-4">App content for {id}</div>;
     }
