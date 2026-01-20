@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Wifi, Bluetooth, Bell, Moon, Volume2, Monitor, Keyboard, Mouse, User, Lock, Info, Palette } from 'lucide-react';
+import { Wifi, Bluetooth, Bell, Moon, Volume2, Monitor, Keyboard, Mouse, User, Lock, Info, Palette, Image } from 'lucide-react';
 
 interface SettingItem {
   id: string;
@@ -12,6 +12,7 @@ const settingsCategories: SettingItem[] = [
   { id: 'wifi', icon: Wifi, title: 'Wi-Fi', description: 'Connected' },
   { id: 'bluetooth', icon: Bluetooth, title: 'Bluetooth', description: 'On' },
   { id: 'notifications', icon: Bell, title: 'Notifications' },
+  { id: 'background', icon: Image, title: 'Background' },
   { id: 'appearance', icon: Palette, title: 'Appearance' },
   { id: 'sound', icon: Volume2, title: 'Sound' },
   { id: 'display', icon: Monitor, title: 'Displays' },
@@ -64,6 +65,89 @@ export function Settings() {
               <div className="p-4 bg-muted/20 rounded-lg">
                 <div className="text-sm text-muted-foreground">OS Type</div>
                 <div className="text-foreground">64-bit</div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'background':
+        return (
+          <div className="p-6 space-y-6">
+            <div className="space-y-4">
+              {/* Large preview of current wallpaper */}
+              <div className="relative w-full max-w-2xl aspect-video rounded-lg overflow-hidden border border-border shadow-lg">
+                <img 
+                  src="/images/ubuntu-bg2.jpg" 
+                  alt="Current wallpaper preview" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                This background selection only applies to the dark style
+              </p>
+
+              {/* Grid of wallpaper thumbnails */}
+              <div className="grid grid-cols-4 gap-3 mt-4">
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-primary shadow-md hover:scale-105 transition-transform">
+                  <img 
+                    src="/images/ubuntu-bg.jpg" 
+                    alt="Wallpaper 1" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </button>
+
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
+                  <img 
+                    src="/images/ubuntu-bg2.jpg" 
+                    alt="Wallpaper 2" 
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
+                  <img 
+                    src="/images/ubuntu-bg3.jpg" 
+                    alt="Wallpaper 3" 
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
+                  <img 
+                    src="/images/ubuntu-bg4.jpg" 
+                    alt="Wallpaper 4" 
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
+                  <img 
+                    src="/images/ubuntu-bg6.jpg" 
+                    alt="Wallpaper 5" 
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-transparent hover:border-muted-foreground/30 hover:scale-105 transition-transform">
+                  <img 
+                    src="/images/ubuntu-bg7.jpg" 
+                    alt="Wallpaper 6" 
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+
+                {/* Add Picture button */}
+                <button className="relative aspect-video rounded-lg overflow-hidden border-2 border-dashed border-muted-foreground/30 bg-muted/10 hover:bg-muted/20 hover:border-muted-foreground/50 transition-all flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">+</div>
+                    <div className="text-xs text-muted-foreground">Add Picture</div>
+                  </div>
+                </button>
               </div>
             </div>
           </div>

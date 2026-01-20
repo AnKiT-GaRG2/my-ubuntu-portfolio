@@ -35,8 +35,8 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
   settings: {
     title: 'Settings',
     icon: '⚙️',
-    position: { x: 220, y: 90 },
-    size: { width: 600, height: 450 },
+    position: { x: 150, y: 60 },
+    size: { width: 900, height: 650 },
   },
   calculator: {
     title: 'Calculator',
