@@ -608,6 +608,28 @@ const education = [
       case 'resume':
         return (
           <div className="space-y-6 animate-fadeIn">
+             {/* PDF Preview */}
+            <div className="bg-muted/20 rounded-xl border border-border overflow-hidden">
+              <div className="bg-muted/30 px-6 py-3 border-b border-border flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  Resume Preview
+                </h3>
+                <span className="text-xs text-muted-foreground">Software_engineering_internL.pdf</span>
+              </div>
+              <div className="p-4 bg-gradient-to-b from-muted/10 to-transparent">
+                <div className="bg-white rounded-lg overflow-hidden shadow-xl">
+                  <iframe
+                    src="/files/Software_engineering_internL.pdf"
+                    className="w-full h-[600px] border-0"
+                    title="Resume Preview"
+                  />
+                </div>
+                <p className="text-center text-xs text-muted-foreground mt-4">
+                  💡 Tip: Use the buttons above to download or open in a new tab for better viewing
+                </p>
+              </div>
+            </div>
             {/* Download Section */}
             <div className="text-center p-8 bg-gradient-to-br from-muted/20 to-muted/5 rounded-xl border border-border">
               <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300">
@@ -638,28 +660,7 @@ const education = [
               </div>
             </div>
 
-            {/* PDF Preview */}
-            <div className="bg-muted/20 rounded-xl border border-border overflow-hidden">
-              <div className="bg-muted/30 px-6 py-3 border-b border-border flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-primary" />
-                  Resume Preview
-                </h3>
-                <span className="text-xs text-muted-foreground">Software_engineering_internL.pdf</span>
-              </div>
-              <div className="p-4 bg-gradient-to-b from-muted/10 to-transparent">
-                <div className="bg-white rounded-lg overflow-hidden shadow-xl">
-                  <iframe
-                    src="/files/Software_engineering_internL.pdf"
-                    className="w-full h-[600px] border-0"
-                    title="Resume Preview"
-                  />
-                </div>
-                <p className="text-center text-xs text-muted-foreground mt-4">
-                  💡 Tip: Use the buttons above to download or open in a new tab for better viewing
-                </p>
-              </div>
-            </div>
+           
 
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-4">
