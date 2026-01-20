@@ -1,9 +1,57 @@
 import { useState } from 'react';
-import { Mail, MapPin, Github, Linkedin, Twitter, Globe, Code, Briefcase, GraduationCap, Download, Star, Award, BookOpen, Lightbulb, Rocket, Sparkles, Zap, Database, Brain, Users, Terminal, FolderGit2, ExternalLink, GitBranch } from 'lucide-react';
+import { Mail, MapPin, Github, Linkedin, Twitter, Globe, Code, Briefcase, GraduationCap, Download, Star, Award, BookOpen, Lightbulb, Rocket, Sparkles, Zap, Database, Brain, Users, Terminal, FolderGit2, ExternalLink, GitBranch, Send, X } from 'lucide-react';
 
 export function AboutMe() {
   const [activeTab, setActiveTab] = useState('about');
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [reviewForm, setReviewForm] = useState({
+    name: '',
+    designation: '',
+    comment: '',
+    rating: 5,
+  });
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitMessage(null);
+    
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/anki88520@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: reviewForm.name,
+          designation: reviewForm.designation,
+          rating: `${reviewForm.rating}/5 stars`,
+          review: reviewForm.comment,
+          _subject: 'New Review from Portfolio',
+          _template: 'table'
+        })
+      });
+
+      if (response.ok) {
+        setSubmitMessage({ type: 'success', text: 'Thank you! Your review has been submitted successfully.' });
+        setReviewForm({ name: '', designation: '', comment: '', rating: 5 });
+        setTimeout(() => {
+          setShowReviewForm(false);
+          setSubmitMessage(null);
+        }, 2000);
+      } else {
+        throw new Error('Failed to submit review');
+      }
+    } catch (error) {
+      setSubmitMessage({ type: 'error', text: 'Failed to submit review. Please try again.' });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const tabs = [
     { id: 'about', label: 'About Me', icon: Code },
@@ -686,10 +734,20 @@ const education = [
       case 'reviews':
         return (
           <div className="space-y-6 animate-fadeIn">
-            <h2 className="text-2xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <Star className="w-7 h-7 text-primary" />
-              What People Say
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2">
+                <Star className="w-7 h-7 text-primary" />
+                What People Say
+              </h2>
+              <button
+                onClick={() => setShowReviewForm(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all hover:scale-105 shadow-lg"
+              >
+                <Send className="w-4 h-4" />
+                Add Review
+              </button>
+            </div>
+
             {reviews.map((review, index) => (
               <div 
                 key={index}
@@ -713,6 +771,142 @@ const education = [
                 <p className="text-foreground/80 italic">"{review.comment}"</p>
               </div>
             ))}
+
+            {/* Bottom Add Review Button */}
+            <div className="flex justify-center pt-4">
+              <button
+                onClick={() => setShowReviewForm(true)}
+                className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-lg font-medium hover:from-primary/90 hover:to-primary/70 transition-all hover:scale-105 shadow-lg"
+              >
+                <Send className="w-5 h-5" />
+                Share Your Experience
+              </button>
+            </div>
+
+            {/* Add Review Form Modal */}
+            {showReviewForm && (
+              <div className="fixed inset-0 z-[700] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
+                <div className="bg-[#3c3c3c] rounded-xl w-full max-w-lg mx-4 shadow-2xl border border-border">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+                    <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                      <Star className="w-6 h-6 text-primary" />
+                      Write a Review
+                    </h3>
+                    <button
+                      onClick={() => setShowReviewForm(false)}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted/40 transition-colors"
+                    >
+                      <X className="w-5 h-5 text-foreground" />
+                    </button>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleSubmitReview} className="p-6 space-y-4">
+                    {/* Success/Error Message */}
+                    {submitMessage && (
+                      <div className={`p-4 rounded-lg border-2 ${
+                        submitMessage.type === 'success' 
+                          ? 'bg-green-500/20 border-green-500/50 text-green-300' 
+                          : 'bg-red-500/20 border-red-500/50 text-red-300'
+                      }`}>
+                        {submitMessage.text}
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Your Name <span className="text-primary">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={reviewForm.name}
+                        onChange={(e) => setReviewForm({ ...reviewForm, name: e.target.value })}
+                        disabled={submitting}
+                        className="w-full bg-[#2d2d2d] text-white border-2 border-border focus:border-primary rounded-lg px-4 py-2 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="John Doe"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Designation <span className="text-primary">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={reviewForm.designation}
+                        onChange={(e) => setReviewForm({ ...reviewForm, designation: e.target.value })}
+                        disabled={submitting}
+                        className="w-full bg-[#2d2d2d] text-white border-2 border-border focus:border-primary rounded-lg px-4 py-2 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="Senior Developer at Tech Corp"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Rating <span className="text-primary">*</span>
+                      </label>
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => !submitting && setReviewForm({ ...reviewForm, rating: star })}
+                            disabled={submitting}
+                            className={`transition-transform hover:scale-110 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          >
+                            <Star
+                              className={`w-8 h-8 ${
+                                star <= reviewForm.rating
+                                  ? 'fill-primary text-primary'
+                                  : 'text-muted-foreground'
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Your Review <span className="text-primary">*</span>
+                      </label>
+                      <textarea
+                        required
+                        value={reviewForm.comment}
+                        onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                        disabled={submitting}
+                        className="w-full bg-[#2d2d2d] text-white border-2 border-border focus:border-primary rounded-lg px-4 py-2 focus:outline-none transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                        rows={4}
+                        placeholder="Share your experience working with me..."
+                      />
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        type="button"
+                        onClick={() => setShowReviewForm(false)}
+                        disabled={submitting}
+                        className="flex-1 px-6 py-3 bg-muted/40 hover:bg-muted/60 text-foreground rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="flex-1 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all hover:scale-105 shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                      >
+                        <Send className={`w-4 h-4 ${submitting ? 'animate-pulse' : ''}`} />
+                        {submitting ? 'Submitting...' : 'Submit Review'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         );
 
