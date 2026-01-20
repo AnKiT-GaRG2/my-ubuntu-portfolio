@@ -43,7 +43,7 @@ export function NewFolderDialog({ onConfirm, onCancel }: NewFolderDialogProps) {
             value={folderName}
             onChange={(e) => setFolderName(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full bg-[#2d2d2d] text-white border-2 border-[#ff7139] rounded px-3 py-2 focus:outline-none focus:border-[#ff7139]"
+            className="w-full bg-[#2d2d2d] text-white border-2 border-accent-dynamic rounded px-3 py-2 focus:outline-none focus:border-accent-dynamic"
             placeholder=""
             maxLength={50}
           />
@@ -65,7 +65,7 @@ export function NewFolderDialog({ onConfirm, onCancel }: NewFolderDialogProps) {
                 onConfirm(folderName.trim());
               }
             }}
-            className="px-6 py-2 bg-[#ff7139] text-white rounded hover:bg-[#ff8555] transition-colors text-sm"
+            className="px-6 py-2 bg-accent-dynamic text-white rounded hover:brightness-110 transition-all text-sm"
           >
             Create
           </button>

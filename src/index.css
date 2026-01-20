@@ -6,6 +6,9 @@
 
 @layer base {
   :root {
+    /* Dynamic Accent Color - set by JavaScript */
+    --accent-color: #f97316;
+
     /* Ubuntu Theme Colors */
     --background: 320 56% 10%;
     --foreground: 0 0% 95%;
@@ -16,7 +19,8 @@
     --popover: 0 0% 12%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 14 89% 51%;
+    /* Primary uses accent color - converted from hex to HSL */
+    --primary: 17 88% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 320 56% 15%;
@@ -25,7 +29,8 @@
     --muted: 0 0% 20%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 14 89% 51%;
+    /* Accent uses same as primary */
+    --accent: 17 88% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -33,7 +38,9 @@
 
     --border: 0 0% 25%;
     --input: 0 0% 20%;
-    --ring: 14 89% 51%;
+    
+    /* Ring also uses accent color */
+    --ring: 17 88% 60%;
 
     --radius: 0.5rem;
 
@@ -91,6 +98,31 @@
 /* Ubuntu Mono for terminal */
 .font-ubuntu-mono {
   font-family: 'Ubuntu Mono', monospace;
+}
+
+/* Accent Color Utilities */
+.bg-accent-dynamic {
+  background-color: var(--accent-color) !important;
+}
+
+.text-accent-dynamic {
+  color: var(--accent-color) !important;
+}
+
+.border-accent-dynamic {
+  border-color: var(--accent-color) !important;
+}
+
+.ring-accent-dynamic {
+  --tw-ring-color: var(--accent-color) !important;
+}
+
+.hover\:bg-accent-dynamic:hover {
+  background-color: var(--accent-color) !important;
+}
+
+.hover\:text-accent-dynamic:hover {
+  color: var(--accent-color) !important;
 }
 
 /* Window animations */

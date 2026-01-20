@@ -36,16 +36,39 @@ interface SettingsProps {
   currentBackground?: string;
   onBackgroundChange?: (background: string) => void;
   initialSection?: string;
+  currentAccentColor?: string;
+  onAccentColorChange?: (color: string) => void;
 }
 
-export function Settings({ currentBackground = '/images/ubuntu-bg2.jpg', onBackgroundChange, initialSection = 'about' }: SettingsProps) {
+export function Settings({ 
+  currentBackground = '/images/ubuntu-bg2.jpg', 
+  onBackgroundChange, 
+  initialSection = 'about',
+  currentAccentColor = 'orange',
+  onAccentColorChange 
+}: SettingsProps) {
   const [activeSection, setActiveSection] = useState(initialSection);
   const [selectedBg, setSelectedBg] = useState(currentBackground);
+  const [selectedAccentColor, setSelectedAccentColor] = useState(currentAccentColor);
 
   const handleBackgroundSelect = (bg: string) => {
     setSelectedBg(bg);
     onBackgroundChange?.(bg);
   };
+
+  const handleAccentColorSelect = (color: string) => {
+    setSelectedAccentColor(color);
+    onAccentColorChange?.(color);
+  };
+
+  const accentColors = [
+    { name: 'orange', class: 'bg-orange-500', value: '#f97316' },
+    { name: 'blue', class: 'bg-blue-500', value: '#3b82f6' },
+    { name: 'green', class: 'bg-green-500', value: '#22c55e' },
+    { name: 'purple', class: 'bg-purple-500', value: '#a855f7' },
+    { name: 'pink', class: 'bg-pink-500', value: '#ec4899' },
+    { name: 'red', class: 'bg-red-500', value: '#ef4444' },
+  ];
 
   const renderContent = () => {
     switch (activeSection) {
@@ -168,10 +191,16 @@ export function Settings({ currentBackground = '/images/ubuntu-bg2.jpg', onBackg
               <div>
                 <h3 className="text-sm font-medium text-foreground mb-3">Accent Color</h3>
                 <div className="flex gap-2">
-                  {['bg-orange-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-red-500'].map((color) => (
+                  {accentColors.map((color) => (
                     <button
-                      key={color}
-                      className={`w-8 h-8 rounded-full ${color} ${color === 'bg-orange-500' ? 'ring-2 ring-white ring-offset-2 ring-offset-ubuntu-window' : ''}`}
+                      key={color.name}
+                      onClick={() => handleAccentColorSelect(color.name)}
+                      className={`w-8 h-8 rounded-full ${color.class} ${
+                        selectedAccentColor === color.name 
+                          ? 'ring-2 ring-white ring-offset-2 ring-offset-ubuntu-window' 
+                          : 'hover:scale-110 transition-transform'
+                      }`}
+                      title={color.name.charAt(0).toUpperCase() + color.name.slice(1)}
                     />
                   ))}
                 </div>
@@ -198,9 +227,10 @@ export function Settings({ currentBackground = '/images/ubuntu-bg2.jpg', onBackg
             onClick={() => setActiveSection(item.id)}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
               activeSection === item.id
-                ? 'bg-primary/20 text-primary'
+                ? 'text-accent-dynamic'
                 : 'text-foreground/80 hover:bg-white/5'
             }`}
+            style={activeSection === item.id ? { backgroundColor: 'var(--accent-color)20' } : {}}
           >
             <item.icon className="w-5 h-5" />
             <div className="flex-1">

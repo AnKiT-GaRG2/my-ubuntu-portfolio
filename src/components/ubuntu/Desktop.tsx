@@ -31,10 +31,61 @@ export function Desktop() {
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [brightness, setBrightness] = useState(80);
   const [background, setBackground] = useState('/images/ubuntu-bg2.jpg');
+  const [accentColor, setAccentColor] = useState('orange');
   const [userFolders, setUserFolders] = useState<Array<{ id: string; name: string; position: { row: number; col: number } }>>([]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  // Helper function to convert hex to HSL
+  const hexToHSL = (hex: string): string => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) return '17 88% 60%'; // default orange
+    
+    const r = parseInt(result[1], 16) / 255;
+    const g = parseInt(result[2], 16) / 255;
+    const b = parseInt(result[3], 16) / 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      
+      switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+        case g: h = ((b - r) / d + 2) / 6; break;
+        case b: h = ((r - g) / d + 4) / 6; break;
+      }
+    }
+
+    h = Math.round(h * 360);
+    s = Math.round(s * 100);
+    l = Math.round(l * 100);
+
+    return `${h} ${s}% ${l}%`;
+  };
+
+  // Apply accent color to CSS custom property
+  useEffect(() => {
+    const accentColorMap: Record<string, string> = {
+      orange: '#f97316',
+      blue: '#3b82f6',
+      green: '#22c55e',
+      purple: '#a855f7',
+      pink: '#ec4899',
+      red: '#ef4444',
+    };
+    const hexColor = accentColorMap[accentColor] || accentColorMap.orange;
+    const hslColor = hexToHSL(hexColor);
+    
+    document.documentElement.style.setProperty('--accent-color', hexColor);
+    document.documentElement.style.setProperty('--primary', hslColor);
+    document.documentElement.style.setProperty('--accent', hslColor);
+    document.documentElement.style.setProperty('--ring', hslColor);
+  }, [accentColor]);
   
   useEffect(() => {
     console.log('📍 Context menu state changed:', contextMenu);
@@ -176,6 +227,8 @@ export function Desktop() {
           currentBackground={background} 
           onBackgroundChange={setBackground}
           initialSection={metadata?.initialSection as string}
+          currentAccentColor={accentColor}
+          onAccentColorChange={setAccentColor}
         />;
       case 'calculator':
         return <Calculator />;

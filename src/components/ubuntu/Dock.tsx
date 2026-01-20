@@ -42,7 +42,7 @@ export function Dock({ openWindows, onOpenApp, desktopApps = [], userFolders = [
                   <span className="text-2xl opacity-70 group-hover:opacity-100">{app.icon}</span>
                 )}
                 {isOpen && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r bg-gray-400" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r bg-accent-dynamic" />
                 )}
                 <div className="absolute left-16 ml-2 bg-gray-800 text-gray-200 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                   {app.name}
