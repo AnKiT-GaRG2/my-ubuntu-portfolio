@@ -4,28 +4,53 @@ import { X, Search } from 'lucide-react';
 interface ApplicationsGridProps {
   onClose: () => void;
   onOpenApp: (id: string) => void;
+  desktopApps?: AppItem[];
+  userFolders?: Array<{ id: string; name: string; position: { row: number; col: number } }>;
 }
 
-const allApplications = [
-  { id: 'about', icon: '/icons/AboutMe.jpg', name: 'About Me', type: 'image' },
-  { id: 'files', icon: '/icons/files.jpg', name: 'Files', type: 'image' },
-  { id: 'chrome', icon: '/icons/Google_Chrome_icon.jpg', name: 'Chrome', type: 'image' },
-  { id: 'vscode', icon: '/icons/Visual_Studio_Code_icon.jpg', name: 'VS Code', type: 'image' },
+interface AppItem {
+  id: string;
+  icon: string;
+  name: string;
+  type: string;
+  isExternal?: boolean;
+  externalUrl?: string;
+}
+
+// System apps that are always available
+const systemApps: AppItem[] = [
   { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', type: 'image' },
   { id: 'calculator', icon: '/icons/Calculator.jpg', name: 'Calculator', type: 'image' },
-  { id: 'settings', icon: '/icons/settings.webp', name: 'Settings', type: 'image' },
+  { id: 'settings', icon: '/icons/settings.jpg', name: 'Settings', type: 'image' },
 ];
 
-export function ApplicationsGrid({ onClose, onOpenApp }: ApplicationsGridProps) {
+export function ApplicationsGrid({ onClose, onOpenApp, desktopApps = [], userFolders = [] }: ApplicationsGridProps) {
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Combine desktop apps, user folders, and system apps
+  const allApplications: AppItem[] = [
+    ...desktopApps,
+    ...userFolders.map(folder => ({
+      id: folder.id,
+      icon: '/icons/folder.png',
+      name: folder.name,
+      type: 'image',
+    })),
+    ...systemApps,
+  ];
 
   const filteredApps = allApplications.filter((app) =>
     app.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleAppClick = (appId: string) => {
-    onOpenApp(appId);
-    onClose();
+  const handleAppClick = (app: AppItem) => {
+    if (app.isExternal && app.externalUrl) {
+      window.open(app.externalUrl, '_blank');
+      onClose();
+    } else {
+      onOpenApp(app.id);
+      onClose();
+    }
   };
 
   return (
@@ -62,7 +87,7 @@ export function ApplicationsGrid({ onClose, onOpenApp }: ApplicationsGridProps) 
               {filteredApps.map((app) => (
                 <button
                   key={app.id}
-                  onClick={() => handleAppClick(app.id)}
+                  onClick={() => handleAppClick(app)}
                   className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-white/10 transition-colors group"
                 >
                   <div className="w-16 h-16 flex items-center justify-center">

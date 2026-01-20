@@ -5,6 +5,8 @@ import { ApplicationsGrid } from './ApplicationsGrid';
 interface DockProps {
   openWindows: WindowState[];
   onOpenApp: (id: string) => void;
+  desktopApps?: Array<{ id: string; icon: string; name: string; type: string; isExternal?: boolean; externalUrl?: string }>;
+  userFolders?: Array<{ id: string; name: string; position: { row: number; col: number } }>;
 }
 
 const dockApps = [
@@ -17,7 +19,7 @@ const dockApps = [
   { id: 'settings', icon: '/icons/settings.jpg', name: 'Settings', type: 'image' },
 ];
 
-export function Dock({ openWindows, onOpenApp }: DockProps) {
+export function Dock({ openWindows, onOpenApp, desktopApps = [], userFolders = [] }: DockProps) {
   const [showApplications, setShowApplications] = useState(false);
 
   return (
@@ -78,6 +80,8 @@ export function Dock({ openWindows, onOpenApp }: DockProps) {
         <ApplicationsGrid
           onClose={() => setShowApplications(false)}
           onOpenApp={onOpenApp}
+          desktopApps={desktopApps}
+          userFolders={userFolders}
         />
       )}
     </>

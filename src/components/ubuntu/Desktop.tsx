@@ -248,7 +248,12 @@ export function Desktop() {
         </Window>
       ))}
 
-      <Dock openWindows={windows} onOpenApp={openWindow} />
+      <Dock 
+        openWindows={windows} 
+        onOpenApp={openWindow}
+        desktopApps={desktopApps}
+        userFolders={userFolders}
+      />
       
       {/* Context Menu */}
       {contextMenu && (
