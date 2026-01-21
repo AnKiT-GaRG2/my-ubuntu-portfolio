@@ -7,9 +7,11 @@ const COMMANDS = {
   skills      - List my technical skills
   projects    - Show my projects
   education   - View my education
-  experience  - View my work experience
   contact     - Display contact information
   social      - Show social media links
+  stats       - View coding statistics
+  reviews     - Show all reviews
+  add-review  - Open Add Review application
   clear       - Clear the terminal
   welcome     - Display welcome message
   echo        - Echo a message
@@ -28,129 +30,167 @@ const COMMANDS = {
   exit        - Close terminal (use window controls)`,
 
   about: `
-╭──────────────────────────────────────────────────────────────╮
-│                        ABOUT ME                              │
-├──────────────────────────────────────────────────────────────┤
-│  Hi! I'm a passionate Full-Stack Developer based in the      │
-│  digital realm of creativity and innovation.                 │
-│                                                              │
-│  🚀 I love building elegant solutions to complex problems    │
-│  💡 Always learning and exploring new technologies           │
-│  🎯 Focused on creating impactful user experiences           │
-│                                                              │
-│  When I'm not coding, you'll find me exploring open-source   │
-│  projects, contributing to the developer community, and      │
-│  staying up-to-date with the latest tech trends.             │
+──────────────────────────────────────────────────────────────
+                     ANKIT GARG                               
+──────────────────────────────────────────────────────────────
+  🧑‍💻 ML Enthusiast + Full Stack Developer                     
+  📍 Location: India                                          
+                                                              
+  Passionate Full Stack Developer with expertise in building  
+  modern web applications. I love creating elegant solutions  
+  to complex problems and contributing to open source         
+  projects. With a strong foundation in both frontend and     
+  backend technologies, I bring ideas to life through clean,  
+  efficient code.                                             
+                                                              
+  When I'm not coding, you can find me exploring new          
+  technologies, Listening Music, or Travelling. I believe in  
+  continuous learning and staying updated with the latest     
+  trends.                                                     
+                                                              
+  📊 Quick Stats:                                             
+  ├── 10+ Projects Completed                                  
+  ├── 6+ Hackathons Participated                              
+  └── 8+ Certifications Earned                                
 ╰──────────────────────────────────────────────────────────────╯`,
 
   skills: `
-╭──────────────────────────────────────────────────────────────╮
-│                    TECHNICAL SKILLS                          │
-├──────────────────────────────────────────────────────────────┤
-│  LANGUAGES                                                   │
-│  ├── JavaScript/TypeScript  ████████████████████  Expert     │
-│  ├── Python                 ████████████████░░░░  Advanced   │
-│  ├── Java                   ████████████░░░░░░░░  Proficient │
-│  └── C/C++                  ████████░░░░░░░░░░░░  Familiar   │
-│                                                              │
-│  FRONTEND                                                    │
-│  ├── React.js               ████████████████████  Expert     │
-│  ├── Vue.js                 ████████████████░░░░  Advanced   │
-│  ├── HTML/CSS               ████████████████████  Expert     │
-│  └── Tailwind CSS           ████████████████████  Expert     │
-│                                                              │
-│  BACKEND                                                     │
-│  ├── Node.js                ████████████████████  Expert     │
-│  ├── Express.js             ████████████████░░░░  Advanced   │
-│  └── Django                 ████████████░░░░░░░░  Proficient │
-│                                                              │
-│  DATABASE                                                    │
-│  ├── PostgreSQL             ████████████████░░░░  Advanced   │
-│  ├── MongoDB                ████████████████░░░░  Advanced   │
-│  └── Redis                  ████████████░░░░░░░░  Proficient │
-│                                                              │
-│  TOOLS & PLATFORMS                                           │
-│  ├── Git/GitHub             ████████████████████  Expert     │
-│  ├── Docker                 ████████████████░░░░  Advanced   │
-│  ├── AWS                    ████████████░░░░░░░░  Proficient │
-│  └── Linux                  ████████████████░░░░  Advanced   │
+──────────────────────────────────────────────────────────────
+                    TECHNICAL SKILLS                          
+──────────────────────────────────────────────────────────────
+  💻 PROGRAMMING LANGUAGES                                    
+  ├── C                      ████████████████░░░░  80%        
+  ├── C++                    ███████████████████░  95%        
+  ├── Python                 ██████████████████░░  90%        
+  ├── JavaScript             ████████████░░░░░░░░  60%        
+  └── SQL                    ███████████████░░░░░  75%        
+                                                              
+  🌐 WEB TECHNOLOGIES                                         
+  ├── React.js               ██████████████████░░  90%        
+  ├── Node.js                ██████████████████░░  90%        
+  ├── Next.js                ████████████████░░░░  80%        
+  ├── Express.js             █████████████████░░░  85%        
+  ├── Bootstrap              ███████████████░░░░░  75%        
+  ├── Tailwind CSS           ███████████████░░░░░  75%        
+  ├── MongoDB                ███████████████░░░░░  75%        
+  └── REST APIs              █████████████████░░░  85%        
+                                                              
+  🤖 ML/DATA TOOLS                                            
+  ├── NumPy                  ███████████████████░  95%        
+  ├── Pandas                 ███████████████████░  95%        
+  ├── Scikit-learn           █████████████████░░░  85%        
+  ├── TensorFlow             ████████████████░░░░  80%        
+  ├── PyTorch                ████████████████░░░░  80%        
+  ├── OpenCV                 ██████████████████░░  90%        
+  └── Matplotlib             ██████████████████░░  90%        
+                                                              
+  ⚡ CS FUNDAMENTALS                                           
+  ├── DSA                    ██████████████████░░  90% 
+  ├── Computer Networks      █████████████████░░░  85%        
+  ├── OOPs                   ██████████████████░░  92%        
+  ├── GitHub                 ███████████████████░  95%        
+  ├── DBMS                   █████████████████░░░  88%        
+  ├── Operating Systems      █████████████████░░░  85%        
+  └── NLP                    ████████████████░░░░  80%        
+                                                              
+
 ╰──────────────────────────────────────────────────────────────╯`,
 
   projects: `
-╭──────────────────────────────────────────────────────────────╮
-│                      MY PROJECTS                             │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. 🖥️  Ubuntu Portfolio                                     │
-│     ├── Tech: React, TypeScript, Tailwind CSS                │
-│     ├── A unique portfolio simulating Ubuntu Desktop         │
-│     └── github.com/username/ubuntu-portfolio                 │
-│                                                              │
-│  2. 🛒  E-Commerce Platform                                  │
-│     ├── Tech: Next.js, Node.js, PostgreSQL                   │
-│     ├── Full-featured online shopping platform               │
-│     └── github.com/username/ecommerce                        │
-│                                                              │
-│  3. 💬  Real-time Chat App                                   │
-│     ├── Tech: React, Socket.io, MongoDB                      │
-│     ├── Instant messaging with group support                 │
-│     └── github.com/username/chat-app                         │
-│                                                              │
-│  4. 📊  Analytics Dashboard                                  │
-│     ├── Tech: React, D3.js, Python, FastAPI                  │
-│     ├── Data visualization and analytics tool                │
-│     └── github.com/username/analytics                        │
-│                                                              │
-│  Type 'open <project-number>' for more details               │
-╰──────────────────────────────────────────────────────────────╯`,
+──────────────────────────────────────────────────────────────
+                      MY PROJECTS                             
+──────────────────────────────────────────────────────────────
+                                                              
+  1. 🖥️  Ubuntu Portfolio Website                             
+     ├── Tech: React, TypeScript, Tailwind CSS, Vite          
+     ├── Fully functional Ubuntu-themed portfolio with        
+     │   interactive desktop environment                      
+     ├── Live: [Current Website]                              
+     └── github.com/AnKiT-GaRG2/my-ubuntu-portfolio          
+                                                              
+  2. � Forex Prediction App                                   
+     ├── Tech: Python, Machine Learning, TensorFlow, Flask    
+     ├── ML application for forex market prediction with      
+     │   real-time data analysis (92% accuracy)               
+     ├── Live: forex-prediction-app.onrender.com             
+     └── github.com/AnKiT-GaRG2/Forex-Prediction-App         
+                                                              
+  3. � Loan Manager                                           
+     ├── Tech: React, Node.js, MongoDB, Express, REST APIs    
+     ├── Comprehensive loan management system with            
+     │   tracking and payment management                      
+     └── github.com/AnKiT-GaRG2/LoanManager                   
+                                                              
+  4. 🔍 Code Reviewer                                        
+     ├── Tech: Python, AI/ML, NLP, React, FastAPI             
+     ├── AI-powered code review tool for quality analysis     
+     ├── Live: code-reviewer-frontend-mu.vercel.app           
+     └── github.com/AnKiT-GaRG2/Code-Reviewer                 
+                                                              
+  5. ⚠️  Risk Management System                               
+     ├── Tech: React, TypeScript, Node.js, PostgreSQL         
+     ├── Enterprise-level risk management platform            
+     ├── Live: risk-management-system-git-main-...vercel.app  
+     └── github.com/AnKiT-GaRG2/Risk-Management-System        
+           
+  and many more.. 
+  See all p[rojects in my About Me section.                                                            
+           
+  Type 'open chrome' to view projects in browser              
+──────────────────────────────────────────────────────────────`,
 
   education: `
-╭──────────────────────────────────────────────────────────────╮
-│                       EDUCATION                              │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  🎓 Bachelor of Technology in Computer Science               │
-│     ├── University Name                                      │
-│     ├── 2019 - 2023                                          │
-│     ├── GPA: 3.8/4.0                                         │
-│     └── Relevant Coursework:                                 │
-│         • Data Structures & Algorithms                       │
-│         • Database Management Systems                        │
-│         • Computer Networks                                  │
-│         • Machine Learning                                   │
-│         • Software Engineering                               │
-│                                                              │
-│  📜 Certifications                                           │
-│     ├── AWS Certified Developer Associate                    │
-│     ├── Meta Frontend Developer Certificate                  │
-│     └── Google Cloud Professional                            │
+──────────────────────────────────────────────────────────────
+                       EDUCATION                              
+──────────────────────────────────────────────────────────────
+                                                              
+  🎓 Bachelor of Technology in Computer Science               
+     ├── Birla Institute Of Technology (BIT Mesra)            
+     ├── 2023 - Present                                       
+     ├── CGPA: 8.2/10                                         
+     └── Strong foundation in software engineering, DSA,      
+         operating systems, databases, and modern web         
+         technologies, with hands-on project and              
+         problem-solving experience.                          
+                                                              
+  🎓 Senior Secondary (12th)                                  
+     ├── Grizzly Vidyalaya, Koderma                           
+     ├── 2020 - 2022                                          
+     ├── Score: 87.6% (CBSE)                                  
+     └── Science stream with emphasis on Mathematics,         
+         Computer Science, and analytical problem-solving.    
+                                                              
+  🎓 Secondary (10th)                                         
+     ├── The Himalayan Public School, Dehradun                
+     ├── 2018 - 2020                                          
+     ├── Score: 91.6% (ICSE)                                  
+     └── Built strong academic foundation with focus on       
+         Mathematics, Science, and logical reasoning.         
 ╰──────────────────────────────────────────────────────────────╯`,
 
-  experience: `
-╭──────────────────────────────────────────────────────────────╮
-│                    WORK EXPERIENCE                           │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  💼 Senior Software Engineer                                 │
-│     ├── Tech Company Inc.                                    │
-│     ├── Jan 2023 - Present                                   │
-│     └── • Led development of microservices architecture      │
-│         • Mentored junior developers                         │
-│         • Reduced system latency by 40%                      │
-│                                                              │
-│  💼 Full Stack Developer                                     │
-│     ├── Startup XYZ                                          │
-│     ├── Jun 2021 - Dec 2022                                  │
-│     └── • Built scalable web applications                    │
-│         • Implemented CI/CD pipelines                        │
-│         • Integrated third-party APIs                        │
-│                                                              │
-│  💼 Software Development Intern                              │
-│     ├── Innovation Labs                                      │
-│     ├── Jan 2021 - May 2021                                  │
-│     └── • Developed RESTful APIs                             │
-│         • Wrote unit tests for critical modules              │
-│         • Collaborated in Agile environment                  │
+  stats: `
+──────────────────────────────────────────────────────────────
+                   CODING STATISTICS                          
+──────────────────────────────────────────────────────────────
+                                                              
+  🏆 Competitive Programming                                  
+  ├── Total Problems Solved: 800+                             
+  ├── Codeforces Rating: 1365 (ankitGarG)                     
+  ├── CodeChef Rating: 1632 (anki88520)                       
+  └── LeetCode Rating: 1664 (anki88520)                       
+                                                              
+  🎯 Hackathons & Achievements                                
+  ├── 6+ National-level Hackathons                            
+  ├── Adobe India Hackathon 2025                              
+  │   └── Dockerized OCR & RAG PDF Assistant                  
+  ├── Runner-up: Hackaway-Robosaga                            
+  ├── Regional Qualifier: Smart India Hackathon               
+  └── Organized IEEE's CTF Event                              
+                                                              
+  💻 GitHub Activity                                          
+  ├── Repositories: 20+                                       
+  ├── Contributions: Active                                   
+  └── Profile: github.com/AnKiT-GaRG2                         
 ╰──────────────────────────────────────────────────────────────╯`,
 
   contact: `
@@ -158,41 +198,79 @@ const COMMANDS = {
 │                    CONTACT INFORMATION                       │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
-│  📧 Email      :  developer@example.com                      │
-│  📱 Phone      :  +1 (555) 123-4567                          │
-│  📍 Location   :  San Francisco, CA                          │
-│  🌐 Website    :  https://myportfolio.dev                    │
+│  📧 Email      :  anki88520@gmail.com                        │
+│  📱 Phone      :  +91 8852089989                             │
+│  📍 Location   :  India                                      │
+│  🌐 Portfolio  :  https://ankitgarg.dev                      │
 │                                                              │
 │  Feel free to reach out for collaborations or just to say hi!│
 ╰──────────────────────────────────────────────────────────────╯`,
 
   social: `
-╭──────────────────────────────────────────────────────────────╮
-│                     SOCIAL MEDIA                             │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  🐙 GitHub     :  github.com/username                        │
-│  💼 LinkedIn   :  linkedin.com/in/username                   │
-│  🐦 Twitter    :  twitter.com/username                       │
-│  📸 Instagram  :  instagram.com/username                     │
-│  ✍️  Medium     :  medium.com/@username                       │
-│  📘 Dev.to     :  dev.to/username                            │
-│                                                              │
+──────────────────────────────────────────────────────────────
+                     SOCIAL MEDIA                             
+──────────────────────────────────────────────────────────────
+                                                              
+  🐙 GitHub     :  github.com/AnKiT-GaRG2                     
+  💼 LinkedIn   :  linkedin.com/in/ankitgarg-516b9b29a        
+  🐦 Twitter    :  twitter.com/AnkitGarg357478                
+                                                              
+  💻 Coding Profiles:                                         
+  ├── Codeforces :  codeforces.com/profile/ankitGarG         
+  ├── CodeChef   :  codechef.com/users/anki88520             
+  └── LeetCode   :  leetcode.com/anki88520                    
+                                                              
 ╰──────────────────────────────────────────────────────────────╯`,
 
-  welcome: `
-   _   _ _                 _         ____            _    _              
-  | | | | |               | |       |  _ \\          | |  | |             
-  | | | | |__  _   _ _ __ | |_ _   _| |_) | ___  ___| | _| |_ ___  _ __  
-  | | | | '_ \\| | | | '_ \\| __| | | |  _ < / _ \\/ __| |/ / __/ _ \\| '_ \\ 
-  | |_| | |_) | |_| | | | | |_| |_| | |_) |  __/\\__ \\   <| || (_) | |_) |
-   \\___/|_.__/ \\__,_|_| |_|\\__|\\__,_|____/ \\___||___/_|\\_\\\\__\\___/| .__/ 
-                                                                  | |    
-                                                                  |_|    
+  reviews: `
+──────────────────────────────────────────────────────────────
+                     CLIENT REVIEWS                           
+──────────────────────────────────────────────────────────────
+                                                              
+  ⭐ John Doe - Senior Developer at Tech Corp                 
+  Rating: ⭐⭐⭐⭐⭐ (5/5)                                    
+  "Excellent developer with great problem-solving skills.     
+   Delivered projects on time and exceeded expectations."     
+                                                              
+  ⭐ Sarah Smith - Project Manager at StartupXYZ              
+  Rating: ⭐⭐⭐⭐⭐ (5/5)                                    
+  "Amazing team player! Great communication skills and        
+   always willing to help others. Highly recommended!"        
+                                                              
+  ⭐ Mike Johnson - CTO at InnovateLabs                       
+  Rating: ⭐⭐⭐⭐⭐ (5/5)                                    
+  "Outstanding technical skills and creativity. Brought       
+   innovative solutions to complex challenges."               
+                                                              
+  Want to add your review? Type 'add-review'                  
+╰──────────────────────────────────────────────────────────────╯`,
 
-  Welcome to Ankit's interactive portfolio!
+welcome: `
+
+                                                             
+          █████╗ ███╗   ██╗██╗  ██╗██╗████████╗      ███████╗     
+         ██╔══██╗████╗  ██║██║ ██╔╝██║╚══██╔══╝      ██╔════╝     
+         ███████║██╔██╗ ██║█████╔╝ ██║   ██║   █████╗███████╗     
+         ██╔══██║██║╚██╗██║██╔═██╗ ██║   ██║   ╚════╝╚════██║     
+         ██║  ██║██║ ╚████║██║  ██╗██║   ██║         ███████║     
+         ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝   ╚═╝         ╚══════╝     
+                                                                    
+          ██╗   ██╗██████╗ ██╗   ██╗███╗   ██╗████████╗██╗   ██╗
+          ██║   ██║██╔══██╗██║   ██║████╗  ██║╚══██╔══╝██║   ██║
+          ██║   ██║██████╔╝██║   ██║██╔██╗ ██║   ██║   ██║   ██║
+          ██║   ██║██╔══██╗██║   ██║██║╚██╗██║   ██║   ██║   ██║
+          ╚██████╔╝██████╔╝╚██████╔╝██║ ╚████║   ██║   ╚██████╔╝
+           ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝    ╚═════╝ 
+                                                                    
+  
+
+  🚀 Welcome to Ankit's Ubuntu Interactive Portfolio! 🚀
+
+  💻 ML Enthusiast + Full Stack Developer
+  📍 India | 🎓 BIT Mesra | ⭐ 800+ Problems Solved
 
   Type 'help' to see available commands.
+  Type 'about' to learn more about me.
   `,
 };
 
@@ -262,14 +340,21 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
       case 'education':
         output = COMMANDS.education;
         break;
-      case 'experience':
-        output = COMMANDS.experience;
+      case 'stats':
+        output = COMMANDS.stats;
         break;
       case 'contact':
         output = COMMANDS.contact;
         break;
       case 'social':
         output = COMMANDS.social;
+        break;
+      case 'reviews':
+        output = COMMANDS.reviews;
+        break;
+      case 'add-review':
+        onOpenApp?.('review');
+        output = 'Opening Add Review...';
         break;
       case 'welcome':
         output = COMMANDS.welcome;
@@ -284,10 +369,10 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
         output = new Date().toString();
         break;
       case 'whoami':
-        output = 'guest@ubuntu-portfolio';
+        output = 'Ankit@ubuntu-portfolio';
         break;
       case 'pwd':
-        output = currentDirectory.replace('~', '/home/guest');
+        output = currentDirectory.replace('~', '/home/ankit');
         break;
       case 'cd':
         if (args.length === 0 || rest === '') {
@@ -394,12 +479,18 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
         } else if (args[0] === 'contact') {
           onOpenApp?.('contact');
           output = 'Opening Contact Me...';
+        } else if (args[0] === 'review' || args[0] === 'add-review') {
+          onOpenApp?.('review');
+          output = 'Opening Add Review...';
+        } else if (args[0] === 'chatbot' || args[0] === 'ankitalk') {
+          onOpenApp?.('chatbot');
+          output = 'Opening AnkiTalk...';
         } else {
           output = `open: ${args[0]}: Application not found`;
         }
         break;
       case 'sudo':
-        output = "Nice try! But you don't have sudo privileges here 😄\n[sudo] password for guest: ";
+        output = "Nice try! But you don't have sudo privileges here 😄\n[sudo] password for ankit: ";
         break;
       case 'exit':
       case 'quit':
@@ -480,7 +571,7 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
         </div>
       ))}
       <div className="flex gap-1 items-center">
-        <span className="text-green-400">guest@Dell</span>
+        <span className="text-green-400">Ankit@Dell</span>
         <span className="text-white">:</span>
         <span className="text-blue-400">{currentDirectory}</span>
         <span className="text-white">$</span>
