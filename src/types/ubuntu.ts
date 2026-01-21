@@ -19,5 +19,5 @@ export interface DesktopApp {
 
 export interface TerminalLine {
   type: 'input' | 'output';
-  content: string;
+  content: string | React.ReactNode;
 }

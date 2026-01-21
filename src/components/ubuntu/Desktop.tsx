@@ -2,7 +2,7 @@ import { TopBar } from './TopBar';
 import { Dock } from './Dock';
 import { DesktopIcon } from './DesktopIcon';
 import { Window } from './Window';
-import { Terminal } from './apps/Terminal';
+import { TerminalV2 } from './apps/TerminalV2';
 import { VSCode } from './apps/VSCode';
 import { Chrome } from './apps/Chrome';
 import { AboutMe } from './apps/AboutMe';
@@ -261,7 +261,7 @@ export function Desktop() {
   const renderWindowContent = (id: string, metadata?: Record<string, string | number | boolean>) => {
     switch (id) {
       case 'terminal':
-        return <Terminal onOpenApp={openWindow} onCreateFolder={handleCreateFolder} />;
+        return <TerminalV2 onOpenApp={openWindow} onCreateFolder={handleCreateFolder} />;
       case 'vscode':
         return <VSCode />;
       case 'chrome':
