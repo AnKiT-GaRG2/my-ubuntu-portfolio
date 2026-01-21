@@ -282,11 +282,7 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
               <button
                 key={place.path}
                 onClick={() => {
-                  if (place.icon === 'trash' && onOpenApp) {
-                    onOpenApp('trash');
-                  } else {
-                    navigateTo(place.path);
-                  }
+                  navigateTo(place.path);
                 }}
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-left ${
                   currentPath === place.path ? 'bg-primary/20 text-primary' : 'text-foreground/70 hover:bg-white/5'
