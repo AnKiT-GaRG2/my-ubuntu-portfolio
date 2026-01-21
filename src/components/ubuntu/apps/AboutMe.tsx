@@ -7,8 +7,12 @@ import { ProjectsSection } from './about-sections/ProjectsSection';
 import { ResumeSection } from './about-sections/ResumeSection';
 import { ReviewsSection } from './about-sections/ReviewsSection';
 
-export function AboutMe() {
-  const [activeTab, setActiveTab] = useState('about');
+interface AboutMeProps {
+  initialSection?: string;
+}
+
+export function AboutMe({ initialSection = 'about' }: AboutMeProps) {
+  const [activeTab, setActiveTab] = useState(initialSection);
 
   const tabs = [
     { id: 'about', label: 'About Me', icon: Code },

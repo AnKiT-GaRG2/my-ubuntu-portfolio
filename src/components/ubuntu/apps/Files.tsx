@@ -14,17 +14,18 @@ interface FileItem {
   appId?: string; // Desktop app ID for clickable apps
   isExternal?: boolean; // Is external link
   externalUrl?: string; // External URL
+  metadata?: Record<string, string | number | boolean>; // Additional metadata for apps
 }
 
 const folders: Record<string, FileItem[]> = {
   '/home/guest': [
-    { name: 'Desktop', type: 'folder', icon: 'folder' },
-    { name: 'Documents', type: 'folder', icon: 'folder' },
-    { name: 'Downloads', type: 'folder', icon: 'download' },
-    { name: 'Music', type: 'folder', icon: 'music' },
-    { name: 'Pictures', type: 'folder', icon: 'image' },
-    { name: 'Projects', type: 'folder', icon: 'code' },
-    { name: 'Videos', type: 'folder', icon: 'video' },
+    { name: 'Desktop', type: 'folder', icon: 'folder', customIcon: '/icons/user-home.png' },
+    { name: 'Documents', type: 'folder', icon: 'folder', customIcon: '/icons/folder-documents.png' },
+    { name: 'Downloads', type: 'folder', icon: 'download', customIcon: '/icons/folder-download.png' },
+    { name: 'Music', type: 'folder', icon: 'music', customIcon: '/icons/folder-music.png' },
+    { name: 'Pictures', type: 'folder', icon: 'image', customIcon: '/icons/folder-pictures.png' },
+    { name: 'Projects', type: 'folder', icon: 'code', customIcon: '/icons/folder.png', appId: 'about', metadata: { initialSection: 'projects' } },
+    { name: 'Videos', type: 'folder', icon: 'video', customIcon: '/icons/folder-videos.png' },
   ],
   // Desktop folder will be generated dynamically from desktopApps
   '/home/guest/Documents': [
@@ -59,7 +60,7 @@ const folders: Record<string, FileItem[]> = {
     { name: 'api-server', type: 'folder', icon: 'code' },
   ],
   '/home/guest/Pictures': [
-    { name: 'vacation-2023', type: 'folder', icon: 'folder' },
+    { name: 'vacation-2023', type: 'folder', icon: 'folder', customIcon: '/icons/gallery-app.png' },
     { name: 'screenshots', type: 'folder', icon: 'folder' },
     { name: 'profile.jpg', type: 'file', icon: 'image', size: '2.4 MB', modified: 'Jan 5' },
   ],
@@ -152,7 +153,19 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
 
   const handleItemClick = (item: FileItem) => {
     if (item.type === 'folder') {
-      navigateTo(`${currentPath}/${item.name}`);
+      // Check if folder has an app associated with it
+      if (item.appId) {
+        if (item.isExternal && item.externalUrl) {
+          // Open external link in new tab
+          window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
+        } else if (onOpenApp) {
+          // Open app window with metadata
+          onOpenApp(item.appId, item.metadata);
+        }
+      } else {
+        // Regular folder navigation
+        navigateTo(`${currentPath}/${item.name}`);
+      }
     } else if (item.type === 'file') {
       // Handle desktop app clicks
       if (item.appId) {
@@ -161,7 +174,7 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
           window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
         } else if (onOpenApp) {
           // Open app window
-          onOpenApp(item.appId);
+          onOpenApp(item.appId, item.metadata);
         }
       }
       // Handle PDF files

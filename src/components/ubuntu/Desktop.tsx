@@ -214,7 +214,7 @@ export function Desktop() {
       case 'chrome':
         return <Chrome />;
       case 'about':
-        return <AboutMe />;
+        return <AboutMe initialSection={metadata?.initialSection as string} />;
       case 'files':
         return <Files initialPath={metadata?.initialPath as string} onOpenApp={openWindow} />;
       case 'settings':
