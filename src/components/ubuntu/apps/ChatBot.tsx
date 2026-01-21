@@ -3,9 +3,10 @@ import { Send, Loader2, Sparkles, Bot, User, Trash2, RefreshCw } from 'lucide-re
 
 interface ChatBotProps {
   accentColor: string;
+  onOpenApp?: (appId: string) => void;
 }
 
-export function ChatBot({ accentColor }: ChatBotProps) {
+export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -259,6 +260,15 @@ My website is a fully functional Ubuntu desktop simulation with:
 - Dock with running applications
 - Top bar with system controls
 
+## Add Review Feature:
+If someone wants to add a review:
+- The "Add Review" app allows visitors to submit reviews
+- All fields are required: Name, Designation, Rating (1-5 stars), and Review text
+- Reviews are automatically sent to my email (anki88520@gmail.com) via FormSubmit.co
+- After submission, reviews are manually added to the portfolio after verification
+- The form validates all fields before submission to ensure complete information
+- Users receive a confirmation message after successful submission
+
 ## About My Personality:
 - From Ranchi, Jharkhand, India
 - Currently studying at BIT Mesra
@@ -334,6 +344,79 @@ Respond with ONLY "YES" if the text contains abuse, or "NO" if it's clean. No ex
     } catch (error) {
       console.error('Error checking for abuse:', error);
       return false; // If error, allow the message
+    }
+  };
+
+  const detectReviewIntent = async (text: string): Promise<boolean> => {
+    console.log('🔍 Checking review intent for:', text);
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: `You are an intent detection system. Your job is to determine if the user wants to give/add/submit a review or feedback.
+
+Analyze the user's message in ANY language (English, Hindi, Hinglish, or mixed) and determine if they are expressing intent to:
+- Give a review
+- Add a review
+- Write a review
+- Submit feedback
+- Provide testimonial
+- Share their experience
+- Rate the portfolio/work
+
+Examples of review intent:
+- "I want to give a review"
+- "add krde bhai" (add it brother)
+- "review dena chahta hoon" (want to give review)
+- "let me write a review"
+- "can I add feedback"
+- "apni website par review add karna hai"
+- "mujhe review dena hai"
+- "can i add the review here?"
+- "My name is ankit i am a developer 4 star and he is good"
+
+Respond with ONLY "YES" if they want to give a review, or "NO" if they don't.`
+            },
+            {
+              role: 'user',
+              content: text
+            }
+          ],
+          temperature: 0.3,
+          max_tokens: 10
+        })
+      });
+
+      console.log('📡 Review intent API response status:', response.status, response.ok);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('❌ Review intent API error:', response.status, errorData);
+        return false; // If API fails, don't trigger review
+      }
+
+      const data = await response.json();
+      console.log('🤖 Groq response for intent detection:', data);
+      
+      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        console.error('❌ Invalid response structure from Groq API:', data);
+        return false;
+      }
+      
+      const result = data.choices[0].message.content.trim().toUpperCase();
+      console.log('📊 Review intent result:', result, '→', result === 'YES');
+      return result === 'YES';
+    } catch (error) {
+      console.error('❌ Error detecting review intent:', error);
+      return false; // If error, don't trigger review
     }
   };
 
@@ -432,6 +515,32 @@ Respond with ONLY "YES" if the text contains abuse, or "NO" if it's clean. No ex
         return;
       }
 
+      // Check for review intent using AI
+      console.log('🎯 Starting review intent detection...');
+      const hasReviewIntent = await detectReviewIntent(userInput);
+      console.log('🎯 Review intent detected:', hasReviewIntent);
+      
+      if (hasReviewIntent) {
+        console.log('✅ Opening Add Review app...');
+        // Open the Add Review app
+        if (onOpenApp) {
+          onOpenApp('review');
+          console.log('✅ Add Review app opened successfully');
+        } else {
+          console.warn('⚠️ onOpenApp callback is not available');
+        }
+
+        const reviewResponse = {
+          role: 'assistant',
+          content: "Great! I've opened the Add Review app for you. Please fill in all the required fields:\n\n✓ Your Name\n✓ Your Designation\n✓ Rating (1-5 stars)\n✓ Your Review\n\nYour review will be sent directly to Ankit via email and added to the portfolio! 😊"
+        };
+        setMessages(prev => [...prev, reviewResponse]);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+
+      console.log('💬 Proceeding with normal conversation...');
       // If not abusive, proceed with normal conversation
       const conversationHistory = messages
         .slice(-5)

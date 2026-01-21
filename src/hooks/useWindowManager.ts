@@ -69,9 +69,11 @@ export function useWindowManager() {
   const [maxZIndex, setMaxZIndex] = useState(1);
 
   const openWindow = useCallback((id: string, metadata?: Record<string, string | number | boolean>) => {
+    console.log('🪟 openWindow called with:', { id, metadata });
     setWindows((prev) => {
       const existing = prev.find((w) => w.id === id);
       if (existing) {
+        console.log('🪟 Window already exists, bringing to front:', id);
         // Bring to front and unminimize, update metadata if provided
         setMaxZIndex((z) => z + 1);
         return prev.map((w) =>
@@ -82,8 +84,12 @@ export function useWindowManager() {
       }
 
       // Create new window
+      console.log('🪟 Creating new window:', id);
       const config = defaultWindows[id];
-      if (!config) return prev;
+      if (!config) {
+        console.error('❌ No config found for window:', id);
+        return prev;
+      }
 
       setMaxZIndex((z) => z + 1);
       return [

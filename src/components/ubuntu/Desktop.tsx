@@ -232,7 +232,7 @@ export function Desktop() {
       case 'review':
         return <AddReview />;
       case 'chatbot':
-        return <ChatBot accentColor={accentColor} />;
+        return <ChatBot accentColor={accentColor} onOpenApp={openWindow} />;
       default:
         return <div className="p-4">App content for {id}</div>;
     }
