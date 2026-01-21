@@ -28,13 +28,17 @@ export function ChatMessage({
       {/* Avatar for assistant */}
       {role === 'assistant' && (
         <div 
-          className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg border-2"
+          className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg border-2 overflow-hidden"
           style={{
             background: `linear-gradient(to bottom right, rgb(${accentRgb}), rgb(${darkerRgb}))`,
             borderColor: `rgba(${accentRgb}, 0.5)`
           }}
         >
-          <Bot className="text-white" size={16} />
+          <img 
+            src="/AnkitRobo.png" 
+            alt="AnkiTalk AI" 
+            className="w-full h-full object-cover"
+          />
         </div>
       )}
       

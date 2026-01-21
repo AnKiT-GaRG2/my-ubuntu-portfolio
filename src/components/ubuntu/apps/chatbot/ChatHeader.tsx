@@ -24,13 +24,18 @@ export function ChatHeader({
       }}
     >
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center animate-pulse shadow-xl border-2 border-white/30">
-          <Sparkles className="text-white" size={24} />
+        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-xl border-2 border-white/30 overflow-hidden">
+          <img 
+            src="/AnkitRobo.png" 
+            alt="AnkiTalk AI" 
+            className="w-full h-full object-cover"
+            
+          />
         </div>
         <div>
           <h3 className="text-white font-bold text-lg flex items-center gap-2">
-            AnkiTalk
-            <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">AI</span>
+             Ankit 2.0
+            <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">Humanoid</span>
           </h3>
           <p className="text-white/90 text-xs flex items-center gap-1">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>

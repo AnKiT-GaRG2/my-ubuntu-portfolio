@@ -17,7 +17,7 @@ const dockApps = [
   { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', type: 'image' },
   { id: 'calculator', icon: '/icons/Calculator.jpg', name: 'Calculator', type: 'image' },
   { id: 'review', icon: '/icons/reviewapp.jpg', name: 'Add Review', type: 'image' },
-  { id: 'chatbot', icon: '/icons/assistant.png', name: 'AnkiTalk', type: 'image' },
+  { id: 'chatbot', icon: '/icons/assistant.png', name: 'Talk With Ankit 2.0', type: 'image' },
   { id: 'settings', icon: '/icons/settings.jpg', name: 'Settings', type: 'image' },
 ];
 
