@@ -5,6 +5,11 @@ import {
   detectTerminalIntent,
   detectCalculatorIntent,
   detectVSCodeIntent,
+  detectCertificateIntent,
+  generateCertificateInfoResponse,
+  generateShowCertificateResponse,
+  generateCertificateNotFoundResponse,
+  formatCertificateList,
   checkForAbuse,
   callGroqAPI,
   getColorVariants,
@@ -18,7 +23,7 @@ import {
 
 interface ChatBotProps {
   accentColor: string;
-  onOpenApp?: (appId: string) => void;
+  onOpenApp?: (appId: string, metadata?: Record<string, string | number | boolean>) => void;
 }
 
 interface Message {
@@ -38,6 +43,9 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [abuseWarnings, setAbuseWarnings] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [pdfTitle, setPdfTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -221,6 +229,69 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         return;
       }
 
+      // Check for Certificate intent using AI
+      console.log('📜 Starting Certificate intent detection...');
+      // Pass last 2 messages as context to understand "the certificate" references
+      const recentContext = messages.slice(-2).map(m => `${m.role}: ${m.content}`).join('\n');
+      const certificateIntent = await detectCertificateIntent(userInput, GROQ_API_KEY, recentContext);
+      console.log('📜 Certificate intent detected:', certificateIntent);
+      
+      if (certificateIntent.hasIntent) {
+        if (certificateIntent.action === 'list') {
+          // List all certificates
+          console.log('📋 Listing all certificates...');
+          const listResponse: Message = {
+            role: 'assistant',
+            content: formatCertificateList()
+          };
+          setMessages(prev => [...prev, listResponse]);
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        } else if (certificateIntent.action === 'info' && certificateIntent.certificate) {
+          // Show certificate information
+          console.log('ℹ️ Showing certificate info:', certificateIntent.certificate.name);
+          const infoResponse: Message = {
+            role: 'assistant',
+            content: generateCertificateInfoResponse(certificateIntent.certificate)
+          };
+          setMessages(prev => [...prev, infoResponse]);
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        } else if (certificateIntent.action === 'show' && certificateIntent.certificate) {
+          // Open the certificate PDF in inline viewer
+          console.log('✅ Opening certificate:', certificateIntent.certificate.name);
+          
+          // Set PDF viewer state
+          setPdfUrl(certificateIntent.certificate.filePath);
+          setPdfTitle(certificateIntent.certificate.displayName);
+          setShowPdfViewer(true);
+          
+          const showResponse: Message = {
+            role: 'assistant',
+            content: `Sure! I've opened the **${certificateIntent.certificate.displayName}** for you! 📜✨
+
+You can view it below. Click the ❌ button to close it when you're done.`
+          };
+          setMessages(prev => [...prev, showResponse]);
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        } else if (certificateIntent.action === 'show' || certificateIntent.action === 'info') {
+          // Certificate not found
+          console.log('❌ Certificate not found');
+          const notFoundResponse: Message = {
+            role: 'assistant',
+            content: generateCertificateNotFoundResponse(certificateIntent.query)
+          };
+          setMessages(prev => [...prev, notFoundResponse]);
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        }
+      }
+
       // Check for review intent using AI
       console.log('🎯 Starting review intent detection...');
       const hasReviewIntent = await detectReviewIntent(userInput, GROQ_API_KEY);
@@ -295,7 +366,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
 
   return (
     <div 
-      className="h-full bg-ubuntu-window flex flex-col"
+      className="h-full bg-ubuntu-window flex flex-col relative"
       data-accent-color={accentColor}
       data-hex-color={hexColor}
     >
@@ -359,6 +430,50 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         onSend={handleSend}
         onKeyPress={handleKeyPress}
       />
+
+      {/* PDF Viewer Modal */}
+      {showPdfViewer && (
+        <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4">
+          <div className="relative w-[95%] h-[92%] bg-gray-900 rounded-lg shadow-2xl flex flex-col overflow-hidden">
+            {/* PDF Header */}
+            <div 
+              className="flex items-center justify-between px-3 py-2 rounded-t-lg flex-shrink-0"
+              style={{ 
+                background: `linear-gradient(135deg, rgba(${accentRgb}, 0.9), rgba(${lighterRgb}, 0.8))` 
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span className="text-white font-semibold text-xl">{pdfTitle}</span>
+              </div>
+              <button
+                onClick={() => {
+                  setShowPdfViewer(false);
+                  setPdfUrl('');
+                  setPdfTitle('');
+                }}
+                className="p-2.5 hover:bg-white/20 rounded-full transition-colors flex-shrink-0"
+                aria-label="Close PDF viewer"
+              >
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* PDF Content */}
+            <div className="flex-1 bg-gray-800 rounded-b-lg overflow-hidden">
+              <iframe
+                src={pdfUrl}
+                className="w-full h-full border-0"
+                title={pdfTitle}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

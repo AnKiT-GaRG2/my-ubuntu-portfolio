@@ -4,6 +4,20 @@ export { detectChromeIntent } from './detectChromeIntent';
 export { detectTerminalIntent } from './detectTerminalIntent';
 export { detectCalculatorIntent } from './detectCalculatorIntent';
 export { detectVSCodeIntent } from './detectVSCodeIntent';
+export { 
+  detectCertificateIntent, 
+  generateCertificateInfoResponse,
+  generateShowCertificateResponse,
+  generateCertificateNotFoundResponse,
+  type CertificateIntentResult 
+} from './detectCertificateIntent';
+export { 
+  getAllCertificates, 
+  getCertificatesByCategory, 
+  findCertificate, 
+  formatCertificateList,
+  type Certificate 
+} from './certificatesData';
 export { checkForAbuse } from './checkForAbuse';
 export { callGroqAPI } from './callGroqAPI';
 export { getColorVariants } from './colorUtils';
