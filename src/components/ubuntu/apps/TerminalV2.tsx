@@ -16,9 +16,10 @@ import {
 interface TerminalProps {
   onOpenApp?: (id: string) => void;
   onCreateFolder?: (name: string) => void;
+  initialCommand?: string;
 }
 
-export function TerminalV2({ onOpenApp, onCreateFolder }: TerminalProps) {
+export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand }: TerminalProps) {
   const [lines, setLines] = useState<TerminalLine[]>([
     { type: 'output', content: <WelcomeCommand /> },
   ]);
@@ -267,6 +268,17 @@ export function TerminalV2({ onOpenApp, onCreateFolder }: TerminalProps) {
       setLines((prev) => [...prev, { type: 'input', content: cmd }]);
     }
   };
+
+  // Execute initial command if provided
+  useEffect(() => {
+    if (initialCommand) {
+      // Small delay to ensure terminal is ready
+      setTimeout(() => {
+        processCommand(initialCommand);
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCommand]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

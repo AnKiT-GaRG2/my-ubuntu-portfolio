@@ -5,6 +5,12 @@ export { detectTerminalIntent } from './detectTerminalIntent';
 export { detectCalculatorIntent } from './detectCalculatorIntent';
 export { detectVSCodeIntent } from './detectVSCodeIntent';
 export { 
+  detectFolderIntent,
+  generateAskFolderNameResponse,
+  generateFolderCreatedResponse,
+  type FolderIntentResult
+} from './detectFolderIntent';
+export { 
   detectCertificateIntent, 
   generateCertificateInfoResponse,
   generateShowCertificateResponse,

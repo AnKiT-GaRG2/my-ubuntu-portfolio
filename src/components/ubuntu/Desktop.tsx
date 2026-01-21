@@ -261,7 +261,11 @@ export function Desktop() {
   const renderWindowContent = (id: string, metadata?: Record<string, string | number | boolean>) => {
     switch (id) {
       case 'terminal':
-        return <TerminalV2 onOpenApp={openWindow} onCreateFolder={handleCreateFolder} />;
+        return <TerminalV2 
+          onOpenApp={openWindow} 
+          onCreateFolder={handleCreateFolder}
+          initialCommand={metadata?.initialCommand as string}
+        />;
       case 'vscode':
         return <VSCode />;
       case 'chrome':

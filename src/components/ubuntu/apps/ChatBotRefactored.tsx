@@ -5,6 +5,9 @@ import {
   detectTerminalIntent,
   detectCalculatorIntent,
   detectVSCodeIntent,
+  detectFolderIntent,
+  generateAskFolderNameResponse,
+  generateFolderCreatedResponse,
   detectCertificateIntent,
   generateCertificateInfoResponse,
   generateShowCertificateResponse,
@@ -286,6 +289,44 @@ You can view it below. Click the ❌ button to close it when you're done.`
             content: generateCertificateNotFoundResponse(certificateIntent.query)
           };
           setMessages(prev => [...prev, notFoundResponse]);
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        }
+      }
+
+      // Check for folder creation intent using AI
+      console.log('📁 Starting folder creation intent detection...');
+      const folderIntent = await detectFolderIntent(userInput, GROQ_API_KEY);
+      console.log('📁 Folder intent detected:', folderIntent);
+      
+      if (folderIntent.hasIntent) {
+        if (folderIntent.needsName) {
+          // User wants to create a folder but didn't provide a name
+          console.log('❓ Asking user for folder name...');
+          const askNameResponse: Message = {
+            role: 'assistant',
+            content: generateAskFolderNameResponse()
+          };
+          setMessages(prev => [...prev, askNameResponse]);
+          setIsLoading(false);
+          setIsTyping(false);
+          return;
+        } else if (folderIntent.folderName) {
+          // User provided a folder name, create it
+          console.log('✅ Creating folder:', folderIntent.folderName);
+          const createdResponse: Message = {
+            role: 'assistant',
+            content: generateFolderCreatedResponse(folderIntent.folderName)
+          };
+          setMessages(prev => [...prev, createdResponse]);
+          
+          // Open terminal with mkdir command
+          if (onOpenApp) {
+            onOpenApp('terminal', { initialCommand: `mkdir "${folderIntent.folderName}"` });
+            console.log('✅ Terminal opened with mkdir command:', folderIntent.folderName);
+          }
+          
           setIsLoading(false);
           setIsTyping(false);
           return;
