@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   detectReviewIntent,
+  detectChromeIntent,
   checkForAbuse,
   callGroqAPI,
   getColorVariants,
@@ -112,6 +113,31 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           content: warningMessage
         };
         setMessages(prev => [...prev, warningResponse]);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+
+      // Check for Chrome intent using AI
+      console.log('🌐 Starting Chrome intent detection...');
+      const hasChromeIntent = await detectChromeIntent(userInput, GROQ_API_KEY);
+      console.log('🌐 Chrome intent detected:', hasChromeIntent);
+      
+      if (hasChromeIntent) {
+        console.log('✅ Opening Chrome app...');
+        // Open the Chrome app
+        if (onOpenApp) {
+          onOpenApp('chrome');
+          console.log('✅ Chrome app opened successfully');
+        } else {
+          console.warn('⚠️ onOpenApp callback is not available');
+        }
+
+        const chromeResponse: Message = {
+          role: 'assistant',
+          content: "Sure! I've opened Chrome for you. You can now browse the web! 🌐"
+        };
+        setMessages(prev => [...prev, chromeResponse]);
         setIsLoading(false);
         setIsTyping(false);
         return;
