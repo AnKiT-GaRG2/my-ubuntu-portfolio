@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   detectReviewIntent,
   detectChromeIntent,
+  detectTerminalIntent,
   checkForAbuse,
   callGroqAPI,
   getColorVariants,
@@ -138,6 +139,31 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           content: "Sure! I've opened Chrome for you. You can now browse the web! 🌐"
         };
         setMessages(prev => [...prev, chromeResponse]);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+
+      // Check for Terminal intent using AI
+      console.log('💻 Starting Terminal intent detection...');
+      const hasTerminalIntent = await detectTerminalIntent(userInput, GROQ_API_KEY);
+      console.log('💻 Terminal intent detected:', hasTerminalIntent);
+      
+      if (hasTerminalIntent) {
+        console.log('✅ Opening Terminal app...');
+        // Open the Terminal app
+        if (onOpenApp) {
+          onOpenApp('terminal');
+          console.log('✅ Terminal app opened successfully');
+        } else {
+          console.warn('⚠️ onOpenApp callback is not available');
+        }
+
+        const terminalResponse: Message = {
+          role: 'assistant',
+          content: "Sure! I've opened the Terminal for you. You can now run commands! 💻"
+        };
+        setMessages(prev => [...prev, terminalResponse]);
         setIsLoading(false);
         setIsTyping(false);
         return;
