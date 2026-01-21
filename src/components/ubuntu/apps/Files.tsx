@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Search, Grid, List, Folder, FileText, Image, Music, Video, Download, FileCode, X, FileType } from 'lucide-react';
-import { desktopApps } from '../desktopConfig';
+import { ChevronLeft, ChevronRight, Search, Grid, List, Folder, FileText, Image, Music, Video, Download, FileCode, X, FileType, Trash2 } from 'lucide-react';
+import { desktopApps, specialFolders } from '../desktopConfig';
 import { useDesktop } from '@/hooks/useDesktop';
 
 interface FileItem {
@@ -68,6 +68,9 @@ const folders: Record<string, FileItem[]> = {
     { name: 'nodejs-installer.deb', type: 'file', icon: 'download', size: '23 MB', modified: 'Today' },
     { name: 'vscode.deb', type: 'file', icon: 'download', size: '78 MB', modified: 'Yesterday' },
   ],
+  '/home/guest/.local/share/Trash': [
+    { name: 'Empty', type: 'file', icon: 'document', size: '0 KB', modified: 'N/A' },
+  ],
 };
 
 const iconMap = {
@@ -110,6 +113,15 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
       externalUrl: app.externalUrl,
     }));
 
+    const specialFolderFiles = specialFolders.map(folder => ({
+      name: folder.name,
+      type: 'folder' as const,
+      icon: 'folder' as const,
+      size: '--',
+      modified: 'Today',
+      customIcon: folder.icon,
+    }));
+
     const folderFiles = userFolders.map(folder => ({
       name: folder.name,
       type: 'folder' as const,
@@ -118,7 +130,7 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
       modified: 'Today',
     }));
 
-    return [...appFiles, ...folderFiles];
+    return [...appFiles, ...specialFolderFiles, ...folderFiles];
   }, [userFolders]);
 
   // Merge static folders with dynamic desktop
@@ -153,6 +165,12 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
 
   const handleItemClick = (item: FileItem) => {
     if (item.type === 'folder') {
+      // Special handling for Trash folder
+      if (item.name === 'Trash') {
+        navigateTo('/home/guest/.local/share/Trash');
+        return;
+      }
+      
       // Check if folder has an app associated with it
       if (item.appId) {
         if (item.isExternal && item.externalUrl) {
@@ -248,23 +266,45 @@ export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
         <div className="w-48 bg-muted/10 border-r border-border p-3 space-y-1">
           <div className="text-xs uppercase text-muted-foreground font-medium mb-2">Places</div>
           {[
-            { name: 'Home', path: '/home/guest' },
-            { name: 'Desktop', path: '/home/guest/Desktop' },
-            { name: 'Documents', path: '/home/guest/Documents' },
-            { name: 'Downloads', path: '/home/guest/Downloads' },
-            { name: 'Pictures', path: '/home/guest/Pictures' },
-          ].map((place) => (
-            <button
-              key={place.path}
-              onClick={() => navigateTo(place.path)}
-              className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-left ${
-                currentPath === place.path ? 'bg-primary/20 text-primary' : 'text-foreground/70 hover:bg-white/5'
-              }`}
-            >
-              <Folder className="w-4 h-4" />
-              {place.name}
-            </button>
-          ))}
+            { name: 'Home', path: '/home/guest', icon: 'folder' },
+            { name: 'Desktop', path: '/home/guest/Desktop', icon: 'folder' },
+            { name: 'Documents', path: '/home/guest/Documents', icon: 'folder' },
+            { name: 'Downloads', path: '/home/guest/Downloads', icon: 'download' },
+            { name: 'Pictures', path: '/home/guest/Pictures', icon: 'image' },
+            { name: 'Trash', path: '/home/guest/.local/share/Trash', icon: 'trash' },
+          ].map((place) => {
+            const iconClass = place.icon === 'trash' ? 'text-red-500' : 
+                              place.icon === 'download' ? 'text-green-500' : 
+                              place.icon === 'image' ? 'text-blue-500' : 
+                              'text-foreground/70';
+            
+            return (
+              <button
+                key={place.path}
+                onClick={() => {
+                  if (place.icon === 'trash' && onOpenApp) {
+                    onOpenApp('trash');
+                  } else {
+                    navigateTo(place.path);
+                  }
+                }}
+                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-left ${
+                  currentPath === place.path ? 'bg-primary/20 text-primary' : 'text-foreground/70 hover:bg-white/5'
+                }`}
+              >
+                {place.icon === 'trash' ? (
+                  <Trash2 className={`w-4 h-4 ${iconClass}`} />
+                ) : place.icon === 'download' ? (
+                  <Download className={`w-4 h-4 ${iconClass}`} />
+                ) : place.icon === 'image' ? (
+                  <Image className={`w-4 h-4 ${iconClass}`} />
+                ) : (
+                  <Folder className={`w-4 h-4 ${iconClass}`} />
+                )}
+                {place.name}
+              </button>
+            );
+          })}
         </div>
 
         {/* File Grid/List */}

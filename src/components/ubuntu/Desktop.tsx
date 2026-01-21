@@ -18,7 +18,7 @@ import { ContextMenu } from './ContextMenu';
 import { NewFolderDialog } from './NewFolderDialog';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useState, useEffect } from 'react';
-import { desktopApps } from './desktopConfig';
+import { desktopApps, specialFolders } from './desktopConfig';
 import { useDesktop } from '@/hooks/useDesktop';
 
 export function Desktop() {
@@ -268,6 +268,23 @@ export function Desktop() {
             position={app.position}
             type={app.type as 'emoji' | 'image'}
             onDoubleClick={() => handleIconDoubleClick(app)}
+          />
+        ))}
+        
+        {/* Special folders (Trash, etc.) */}
+        {specialFolders.map((folder) => (
+          <DesktopIcon
+            key={folder.id}
+            id={folder.id}
+            icon={folder.icon}
+            name={folder.name}
+            position={folder.position}
+            type="image"
+            onDoubleClick={() => {
+              if (folder.id === 'trash') {
+                openWindow('files', { initialPath: '/home/guest/.local/share/Trash' });
+              }
+            }}
           />
         ))}
         

@@ -7,4 +7,10 @@ export const desktopApps = [
   { id: 'github', icon: '/icons/github.jpg', name: 'GitHub', position: { row: 5, col: 0 }, type: 'image', isExternal: true, externalUrl: 'https://github.com/AnKiT-GaRG2' },
 ];
 
+// Special desktop folders (like Ubuntu)
+export const specialFolders = [
+  { id: 'trash', icon: '/icons/user-trash.png', name: 'Trash', position: { row: 6, col: 0 }, type: 'folder' as const },
+];
+
 export type DesktopApp = typeof desktopApps[number];
+export type SpecialFolder = typeof specialFolders[number];
