@@ -283,7 +283,7 @@ input[type="range"].slider::-moz-range-thumb:hover {
 }
 
 .terminal-cursor {
-  animation: blink 1s step-end infinite;
+  animation: blink 1.2s step-end infinite;
 }
 
 /* Custom scrollbar for Applications Grid */

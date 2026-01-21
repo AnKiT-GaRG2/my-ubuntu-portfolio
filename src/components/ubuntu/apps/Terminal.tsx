@@ -108,14 +108,14 @@ const COMMANDS = {
      ├── Live: [Current Website]                              
      └── github.com/AnKiT-GaRG2/my-ubuntu-portfolio          
                                                               
-  2. � Forex Prediction App                                   
+  2. 💹 Forex Prediction App                                   
      ├── Tech: Python, Machine Learning, TensorFlow, Flask    
      ├── ML application for forex market prediction with      
      │   real-time data analysis (92% accuracy)               
      ├── Live: forex-prediction-app.onrender.com             
      └── github.com/AnKiT-GaRG2/Forex-Prediction-App         
                                                               
-  3. � Loan Manager                                           
+  3. 💰 Loan Manager                                           
      ├── Tech: React, Node.js, MongoDB, Express, REST APIs    
      ├── Comprehensive loan management system with            
      │   tracking and payment management                      
@@ -134,7 +134,7 @@ const COMMANDS = {
      └── github.com/AnKiT-GaRG2/Risk-Management-System        
            
   and many more.. 
-  See all p[rojects in my About Me section.                                                            
+  See all projects in my About Me section.                                                            
            
   Type 'open chrome' to view projects in browser              
 ──────────────────────────────────────────────────────────────`,
@@ -284,6 +284,7 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
     { type: 'output', content: COMMANDS.welcome },
   ]);
   const [currentInput, setCurrentInput] = useState('');
+  const [cursorPosition, setCursorPosition] = useState(0);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [currentDirectory, setCurrentDirectory] = useState('~');
@@ -309,6 +310,13 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Sync cursor position with input ref
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.setSelectionRange(cursorPosition, cursorPosition);
+    }
+  }, [cursorPosition]);
 
   const processCommand = (cmd: string) => {
     const trimmedCmd = cmd.trim();
@@ -517,31 +525,68 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
     if (e.key === 'Enter') {
       processCommand(currentInput);
       setCurrentInput('');
+      setCursorPosition(0);
       setHistoryIndex(-1);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (historyIndex < commandHistory.length - 1) {
         const newIndex = historyIndex + 1;
         setHistoryIndex(newIndex);
-        setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex] || '');
+        const newCommand = commandHistory[commandHistory.length - 1 - newIndex] || '';
+        setCurrentInput(newCommand);
+        setCursorPosition(newCommand.length);
       }
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIndex > 0) {
         const newIndex = historyIndex - 1;
         setHistoryIndex(newIndex);
-        setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex] || '');
+        const newCommand = commandHistory[commandHistory.length - 1 - newIndex] || '';
+        setCurrentInput(newCommand);
+        setCursorPosition(newCommand.length);
       } else if (historyIndex === 0) {
         setHistoryIndex(-1);
         setCurrentInput('');
+        setCursorPosition(0);
       }
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setCursorPosition((prev) => Math.max(0, prev - 1));
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      setCursorPosition((prev) => Math.min(currentInput.length, prev + 1));
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setCursorPosition(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setCursorPosition(currentInput.length);
     } else if (e.key === 'Tab') {
       e.preventDefault();
       const commands = Object.keys(COMMANDS);
       const matches = commands.filter((c) => c.startsWith(currentInput.toLowerCase()));
       if (matches.length === 1) {
         setCurrentInput(matches[0]);
+        setCursorPosition(matches[0].length);
       }
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      if (cursorPosition > 0) {
+        const newInput = currentInput.slice(0, cursorPosition - 1) + currentInput.slice(cursorPosition);
+        setCurrentInput(newInput);
+        setCursorPosition(cursorPosition - 1);
+      }
+    } else if (e.key === 'Delete') {
+      e.preventDefault();
+      if (cursorPosition < currentInput.length) {
+        const newInput = currentInput.slice(0, cursorPosition) + currentInput.slice(cursorPosition + 1);
+        setCurrentInput(newInput);
+      }
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      e.preventDefault();
+      const newInput = currentInput.slice(0, cursorPosition) + e.key + currentInput.slice(cursorPosition);
+      setCurrentInput(newInput);
+      setCursorPosition(cursorPosition + 1);
     }
   };
 
@@ -576,14 +621,23 @@ export function Terminal({ onOpenApp, onCreateFolder }: TerminalProps) {
         <span className="text-blue-400">{currentDirectory}</span>
         <span className="text-white">$</span>
         <div className="flex-1 relative flex items-center ml-1">
-          <span className="text-white">{currentInput}</span>
-          <span className="inline-block w-2 h-4 bg-white terminal-cursor ml-0.5"></span>
+          <span className="text-white">
+            {currentInput.slice(0, cursorPosition)}
+            <span className="inline-block w-[0.6em] h-[1.2em] bg-white/80 terminal-cursor"></span>
+            {currentInput.slice(cursorPosition)}
+          </span>
           <input
             ref={inputRef}
             type="text"
             value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
+            onChange={(e) => {
+              setCurrentInput(e.target.value);
+              setCursorPosition(e.target.selectionStart || 0);
+            }}
             onKeyDown={handleKeyDown}
+            onSelect={(e) => {
+              setCursorPosition((e.target as HTMLInputElement).selectionStart || 0);
+            }}
             className="absolute inset-0 opacity-0 cursor-default"
             autoFocus
             spellCheck={false}
