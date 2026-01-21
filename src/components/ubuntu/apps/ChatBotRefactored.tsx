@@ -3,6 +3,7 @@ import {
   detectReviewIntent,
   detectChromeIntent,
   detectTerminalIntent,
+  detectCalculatorIntent,
   checkForAbuse,
   callGroqAPI,
   getColorVariants,
@@ -164,6 +165,31 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           content: "Sure! I've opened the Terminal for you. You can now run commands! 💻"
         };
         setMessages(prev => [...prev, terminalResponse]);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+
+      // Check for Calculator intent using AI
+      console.log('🧮 Starting Calculator intent detection...');
+      const hasCalculatorIntent = await detectCalculatorIntent(userInput, GROQ_API_KEY);
+      console.log('🧮 Calculator intent detected:', hasCalculatorIntent);
+      
+      if (hasCalculatorIntent) {
+        console.log('✅ Opening Calculator app...');
+        // Open the Calculator app
+        if (onOpenApp) {
+          onOpenApp('calculator');
+          console.log('✅ Calculator app opened successfully');
+        } else {
+          console.warn('⚠️ onOpenApp callback is not available');
+        }
+
+        const calculatorResponse: Message = {
+          role: 'assistant',
+          content: "Sure! I've opened the Calculator for you. You can now perform your calculations! 🧮"
+        };
+        setMessages(prev => [...prev, calculatorResponse]);
         setIsLoading(false);
         setIsTyping(false);
         return;

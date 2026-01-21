@@ -2,6 +2,7 @@
 export { detectReviewIntent } from './detectReviewIntent';
 export { detectChromeIntent } from './detectChromeIntent';
 export { detectTerminalIntent } from './detectTerminalIntent';
+export { detectCalculatorIntent } from './detectCalculatorIntent';
 export { checkForAbuse } from './checkForAbuse';
 export { callGroqAPI } from './callGroqAPI';
 export { getColorVariants } from './colorUtils';
