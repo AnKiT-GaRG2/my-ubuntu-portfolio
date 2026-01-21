@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Search, Grid, List, Folder, FileText, Image, Music, Video, Download, FileCode } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Grid, List, Folder, FileText, Image, Music, Video, Download, FileCode, X, FileType } from 'lucide-react';
 
 interface FileItem {
   name: string;
   type: 'folder' | 'file';
-  icon: 'folder' | 'document' | 'image' | 'music' | 'video' | 'download' | 'code';
+  icon: 'folder' | 'document' | 'image' | 'music' | 'video' | 'download' | 'code' | 'pdf' | 'certificates';
   size?: string;
   modified?: string;
+  filePath?: string; // Actual file path for opening
+  customIcon?: string; // Custom icon path
 }
 
 const folders: Record<string, FileItem[]> = {
@@ -21,12 +23,17 @@ const folders: Record<string, FileItem[]> = {
   ],
   '/home/guest/Desktop': [
     { name: 'about.txt', type: 'file', icon: 'document', size: '2 KB', modified: 'Today' },
-    { name: 'resume.pdf', type: 'file', icon: 'document', size: '156 KB', modified: 'Yesterday' },
+    { name: 'Software_engineering_internL.pdf', type: 'file', icon: 'pdf', size: '156 KB', modified: 'Yesterday', filePath: '/files/Software_engineering_internL.pdf' },
   ],
   '/home/guest/Documents': [
-    { name: 'resume.pdf', type: 'file', icon: 'document', size: '156 KB', modified: 'Jan 15' },
+    { name: 'Certificates', type: 'folder', icon: 'certificates', customIcon: '/icons/folder-documents.png' },
+    { name: 'Software_engineering_internL.pdf', type: 'file', icon: 'pdf', size: '156 KB', modified: 'Jan 15', filePath: '/files/Software_engineering_internL.pdf' },
     { name: 'cover-letter.docx', type: 'file', icon: 'document', size: '24 KB', modified: 'Jan 10' },
     { name: 'notes.txt', type: 'file', icon: 'document', size: '4 KB', modified: 'Dec 20' },
+  ],
+  '/home/guest/Documents/Certificates': [
+    { name: 'certificate-1.pdf', type: 'file', icon: 'pdf', size: '500 KB', modified: 'Jan 1' },
+    { name: 'certificate-2.pdf', type: 'file', icon: 'pdf', size: '450 KB', modified: 'Dec 15' },
   ],
   '/home/guest/Projects': [
     { name: 'ubuntu-portfolio', type: 'folder', icon: 'code' },
@@ -52,6 +59,8 @@ const iconMap = {
   video: Video,
   download: Download,
   code: FileCode,
+  pdf: FileType,
+  certificates: Folder, // Default, will use custom icon
 };
 
 interface FilesProps {
@@ -63,6 +72,8 @@ export function Files({ initialPath = '/home/guest' }: FilesProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [history, setHistory] = useState<string[]>([initialPath]);
   const [historyIndex, setHistoryIndex] = useState(0);
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState('');
 
   const currentFiles = folders[currentPath] || [];
 
@@ -91,6 +102,13 @@ export function Files({ initialPath = '/home/guest' }: FilesProps) {
   const handleItemClick = (item: FileItem) => {
     if (item.type === 'folder') {
       navigateTo(`${currentPath}/${item.name}`);
+    } else if (item.type === 'file') {
+      // Handle file clicks
+      if (item.icon === 'pdf' && item.filePath) {
+        // Open PDF in iframe viewer
+        setPdfUrl(item.filePath);
+        setShowPdfViewer(true);
+      }
     }
   };
 
@@ -187,7 +205,15 @@ export function Files({ initialPath = '/home/guest' }: FilesProps) {
                     onDoubleClick={() => handleItemClick(item)}
                     className="flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-white/5 focus:bg-white/10 transition-colors"
                   >
-                    <Icon className={`w-12 h-12 ${item.type === 'folder' ? 'text-yellow-500' : 'text-foreground/60'}`} />
+                    {item.customIcon ? (
+                      <img src={item.customIcon} alt={item.name} className="w-12 h-12 object-contain" />
+                    ) : (
+                      <Icon className={`w-12 h-12 ${
+                        item.type === 'folder' ? 'text-yellow-500' : 
+                        item.icon === 'pdf' ? 'text-red-500' : 
+                        'text-foreground/60'
+                      }`} />
+                    )}
                     <span className="text-sm text-foreground/80 text-center line-clamp-2">{item.name}</span>
                   </button>
                 );
@@ -209,7 +235,15 @@ export function Files({ initialPath = '/home/guest' }: FilesProps) {
                     className="w-full grid grid-cols-12 gap-4 px-3 py-2 rounded hover:bg-white/5 text-left"
                   >
                     <div className="col-span-6 flex items-center gap-3">
-                      <Icon className={`w-5 h-5 ${item.type === 'folder' ? 'text-yellow-500' : 'text-foreground/60'}`} />
+                      {item.customIcon ? (
+                        <img src={item.customIcon} alt={item.name} className="w-5 h-5 object-contain" />
+                      ) : (
+                        <Icon className={`w-5 h-5 ${
+                          item.type === 'folder' ? 'text-yellow-500' : 
+                          item.icon === 'pdf' ? 'text-red-500' : 
+                          'text-foreground/60'
+                        }`} />
+                      )}
                       <span className="text-sm text-foreground/80">{item.name}</span>
                     </div>
                     <div className="col-span-3 text-sm text-foreground/60">{item.size || '--'}</div>
@@ -226,6 +260,36 @@ export function Files({ initialPath = '/home/guest' }: FilesProps) {
       <div className="h-6 bg-muted/10 border-t border-border flex items-center px-3 text-xs text-muted-foreground">
         {currentFiles.length} items
       </div>
+
+      {/* PDF Viewer Modal */}
+      {showPdfViewer && (
+        <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-ubuntu-window rounded-lg w-[95%] h-[95%] flex flex-col shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-3 bg-ubuntu-window-header border-b border-border">
+              <div className="flex items-center gap-2">
+                <FileType className="w-5 h-5 text-red-500" />
+                <h3 className="text-foreground font-medium">{pdfUrl.split('/').pop()}</h3>
+              </div>
+              <button
+                onClick={() => setShowPdfViewer(false)}
+                className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <X className="w-5 h-5 text-foreground/70" />
+              </button>
+            </div>
+            
+            {/* PDF Iframe */}
+            <div className="flex-1 overflow-hidden">
+              <iframe
+                src={pdfUrl}
+                className="w-full h-full border-0"
+                title="Resume PDF Viewer"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

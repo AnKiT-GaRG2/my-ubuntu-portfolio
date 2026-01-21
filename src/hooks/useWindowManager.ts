@@ -29,8 +29,8 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
   files: {
     title: 'Files',
     icon: '📁',
-    position: { x: 180, y: 120 },
-    size: { width: 850, height: 600 },
+    position: { x: 100, y: 80 },
+    size: { width: 1200, height: 800 },
   },
   settings: {
     title: 'Settings',
