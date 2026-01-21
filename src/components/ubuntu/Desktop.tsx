@@ -152,12 +152,65 @@ export function Desktop() {
       return;
     }
     
-    // Calculate position - place on right side below existing apps
-    const maxRow = Math.max(...desktopApps.map(app => app.position.row), ...userFolders.map(f => f.position.row));
+    // Calculate position - place below existing apps, special folders, and user folders
+    // When column is full (max ~10 rows), wrap to next column starting from top
+    const MAX_ROWS_PER_COLUMN = 10;
+    
+    // Get all occupied positions
+    const allPositions = [
+      ...desktopApps.map(app => app.position),
+      ...specialFolders.map(folder => folder.position),
+      ...userFolders.map(f => f.position)
+    ];
+    
+    // Find the next available position
+    let targetRow = 0;
+    let targetCol = 0;
+    
+    if (allPositions.length === 0) {
+      // No items, start from top-left
+      targetRow = 0;
+      targetCol = 0;
+    } else {
+      // Find the maximum column number currently in use
+      const maxCol = Math.max(...allPositions.map(pos => pos.col), 0);
+      
+      // Check each column starting from 0
+      let foundPosition = false;
+      for (let col = 0; col <= maxCol + 1; col++) {
+        const colItems = allPositions.filter(pos => pos.col === col);
+        
+        if (colItems.length === 0) {
+          // Empty column, start from top
+          targetRow = 0;
+          targetCol = col;
+          foundPosition = true;
+          break;
+        } else {
+          const maxRowInCol = Math.max(...colItems.map(pos => pos.row));
+          
+          // If this column has space (less than MAX_ROWS_PER_COLUMN)
+          if (maxRowInCol < MAX_ROWS_PER_COLUMN - 1) {
+            targetRow = maxRowInCol + 1;
+            targetCol = col;
+            foundPosition = true;
+            break;
+          }
+        }
+        // If column is full, continue to next column
+      }
+      
+      // Fallback (should never reach here)
+      if (!foundPosition) {
+        targetRow = 0;
+        targetCol = maxCol + 1;
+      }
+    }
+    
     const newFolder = {
       id: `folder-${Date.now()}`,
       name,
-      position: { row: maxRow + 1, col: 0 }
+      position: { row: targetRow, col: targetCol }
     };
     addFolder(newFolder);
     setShowNewFolderDialog(false);
