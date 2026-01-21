@@ -4,6 +4,7 @@ import {
   detectChromeIntent,
   detectTerminalIntent,
   detectCalculatorIntent,
+  detectVSCodeIntent,
   checkForAbuse,
   callGroqAPI,
   getColorVariants,
@@ -190,6 +191,31 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           content: "Sure! I've opened the Calculator for you. You can now perform your calculations! 🧮"
         };
         setMessages(prev => [...prev, calculatorResponse]);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+
+      // Check for VS Code intent using AI
+      console.log('⌨️ Starting VS Code intent detection...');
+      const hasVSCodeIntent = await detectVSCodeIntent(userInput, GROQ_API_KEY);
+      console.log('⌨️ VS Code intent detected:', hasVSCodeIntent);
+      
+      if (hasVSCodeIntent) {
+        console.log('✅ Opening VS Code app...');
+        // Open the VS Code app
+        if (onOpenApp) {
+          onOpenApp('vscode');
+          console.log('✅ VS Code app opened successfully');
+        } else {
+          console.warn('⚠️ onOpenApp callback is not available');
+        }
+
+        const vscodeResponse: Message = {
+          role: 'assistant',
+          content: "Sure! I've opened VS Code for you. Happy coding! ⌨️💻"
+        };
+        setMessages(prev => [...prev, vscodeResponse]);
         setIsLoading(false);
         setIsTyping(false);
         return;
