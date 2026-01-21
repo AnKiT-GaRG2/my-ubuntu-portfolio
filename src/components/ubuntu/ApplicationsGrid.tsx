@@ -66,7 +66,7 @@ export function ApplicationsGrid({ onClose, onOpenApp, desktopApps = [], userFol
 
       <div className="h-full flex flex-col items-center justify-start pt-20 px-8">
         {/* Search bar */}
-        <div className="w-full max-w-2xl mb-12">
+        <div className="w-full max-w-2xl mb-12 flex-shrink-0">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -80,8 +80,8 @@ export function ApplicationsGrid({ onClose, onOpenApp, desktopApps = [], userFol
           </div>
         </div>
 
-        {/* Applications grid */}
-        <div className="w-full max-w-5xl">
+        {/* Applications grid - Scrollable container */}
+        <div className="w-full max-w-5xl overflow-y-auto pb-8 flex-1 applications-scroll">
           {filteredApps.length > 0 ? (
             <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
               {filteredApps.map((app) => (
