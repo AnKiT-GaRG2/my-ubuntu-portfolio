@@ -11,7 +11,7 @@ import { Settings } from './apps/Settings';
 import { Calculator } from './apps/Calculator';
 import { ContactMe } from './apps/ContactMe';
 import { AddReview } from './apps/AddReview';
-import { ChatBot } from './apps/ChatBot';
+import { ChatBot } from './apps/ChatBotRefactored';
 import { LockScreen } from './LockScreen';
 import { LogoutScreen } from './LogoutScreen';
 import { ContextMenu } from './ContextMenu';
