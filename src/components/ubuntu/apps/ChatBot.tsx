@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, Sparkles, Bot, User, Trash2, RefreshCw } from 'lucide-react';
-import { detectReviewIntent } from './chatbot';
+import { detectReviewIntent, checkForAbuse } from './chatbot';
 
 interface ChatBotProps {
   accentColor: string;
@@ -299,54 +299,7 @@ If someone wants to add a review:
 Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with someone! Keep it natural and human. You know everything on your website because it's YOUR portfolio!
 `;
 
-  const checkForAbuse = async (text: string): Promise<boolean> => {
-    try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${GROQ_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            {
-              role: 'system',
-              content: `You are a content moderation system. Analyze the given text for abusive, offensive, or inappropriate language in ANY language (including English, Hindi, and Hinglish). 
-              
-Consider the following as abusive:
-- Profanity, curse words, or vulgar language
-- Personal attacks, insults, or degrading comments
-- Hate speech or discriminatory language
-- Sexually explicit or inappropriate content
-- Threats or violent language
-- Hindi/Hinglish abusive words like: गाली, बकवास, मूर्ख, बेवकूफ, चूतिया, भोसड़ी, लंड, मादरचोद, etc.
 
-Respond with ONLY "YES" if the text contains abuse, or "NO" if it's clean. No explanations.`
-            },
-            {
-              role: 'user',
-              content: text
-            }
-          ],
-          temperature: 0.3,
-          max_tokens: 10,
-        })
-      });
-
-      if (!response.ok) {
-        console.error('Abuse detection API error');
-        return false; // If API fails, allow the message
-      }
-
-      const data = await response.json();
-      const result = data.choices[0].message.content.trim().toUpperCase();
-      return result === 'YES';
-    } catch (error) {
-      console.error('Error checking for abuse:', error);
-      return false; // If error, allow the message
-    }
-  };
 
 
 
@@ -419,7 +372,7 @@ Respond with ONLY "YES" if the text contains abuse, or "NO" if it's clean. No ex
 
     try {
       // Check for abusive content
-      const isAbusive = await checkForAbuse(userInput);
+      const isAbusive = await checkForAbuse(userInput, GROQ_API_KEY);
       
       if (isAbusive) {
         const newWarningCount = abuseWarnings + 1;
