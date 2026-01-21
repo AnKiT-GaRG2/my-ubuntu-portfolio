@@ -18,15 +18,8 @@ import { ContextMenu } from './ContextMenu';
 import { NewFolderDialog } from './NewFolderDialog';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useState, useEffect } from 'react';
-
-const desktopApps = [
-  { id: 'about', icon: '/icons/AboutMe.jpg', name: 'About Me', position: { row: 0, col: 0 }, type: 'image' },
-  { id: 'chrome', icon: '/icons/Google_Chrome_icon.jpg', name: 'Chrome', position: { row: 1, col: 0 }, type: 'image' },
-  { id: 'contact', icon: '/icons/contactMe.jpg', name: 'Contact Me', position: { row: 2, col: 0 }, type: 'image' },
-  { id: 'review', icon: '/icons/reviewapp.jpg', name: 'Add Review', position: { row: 3, col: 0 }, type: 'image' },
-  { id: 'chatbot', icon: '/icons/assistant.png', name: 'AnkiTalk', position: { row: 4, col: 0 }, type: 'image' },
-  { id: 'github', icon: '/icons/github.jpg', name: 'GitHub', position: { row: 5, col: 0 }, type: 'image', isExternal: true, externalUrl: 'https://github.com/AnKiT-GaRG2' },
-];
+import { desktopApps } from './desktopConfig';
+import { useDesktop } from '@/hooks/useDesktop';
 
 export function Desktop() {
   const [isLocked, setIsLocked] = useState(false);
@@ -34,7 +27,7 @@ export function Desktop() {
   const [brightness, setBrightness] = useState(80);
   const [background, setBackground] = useState('/images/ubuntu-bg2.jpg');
   const [accentColor, setAccentColor] = useState('orange');
-  const [userFolders, setUserFolders] = useState<Array<{ id: string; name: string; position: { row: number; col: number } }>>([]);
+  const { userFolders, addFolder } = useDesktop();
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -166,7 +159,7 @@ export function Desktop() {
       name,
       position: { row: maxRow + 1, col: 0 }
     };
-    setUserFolders(prev => [...prev, newFolder]);
+    addFolder(newFolder);
     setShowNewFolderDialog(false);
   };
 
@@ -223,7 +216,7 @@ export function Desktop() {
       case 'about':
         return <AboutMe />;
       case 'files':
-        return <Files initialPath={metadata?.initialPath as string} />;
+        return <Files initialPath={metadata?.initialPath as string} onOpenApp={openWindow} />;
       case 'settings':
         return <Settings 
           currentBackground={background} 

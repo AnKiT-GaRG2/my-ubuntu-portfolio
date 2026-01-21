@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Search, Grid, List, Folder, FileText, Image, Music, Video, Download, FileCode, X, FileType } from 'lucide-react';
+import { desktopApps } from '../desktopConfig';
+import { useDesktop } from '@/hooks/useDesktop';
 
 interface FileItem {
   name: string;
@@ -9,6 +11,9 @@ interface FileItem {
   modified?: string;
   filePath?: string; // Actual file path for opening
   customIcon?: string; // Custom icon path
+  appId?: string; // Desktop app ID for clickable apps
+  isExternal?: boolean; // Is external link
+  externalUrl?: string; // External URL
 }
 
 const folders: Record<string, FileItem[]> = {
@@ -21,10 +26,7 @@ const folders: Record<string, FileItem[]> = {
     { name: 'Projects', type: 'folder', icon: 'code' },
     { name: 'Videos', type: 'folder', icon: 'video' },
   ],
-  '/home/guest/Desktop': [
-    { name: 'about.txt', type: 'file', icon: 'document', size: '2 KB', modified: 'Today' },
-    { name: 'Software_engineering_internL.pdf', type: 'file', icon: 'pdf', size: '156 KB', modified: 'Yesterday', filePath: '/files/Software_engineering_internL.pdf' },
-  ],
+  // Desktop folder will be generated dynamically from desktopApps
   '/home/guest/Documents': [
     { name: 'Certificates', type: 'folder', icon: 'certificates', customIcon: '/icons/folder-documents.png' },
     { name: 'Software_engineering_internL.pdf', type: 'file', icon: 'pdf', size: '156 KB', modified: 'Jan 15', filePath: '/files/Software_engineering_internL.pdf' },
@@ -32,8 +34,24 @@ const folders: Record<string, FileItem[]> = {
     { name: 'notes.txt', type: 'file', icon: 'document', size: '4 KB', modified: 'Dec 20' },
   ],
   '/home/guest/Documents/Certificates': [
-    { name: 'certificate-1.pdf', type: 'file', icon: 'pdf', size: '500 KB', modified: 'Jan 1' },
-    { name: 'certificate-2.pdf', type: 'file', icon: 'pdf', size: '450 KB', modified: 'Dec 15' },
+    { name: 'Academics', type: 'folder', icon: 'folder' },
+    { name: 'Extracurricular', type: 'folder', icon: 'folder' },
+  ],
+  '/home/guest/Documents/Certificates/Academics': [
+    { name: 'Adobe.pdf', type: 'file', icon: 'pdf', size: '1.2 MB', modified: 'Jan 2024', filePath: '/files/certificates/Academics/Adobe.pdf' },
+    { name: 'Meta Hacker Cup.pdf', type: 'file', icon: 'pdf', size: '856 KB', modified: 'Dec 2023', filePath: '/files/certificates/Academics/Meta Hacker Cup.pdf' },
+    { name: 'SIH.pdf', type: 'file', icon: 'pdf', size: '945 KB', modified: 'Sep 2023', filePath: '/files/certificates/Academics/SIH.pdf' },
+    { name: 'hackaway.pdf', type: 'file', icon: 'pdf', size: '678 KB', modified: 'Nov 2023', filePath: '/files/certificates/Academics/hackaway.pdf' },
+    { name: 'ideathon.pdf', type: 'file', icon: 'pdf', size: '734 KB', modified: 'Oct 2023', filePath: '/files/certificates/Academics/ideathon.pdf' },
+    { name: 'nstse.pdf', type: 'file', icon: 'pdf', size: '512 KB', modified: 'May 2023', filePath: '/files/certificates/Academics/nstse.pdf' },
+    { name: 'sankalp.pdf', type: 'file', icon: 'pdf', size: '623 KB', modified: 'Aug 2023', filePath: '/files/certificates/Academics/sankalp.pdf' },
+  ],
+  '/home/guest/Documents/Certificates/Extracurricular': [
+    { name: 'Badminton State.pdf', type: 'file', icon: 'pdf', size: '1.5 MB', modified: 'Mar 2023', filePath: '/files/certificates/Extracurricular/Badminton State.pdf' },
+    { name: 'Badminton district_U16.pdf', type: 'file', icon: 'pdf', size: '1.3 MB', modified: 'Feb 2023', filePath: '/files/certificates/Extracurricular/Badminton district_U16.pdf' },
+    { name: 'Badminton_district_u-13.pdf', type: 'file', icon: 'pdf', size: '1.2 MB', modified: 'Jan 2023', filePath: '/files/certificates/Extracurricular/Badminton_district_u-13.pdf' },
+    { name: 'Craft_competition.pdf', type: 'file', icon: 'pdf', size: '890 KB', modified: 'Apr 2023', filePath: '/files/certificates/Extracurricular/Craft_competition.pdf' },
+    { name: 'painting.pdf', type: 'file', icon: 'pdf', size: '967 KB', modified: 'Jun 2023', filePath: '/files/certificates/Extracurricular/painting.pdf' },
   ],
   '/home/guest/Projects': [
     { name: 'ubuntu-portfolio', type: 'folder', icon: 'code' },
@@ -65,17 +83,50 @@ const iconMap = {
 
 interface FilesProps {
   initialPath?: string;
+  onOpenApp?: (appId: string, metadata?: Record<string, string | number | boolean>) => void;
 }
 
-export function Files({ initialPath = '/home/guest' }: FilesProps) {
+export function Files({ initialPath = '/home/guest', onOpenApp }: FilesProps) {
   const [currentPath, setCurrentPath] = useState(initialPath);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [history, setHistory] = useState<string[]>([initialPath]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [showPdfViewer, setShowPdfViewer] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
+  const { userFolders } = useDesktop();
 
-  const currentFiles = folders[currentPath] || [];
+  // Generate Desktop folder dynamically from desktopApps and userFolders
+  const desktopFiles = useMemo((): FileItem[] => {
+    const appFiles = desktopApps.map(app => ({
+      name: app.name,
+      type: 'file' as const,
+      icon: 'image' as const,
+      size: '--',
+      modified: 'Today',
+      customIcon: app.icon,
+      appId: app.id,
+      isExternal: app.isExternal,
+      externalUrl: app.externalUrl,
+    }));
+
+    const folderFiles = userFolders.map(folder => ({
+      name: folder.name,
+      type: 'folder' as const,
+      icon: 'folder' as const,
+      size: '--',
+      modified: 'Today',
+    }));
+
+    return [...appFiles, ...folderFiles];
+  }, [userFolders]);
+
+  // Merge static folders with dynamic desktop
+  const allFolders = useMemo(() => ({
+    ...folders,
+    '/home/guest/Desktop': desktopFiles,
+  }), [desktopFiles]);
+
+  const currentFiles = allFolders[currentPath] || [];
 
   const navigateTo = (path: string) => {
     setCurrentPath(path);
@@ -103,8 +154,18 @@ export function Files({ initialPath = '/home/guest' }: FilesProps) {
     if (item.type === 'folder') {
       navigateTo(`${currentPath}/${item.name}`);
     } else if (item.type === 'file') {
-      // Handle file clicks
-      if (item.icon === 'pdf' && item.filePath) {
+      // Handle desktop app clicks
+      if (item.appId) {
+        if (item.isExternal && item.externalUrl) {
+          // Open external link in new tab
+          window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
+        } else if (onOpenApp) {
+          // Open app window
+          onOpenApp(item.appId);
+        }
+      }
+      // Handle PDF files
+      else if (item.icon === 'pdf' && item.filePath) {
         // Open PDF in iframe viewer
         setPdfUrl(item.filePath);
         setShowPdfViewer(true);
