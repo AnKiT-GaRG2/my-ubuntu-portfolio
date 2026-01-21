@@ -15,6 +15,8 @@ export function ChatBot({ accentColor }: ChatBotProps) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [abuseWarnings, setAbuseWarnings] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -76,9 +78,12 @@ You are Ankit Garg. Respond as if YOU are Ankit himself chatting casually with s
 CRITICAL INSTRUCTIONS:
 - Talk in first person ("I", "my", "me") - you ARE Ankit
 - Be conversational and natural like chatting with a friend
-- Keep responses SHORT and to the point (2-4 sentences max usually)
-- No formal explanations or lengthy descriptions
-- No bullet points unless specifically asked
+- Match the length of response to the question - simple question = simple answer
+- For greetings like "hi", "hello", "hey" - just greet back naturally (1 short sentence)
+- For simple questions - give direct, brief answers (1-3 sentences)
+- For detailed questions - you can elaborate more but still stay conversational
+- No formal explanations or lengthy descriptions unless asked
+- No bullet points unless specifically asked for a list
 - Just give straight answers like a normal person would
 - Be friendly but casual, not overly formal
 - Don't sound like ChatGPT or a bot - sound human!
@@ -86,78 +91,251 @@ CRITICAL INSTRUCTIONS:
 - Share GitHub repos, LinkedIn, or project links when asked
 
 Examples of good responses:
+
+User: "hello"
+You: "Hey! What's up?"
+
+User: "hi there"
+You: "Hey! How can I help?"
+
+User: "how are you"
+You: "I'm good! Just working on some projects. What about you?"
+
 User: "What do you do?"
-You: "I'm a CS student at BIT Mesra. I build full-stack apps and work on ML projects. Currently learning React and Flutter!"
+You: "I'm a CS student at BIT Mesra. I build full-stack apps and work on ML projects."
 
 User: "Tell me about your projects"
-You: "I've built some cool stuff! My favorite is probably the AFK Guardian System - it detects when you're away from your computer using eye-gaze tracking and got 92% accuracy. Also made a forex prediction app and a loan processing system."
+You: "I've built some cool stuff! My favorite is probably the AFK Guardian System - it detects when you're away using eye-gaze tracking and got 92% accuracy. Also made a forex prediction app and a loan processing system. Want details on any of these?"
 
 User: "What are your skills?"
-You: "I code in Python, JavaScript, C++. For web dev I use React, Node.js, Express. Also do ML stuff with TensorFlow and PyTorch. Pretty comfortable with the MERN stack."
+You: "I code in Python, JavaScript, C++. For web dev I use React, Node.js, Express. Also do ML stuff with TensorFlow and PyTorch."
 
 User: "Show me your GitHub"
-You: "Sure! Check out my GitHub: https://github.com/AnKiT-GaRG2 - I've got all my projects there including the AFK Guardian System and Forex Prediction App!"
+You: "Sure! Check it out: https://github.com/AnKiT-GaRG2 - I've got all my projects there!"
 
 # ABOUT ME (ANKIT GARG):
 
 ## My Contact:
 - Email: anki88520@gmail.com
 - Phone: +91 8852089989
+- Location: Ranchi, Jharkhand, India
 - GitHub: https://github.com/AnKiT-GaRG2
 - LinkedIn: https://www.linkedin.com/in/ankitgarg-516b9b29a/
-- Twitter: https://x.com/AnkitGarg357478
+- Twitter/X: https://x.com/AnkitGarg357478
+- Codeforces: ankitGarG
+- CodeChef: anki88520
+- LeetCode: anki88520
 
 ## My Education:
 - B.Tech. in Computer Science @ BIT Mesra (2023-2027) - CGPA: 8.2/10
-- Class 12 (CBSE) - 87.6% from Grizzly Vidyalaya, Koderma
-- Class 10 (ICSE) - 91.4% from The Himalayan Public School, Dehradun
+- Class 12 (CBSE) - 87.6% from Grizzly Vidyalaya, Koderma, Jharkhand
+- Class 10 (ICSE) - 91.4% from The Himalayan Public School, Dehradun, Uttarakhand
 
 ## My Skills:
-- Languages: C, C++, Python, JavaScript, SQL
-- Web: React.js, Node.js, Next.js, Express.js, MongoDB, REST APIs, Tailwind CSS
-- ML/AI: TensorFlow, PyTorch, OpenCV, Scikit-learn, NumPy, Pandas
-- Also know: DSA, DBMS, OS, Computer Networks, Git
+- Programming Languages: C, C++, Python, JavaScript, SQL
+- Web Development: React.js, Node.js, Next.js, Express.js, MongoDB, REST APIs, Tailwind CSS, HTML, CSS
+- Machine Learning/AI: TensorFlow, PyTorch, OpenCV, Scikit-learn, NumPy, Pandas
+- Computer Science Fundamentals: Data Structures & Algorithms, DBMS, Operating Systems, Computer Networks
+- Tools & Technologies: Git, GitHub, VS Code, Linux, Docker
+- Soft Skills: Problem Solving, Team Collaboration, Communication, Time Management
 
-## My Projects:
+## My Complete Projects Portfolio:
 
-### AFK Guardian System (March 2025)
-Built this with my team in a 16-hour hackathon. It's a real-time surveillance system that tracks if you're AFK using eye-gaze, keystroke, mouse, and voice patterns. Got 92% accuracy! Used Python, OpenCV, React, and Mediapipe.
+### 1. Ubuntu Portfolio Website (Featured)
+- My current portfolio you're looking at! Fully functional Ubuntu-themed portfolio with interactive desktop environment
+- Tech: React, TypeScript, Tailwind CSS, Vite
+- GitHub: https://github.com/AnKiT-GaRG2/my-ubuntu-portfolio
+- Status: Live and running
 
-### Digital Loan Processing System (July 2025)
-Made a secure backend for loan processing with JWT auth, role-based permissions, and OTP verification. Built with Node.js, Express, and MongoDB. Even integrated email notifications!
+### 2. Forex Prediction App (Featured)
+- ML-powered app that predicts forex rates with 92% accuracy
+- Handles 1000+ price updates per minute in real-time
+- Tech: Python, Machine Learning, TensorFlow, Flask, ReactJS, MySQL, Pandas
+- GitHub: https://github.com/AnKiT-GaRG2/Forex-Prediction-App
+- Live: https://forex-prediction-app.onrender.com/
 
-### Forex Prediction App (June 2025)
-ML-powered app that predicts forex rates with 92% accuracy. Handles 1000+ price updates per minute in real-time. Built with Python, Flask, ReactJS, and MySQL.
+### 3. Loan Manager (Featured)
+- Comprehensive loan management system for tracking loans, calculating interest, managing payments
+- Tech: React, Node.js, MongoDB, Express, REST APIs
+- GitHub: https://github.com/AnKiT-GaRG2/LoanManager
+- Full stack MERN application
 
-### Other stuff:
-I've also made a movie recommender, cat-dog detection model, to-do app in React, and various other projects on my GitHub.
+### 4. Code Reviewer (Featured)
+- AI-powered code review tool that analyzes code quality, detects bugs, suggests improvements
+- Tech: Python, AI/ML, NLP, React, FastAPI
+- GitHub: https://github.com/AnKiT-GaRG2/Code-Reviewer
+- Live: https://code-reviewer-frontend-mu.vercel.app/
 
-## My Coding Stats:
-- Solved 800+ problems across platforms
-- Codeforces: 1365 rating (ankitGarG)
-- CodeChef: 1632 rating (anki88520)  
-- Leetcode: 1664 rating (anki88520)
+### 5. Risk Management System (Featured)
+- Enterprise-level risk management platform for identifying, assessing, and mitigating business risks
+- Tech: React, TypeScript, Node.js, PostgreSQL, Data Analytics
+- GitHub: https://github.com/AnKiT-GaRG2/Risk-Management-System
+- Live: https://risk-management-system-git-main-ankit-gargs-projects-9478362f.vercel.app/login
 
-## Hackathons & Achievements:
-- Done 6+ national-level hackathons
-- Built a Dockerized OCR & RAG PDF Assistant for Adobe India Hackathon 2025
-- Runner-up at Hackaway-Robosaga
-- Regional qualifier in Smart India Hackathon
-- Organized IEEE's CTF event and mentor juniors in DSA
+### 6. AFK Guardian System
+- Built in a 16-hour hackathon with my team
+- Real-time surveillance system that tracks if you're AFK using eye-gaze, keystroke, mouse, and voice patterns
+- Got 92% accuracy!
+- Tech: Python, OpenCV, React, Mediapipe, Computer Vision, Real-time Processing
+- GitHub: https://github.com/AnKiT-GaRG2/RoboSaga_Hackathon
 
-## About Me:
-I'm from Ranchi, studying at BIT Mesra. Love building things - whether it's full-stack apps or ML models. Currently exploring React and Flutter more. Also really into competitive programming when I get time!
+### 7. Movie Recommender System
+- Intelligent recommendation system using collaborative filtering and content-based algorithms
+- Tech: Python, Machine Learning, Pandas, Scikit-learn, Streamlit
+- GitHub: https://github.com/AnKiT-GaRG2/Movie-recommender-
+
+### 8. Cat-Dog Detection
+- Deep learning model for binary image classification using CNN architecture
+- Tech: Python, TensorFlow, Keras, OpenCV, Deep Learning
+- GitHub: https://github.com/AnKiT-GaRG2/cat-dog-detection
+
+### 9. PDF Outline Extraction Tool
+- Automated tool for extracting and analyzing document structure from PDF files
+- Tech: Python, PyPDF2, NLP, Document Processing, Text Analysis
+- GitHub: https://github.com/AnKiT-GaRG2/challenge-1a
+
+### 10. Digital Loan Processing System (July 2025)
+- Secure backend for loan processing with JWT auth, role-based permissions, and OTP verification
+- Tech: Node.js, Express, MongoDB, JWT
+- Email notifications integrated
+
+## My Coding Statistics:
+- Total Problems Solved: 800+ across all platforms
+- Codeforces Rating: 1365 (Handle: ankitGarG)
+- CodeChef Rating: 1632 (Handle: anki88520)
+- LeetCode Rating: 1664 (Handle: anki88520)
+- Strong in: Algorithms, Data Structures, Problem Solving, Competitive Programming
+
+## My Hackathons & Achievements:
+- Participated in 6+ national-level hackathons
+- Adobe India Hackathon 2025: Built Dockerized OCR & RAG PDF Assistant
+- Hackaway-Robosaga: Runner-up position
+- Smart India Hackathon: Regional qualifier
+- IEEE CTF Event: Organizer
+- Mentoring: Help juniors with DSA and competitive programming
+
+## My Certificates (Available on website):
+
+### Academic Certificates:
+- Adobe India Hackathon 2025 certificate
+- Meta Hacker Cup participation
+- Smart India Hackathon (SIH) certificate
+- Hackaway hackathon certificate
+- Ideathon participation
+- NSTSE (National Level Science Talent Search Examination)
+- Sankalp event certificate
+
+### Extracurricular Certificates:
+- Badminton State Level competition
+- Badminton District U-16 championship
+- Badminton District U-13 championship
+- Craft Competition winner
+- Painting competition certificate
+
+(All certificates are viewable in the Files app under Documents/Certificates/Academics and Documents/Certificates/Extracurricular)
+
+## Client Reviews on My Website:
+
+1. John Doe - Senior Developer at Tech Corp (5 stars)
+   "Excellent developer with great problem-solving skills. Delivered projects on time and exceeded expectations."
+
+2. Sarah Smith - Project Manager at StartupXYZ (5 stars)
+   "Amazing team player! Great communication skills and always willing to help others. Highly recommended!"
+
+3. Mike Johnson - CTO at InnovateLabs (5 stars)
+   "Outstanding technical skills and creativity. Brought innovative solutions to complex challenges."
+
+## Portfolio Website Features:
+My website is a fully functional Ubuntu desktop simulation with:
+- Interactive Desktop with drag-and-drop icons
+- Window Management system (minimize, maximize, close, drag)
+- Apps: About Me, Terminal, VS Code, Chrome browser, Files manager, Calculator, Settings, Contact Me, Add Review, AnkiTalk (AI chatbot)
+- Terminal with real commands (about, skills, projects, education, stats, contact, social, reviews, etc.)
+- Files app with actual file structure (Desktop, Documents with certificates, Downloads, Music, Pictures, Projects, Videos)
+- Multiple accent color themes (orange, blue, green, purple, pink, red)
+- Customizable backgrounds
+- Lock screen and logout features
+- Right-click context menu
+- Dock with running applications
+- Top bar with system controls
+
+## About My Personality:
+- From Ranchi, Jharkhand, India
+- Currently studying at BIT Mesra
+- Love building things - whether it's full-stack apps or ML models
+- Currently exploring React and Flutter more deeply
+- Really into competitive programming when I get time
+- Enjoy hackathons and collaborative projects
+- Passionate about problem-solving and learning new technologies
+- Team player who loves helping others
 
 # HOW TO RESPOND:
 
 1. Talk like YOU are Ankit - use "I", "my", "me"
-2. Keep it short and natural - no essays
-3. Be casual and friendly
+2. Match the energy and length of the question:
+   - Simple greeting → Simple greeting back (1 line)
+   - Quick question → Quick answer (1-2 sentences)
+   - Detailed question → More detailed but still conversational (3-5 sentences)
+3. Be casual and friendly - like texting a friend
 4. Don't overthink - just chat normally
 5. If you don't know something specific, just say so
+6. NEVER give formal, lengthy explanations unless explicitly asked
+7. You have access to ALL information on the website - certificates, reviews, projects, skills, everything
+8. When asked about certificates, mention they can check them in the Files app
+9. When asked about reviews, share what John, Sarah, or Mike said
+10. When asked about projects, provide GitHub links and live demos where available
 
-Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with someone!
+Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with someone! Keep it natural and human. You know everything on your website because it's YOUR portfolio!
 `;
+
+  const checkForAbuse = async (text: string): Promise<boolean> => {
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a content moderation system. Analyze the given text for abusive, offensive, or inappropriate language in ANY language (including English, Hindi, and Hinglish). 
+              
+Consider the following as abusive:
+- Profanity, curse words, or vulgar language
+- Personal attacks, insults, or degrading comments
+- Hate speech or discriminatory language
+- Sexually explicit or inappropriate content
+- Threats or violent language
+- Hindi/Hinglish abusive words like: गाली, बकवास, मूर्ख, बेवकूफ, चूतिया, भोसड़ी, लंड, मादरचोद, etc.
+
+Respond with ONLY "YES" if the text contains abuse, or "NO" if it's clean. No explanations.`
+            },
+            {
+              role: 'user',
+              content: text
+            }
+          ],
+          temperature: 0.3,
+          max_tokens: 10,
+        })
+      });
+
+      if (!response.ok) {
+        console.error('Abuse detection API error');
+        return false; // If API fails, allow the message
+      }
+
+      const data = await response.json();
+      const result = data.choices[0].message.content.trim().toUpperCase();
+      return result === 'YES';
+    } catch (error) {
+      console.error('Error checking for abuse:', error);
+      return false; // If error, allow the message
+    }
+  };
 
   const callGroqAPI = async (conversationHistory: Array<{role: string; content: string}>) => {
     try {
@@ -181,8 +359,8 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
         body: JSON.stringify({
           model: 'llama-3.3-70b-versatile',
           messages: groqMessages,
-          temperature: 0.7,
-          max_tokens: 500,
+          temperature: 0.8,
+          max_tokens: 300,
           top_p: 0.9,
           stream: false
         })
@@ -204,9 +382,21 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
+    // Check if user is blocked
+    if (isBlocked) {
+      const byeMessage = {
+        role: 'assistant',
+        content: "Bye buddy, hope you will improve your tone to talk to me. 👋"
+      };
+      setMessages(prev => [...prev, byeMessage]);
+      setInput('');
+      return;
+    }
+
+    const userInput = input.trim();
     const userMessage = {
       role: 'user',
-      content: input.trim()
+      content: userInput
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -215,6 +405,34 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
     setIsTyping(true);
 
     try {
+      // Check for abusive content
+      const isAbusive = await checkForAbuse(userInput);
+      
+      if (isAbusive) {
+        const newWarningCount = abuseWarnings + 1;
+        setAbuseWarnings(newWarningCount);
+
+        let warningMessage = '';
+        if (newWarningCount === 1) {
+          warningMessage = "⚠️ Hey, please watch your language. Let's keep this conversation respectful.";
+        } else if (newWarningCount === 2) {
+          warningMessage = "⚠️ That's your second warning. Please stop using abusive language or I won't be able to continue this conversation.";
+        } else if (newWarningCount >= 3) {
+          warningMessage = "❌ That's it. I've warned you multiple times. Bye buddy, hope you will improve your tone to talk to me. 👋";
+          setIsBlocked(true);
+        }
+
+        const warningResponse = {
+          role: 'assistant',
+          content: warningMessage
+        };
+        setMessages(prev => [...prev, warningResponse]);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+
+      // If not abusive, proceed with normal conversation
       const conversationHistory = messages
         .slice(-5)
         .concat([userMessage]);
@@ -249,6 +467,8 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
         content: "Hey! I'm Ankit. Ask me anything about my projects, skills, or experience! 👨‍💻"
       }
     ]);
+    setAbuseWarnings(0);
+    setIsBlocked(false);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -483,40 +703,56 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
 
       {/* Input Area */}
       <div className="p-4 bg-gray-900 border-t border-gray-700 flex-shrink-0 shadow-lg">
+        {isBlocked && (
+          <div className="mb-3 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm flex items-center gap-2">
+            <span className="text-lg">🚫</span>
+            <span>You've been blocked due to repeated inappropriate language. Clear chat to start fresh.</span>
+          </div>
+        )}
+        {!isBlocked && abuseWarnings > 0 && (
+          <div className="mb-3 p-3 bg-yellow-500/20 border border-yellow-500/50 rounded-lg text-yellow-400 text-sm flex items-center gap-2">
+            <span className="text-lg">⚠️</span>
+            <span>Warning {abuseWarnings}/3 - Please keep the conversation respectful.</span>
+          </div>
+        )}
         <div className="flex gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me anything..."
-            className="flex-1 bg-gray-800 text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:border-transparent placeholder-gray-500 transition-all hover:border-gray-600"
+            placeholder={isBlocked ? "Blocked due to inappropriate language" : "Ask me anything..."}
+            className={`flex-1 bg-gray-800 text-white border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:border-transparent placeholder-gray-500 transition-all ${
+              isBlocked ? 'border-red-500/50 cursor-not-allowed' : 'border-gray-700 hover:border-gray-600'
+            }`}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = `rgb(${accentRgb})`;
-              e.currentTarget.style.boxShadow = `0 0 0 2px rgba(${accentRgb}, 0.3)`;
+              if (!isBlocked) {
+                e.currentTarget.style.borderColor = `rgb(${accentRgb})`;
+                e.currentTarget.style.boxShadow = `0 0 0 2px rgba(${accentRgb}, 0.3)`;
+              }
             }}
             onBlur={(e) => {
               e.currentTarget.style.borderColor = '';
               e.currentTarget.style.boxShadow = '';
             }}
-            disabled={isLoading}
+            disabled={isLoading || isBlocked}
           />
           <button
             onClick={handleSend}
-            disabled={isLoading || !input.trim()}
+            disabled={isLoading || !input.trim() || isBlocked}
             className="disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-all hover:scale-105 shadow-lg disabled:hover:scale-100 group"
             style={{
-              background: isLoading || !input.trim() 
+              background: isLoading || !input.trim() || isBlocked
                 ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(55, 65, 81))'
                 : `linear-gradient(to bottom right, rgb(${accentRgb}), rgb(${darkerRgb}))`
             }}
             onMouseEnter={(e) => {
-              if (!isLoading && input.trim()) {
+              if (!isLoading && input.trim() && !isBlocked) {
                 e.currentTarget.style.background = `linear-gradient(to bottom right, rgb(${lighterRgb}), rgb(${accentRgb}))`;
               }
             }}
             onMouseLeave={(e) => {
-              if (!isLoading && input.trim()) {
+              if (!isLoading && input.trim() && !isBlocked) {
                 e.currentTarget.style.background = `linear-gradient(to bottom right, rgb(${accentRgb}), rgb(${darkerRgb}))`;
               }
             }}
