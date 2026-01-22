@@ -57,7 +57,7 @@ You: "Sure! Check it out: https://github.com/AnKiT-GaRG2 - I've got all my proje
 - LeetCode: anki88520
 
 ## My Education:
-- B.Tech. in Computer Science @ BIT Mesra (2023-2027) - CGPA: 8.2/10
+- B.Tech. in Computer Science @ B.I.T. Mesra Currently in 3rd year (2023-2027) - CGPA: 8.2/10
 - Class 12 (CBSE) - 87.6% from Grizzly Vidyalaya, Koderma, Jharkhand
 - Class 10 (ICSE) - 91.4% from The Himalayan Public School, Dehradun, Uttarakhand
 
