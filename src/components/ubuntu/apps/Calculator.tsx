@@ -101,7 +101,7 @@ export function Calculator() {
   };
 
   const buttonClass = (type: 'number' | 'operation' | 'function') => {
-    const base = 'w-full h-14 rounded-lg font-medium text-xl transition-colors';
+    const base = 'w-full h-16 rounded-lg font-medium text-2xl transition-all hover:scale-105 active:scale-95 shadow-md';
     switch (type) {
       case 'number':
         return `${base} bg-muted/40 hover:bg-muted/60 text-foreground`;
@@ -113,44 +113,47 @@ export function Calculator() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-ubuntu-window p-4">
-      {/* Display */}
-      <div className="bg-muted/30 rounded-lg p-4 mb-4">
-        <div className="text-right text-4xl font-light text-foreground truncate">
-          {display}
-        </div>
-        {operation && previousValue !== null && (
-          <div className="text-right text-sm text-muted-foreground mt-1">
-            {previousValue} {operation}
+    <div className="h-full w-full flex items-center justify-center bg-ubuntu-window p-4">
+      {/* Calculator Container - Max width for better look when maximized */}
+      <div className="w-full max-w-md flex flex-col" style={{ maxHeight: '700px' }}>
+        {/* Display */}
+        <div className="bg-muted/30 rounded-lg p-6 mb-4 shadow-lg">
+          <div className="text-right text-5xl font-light text-foreground truncate">
+            {display}
           </div>
-        )}
-      </div>
+          {operation && previousValue !== null && (
+            <div className="text-right text-base text-muted-foreground mt-2">
+              {previousValue} {operation}
+            </div>
+          )}
+        </div>
 
-      {/* Buttons */}
-      <div className="grid grid-cols-4 gap-2 flex-1">
-        <button onClick={clear} className={buttonClass('function')}>AC</button>
-        <button onClick={toggleSign} className={buttonClass('function')}>+/-</button>
-        <button onClick={percentage} className={buttonClass('function')}>%</button>
-        <button onClick={() => performOperation('÷')} className={buttonClass('operation')}>÷</button>
+        {/* Buttons */}
+        <div className="grid grid-cols-4 gap-3 flex-1">
+          <button onClick={clear} className={buttonClass('function')}>AC</button>
+          <button onClick={toggleSign} className={buttonClass('function')}>+/-</button>
+          <button onClick={percentage} className={buttonClass('function')}>%</button>
+          <button onClick={() => performOperation('÷')} className={buttonClass('operation')}>÷</button>
 
-        <button onClick={() => inputDigit('7')} className={buttonClass('number')}>7</button>
-        <button onClick={() => inputDigit('8')} className={buttonClass('number')}>8</button>
-        <button onClick={() => inputDigit('9')} className={buttonClass('number')}>9</button>
-        <button onClick={() => performOperation('×')} className={buttonClass('operation')}>×</button>
+          <button onClick={() => inputDigit('7')} className={buttonClass('number')}>7</button>
+          <button onClick={() => inputDigit('8')} className={buttonClass('number')}>8</button>
+          <button onClick={() => inputDigit('9')} className={buttonClass('number')}>9</button>
+          <button onClick={() => performOperation('×')} className={buttonClass('operation')}>×</button>
 
-        <button onClick={() => inputDigit('4')} className={buttonClass('number')}>4</button>
-        <button onClick={() => inputDigit('5')} className={buttonClass('number')}>5</button>
-        <button onClick={() => inputDigit('6')} className={buttonClass('number')}>6</button>
-        <button onClick={() => performOperation('-')} className={buttonClass('operation')}>−</button>
+          <button onClick={() => inputDigit('4')} className={buttonClass('number')}>4</button>
+          <button onClick={() => inputDigit('5')} className={buttonClass('number')}>5</button>
+          <button onClick={() => inputDigit('6')} className={buttonClass('number')}>6</button>
+          <button onClick={() => performOperation('-')} className={buttonClass('operation')}>−</button>
 
-        <button onClick={() => inputDigit('1')} className={buttonClass('number')}>1</button>
-        <button onClick={() => inputDigit('2')} className={buttonClass('number')}>2</button>
-        <button onClick={() => inputDigit('3')} className={buttonClass('number')}>3</button>
-        <button onClick={() => performOperation('+')} className={buttonClass('operation')}>+</button>
+          <button onClick={() => inputDigit('1')} className={buttonClass('number')}>1</button>
+          <button onClick={() => inputDigit('2')} className={buttonClass('number')}>2</button>
+          <button onClick={() => inputDigit('3')} className={buttonClass('number')}>3</button>
+          <button onClick={() => performOperation('+')} className={buttonClass('operation')}>+</button>
 
-        <button onClick={() => inputDigit('0')} className={`${buttonClass('number')} col-span-2`}>0</button>
-        <button onClick={inputDecimal} className={buttonClass('number')}>.</button>
-        <button onClick={calculate} className={buttonClass('operation')}>=</button>
+          <button onClick={() => inputDigit('0')} className={`${buttonClass('number')} col-span-2`}>0</button>
+          <button onClick={inputDecimal} className={buttonClass('number')}>.</button>
+          <button onClick={calculate} className={buttonClass('operation')}>=</button>
+        </div>
       </div>
     </div>
   );
