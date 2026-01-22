@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
+import { VoiceMicButton } from './voice_agent/VoiceMicButton';
 
 interface ChatInputProps {
   value: string;
@@ -12,6 +13,10 @@ interface ChatInputProps {
   onChange: (value: string) => void;
   onSend: () => void;
   onKeyPress: (e: React.KeyboardEvent) => void;
+  // Voice props
+  isListening?: boolean;
+  onVoiceToggle?: () => void;
+  voiceSupported?: boolean;
 }
 
 export function ChatInput({
@@ -24,8 +29,32 @@ export function ChatInput({
   darkerRgb,
   onChange,
   onSend,
-  onKeyPress
+  onKeyPress,
+  isListening = false,
+  onVoiceToggle,
+  voiceSupported = false,
 }: ChatInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Keep input focused
+  useEffect(() => {
+    if (inputRef.current && !isBlocked && !isLoading) {
+      inputRef.current.focus();
+    }
+  }, [isBlocked, isLoading, isListening]);
+
+  const handleVoiceToggle = () => {
+    if (onVoiceToggle) {
+      onVoiceToggle();
+    }
+    // Immediately refocus the input after mic click
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
+  };
+
   return (
     <div className="p-4 bg-gray-900 border-t border-gray-700 flex-shrink-0 shadow-lg">
       {/* Block Warning */}
@@ -46,7 +75,18 @@ export function ChatInput({
       
       {/* Input Field and Send Button */}
       <div className="flex gap-3">
+        {/* Voice Microphone Button */}
+        {voiceSupported && onVoiceToggle && (
+          <VoiceMicButton
+            isListening={isListening}
+            onToggle={handleVoiceToggle}
+            accentRgb={accentRgb}
+            disabled={isLoading || isBlocked}
+          />
+        )}
+        
         <input
+          ref={inputRef}
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -68,8 +108,11 @@ export function ChatInput({
           disabled={isLoading || isBlocked}
         />
         <button
+          type="button"
           onClick={onSend}
+          onMouseDown={(e) => e.preventDefault()}
           disabled={isLoading || !value.trim() || isBlocked}
+          tabIndex={-1}
           className="disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-all hover:scale-105 shadow-lg disabled:hover:scale-100 group"
           style={{
             background: isLoading || !value.trim() || isBlocked

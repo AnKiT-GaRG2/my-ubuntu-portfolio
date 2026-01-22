@@ -21,7 +21,10 @@ import {
   QuickQuestions,
   ChatMessage,
   TypingIndicator,
-  ChatInput
+  ChatInput,
+  LiveTranscription,
+  useSpeechRecognition,
+  useSpeechSynthesis,
 } from './chatbot';
 
 interface ChatBotProps {
@@ -51,12 +54,39 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const [pdfTitle, setPdfTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Track if the current message was from voice input
+  const [wasVoiceInput, setWasVoiceInput] = useState(false);
+
+  // Voice hooks
+  const {
+    isListening,
+    transcript,
+    interimTranscript,
+    startListening,
+    stopListening,
+    resetTranscript,
+    isSupported: voiceSupported,
+    error: voiceError,
+  } = useSpeechRecognition();
+
+  const { speak, speaking, cancel: cancelSpeech } = useSpeechSynthesis();
 
   // Get color variants
   const { accentRgb, lighterRgb, darkerRgb, hexColor } = getColorVariants(accentColor);
 
   // Get Groq API key from environment variable
   const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+
+  // Speak welcome message on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      speak("Hey! I'm Ankit. Ask me anything about my projects, skills, or experience!");
+    }, 800);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
@@ -66,6 +96,26 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Handle voice transcript
+  useEffect(() => {
+    if (transcript && !isListening) {
+      setInput(transcript);
+      setWasVoiceInput(true); // Mark this as voice input
+      resetTranscript();
+    }
+  }, [transcript, isListening, resetTranscript]);
+
+  // Show voice error
+  useEffect(() => {
+    if (voiceError && voiceError.includes('denied')) {
+      const showError = () => {
+        addAssistantMessage('🎤 Microphone access denied. Please allow microphone access in your browser settings.');
+      };
+      showError();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voiceError]);
 
   // Quick question suggestions
   const quickQuestions = [
@@ -79,21 +129,53 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
     setInput(question);
   };
 
+  // Helper function to add assistant message with CONDITIONAL voice
+  const addAssistantMessage = (content: string, shouldSpeak: boolean = false) => {
+    const message: Message = {
+      role: 'assistant',
+      content
+    };
+    setMessages(prev => [...prev, message]);
+    
+    // Only speak if requested (used voice input)
+    if (shouldSpeak && !speaking) {
+      setTimeout(() => {
+        speak(content);
+      }, 100);
+    }
+  };
+
+  // Voice toggle handler
+  const handleVoiceToggle = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      // Stop any ongoing speech before listening
+      if (speaking) {
+        cancelSpeech();
+      }
+      startListening();
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
+    // Stop speaking when user sends message
+    if (speaking) {
+      cancelSpeech();
+    }
+
     // Check if user is blocked
     if (isBlocked) {
-      const byeMessage: Message = {
-        role: 'assistant',
-        content: "Bye buddy, hope you will improve your tone to talk to me. 👋"
-      };
-      setMessages(prev => [...prev, byeMessage]);
+      addAssistantMessage("Bye buddy, hope you will improve your tone to talk to me. 👋", wasVoiceInput);
       setInput('');
+      setWasVoiceInput(false); // Reset flag
       return;
     }
 
     const userInput = input.trim();
+    const shouldSpeak = wasVoiceInput; // Capture the voice input state
     const userMessage: Message = {
       role: 'user',
       content: userInput
@@ -101,6 +183,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setWasVoiceInput(false); // Reset flag after capturing
     setIsLoading(true);
     setIsTyping(true);
 
@@ -122,11 +205,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           setIsBlocked(true);
         }
 
-        const warningResponse: Message = {
-          role: 'assistant',
-          content: warningMessage
-        };
-        setMessages(prev => [...prev, warningResponse]);
+        addAssistantMessage(warningMessage, shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
@@ -135,23 +214,13 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
       // Check for Chrome intent using AI
       console.log('🌐 Starting Chrome intent detection...');
       const hasChromeIntent = await detectChromeIntent(userInput, GROQ_API_KEY);
-      console.log('🌐 Chrome intent detected:', hasChromeIntent);
       
       if (hasChromeIntent) {
         console.log('✅ Opening Chrome app...');
-        // Open the Chrome app
         if (onOpenApp) {
           onOpenApp('chrome');
-          console.log('✅ Chrome app opened successfully');
-        } else {
-          console.warn('⚠️ onOpenApp callback is not available');
         }
-
-        const chromeResponse: Message = {
-          role: 'assistant',
-          content: "Sure! I've opened Chrome for you. You can now browse the web! 🌐"
-        };
-        setMessages(prev => [...prev, chromeResponse]);
+        addAssistantMessage("Sure! I've opened Chrome for you. You can now browse the web! 🌐", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
@@ -160,23 +229,13 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
       // Check for Terminal intent using AI
       console.log('💻 Starting Terminal intent detection...');
       const hasTerminalIntent = await detectTerminalIntent(userInput, GROQ_API_KEY);
-      console.log('💻 Terminal intent detected:', hasTerminalIntent);
       
       if (hasTerminalIntent) {
         console.log('✅ Opening Terminal app...');
-        // Open the Terminal app
         if (onOpenApp) {
           onOpenApp('terminal');
-          console.log('✅ Terminal app opened successfully');
-        } else {
-          console.warn('⚠️ onOpenApp callback is not available');
         }
-
-        const terminalResponse: Message = {
-          role: 'assistant',
-          content: "Sure! I've opened the Terminal for you. You can now run commands! 💻"
-        };
-        setMessages(prev => [...prev, terminalResponse]);
+        addAssistantMessage("Sure! I've opened the Terminal for you. You can now run commands! 💻", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
@@ -185,85 +244,55 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
       // Check for Calculator intent using AI
       console.log('🧮 Starting Calculator intent detection...');
       const hasCalculatorIntent = await detectCalculatorIntent(userInput, GROQ_API_KEY);
-      console.log('🧮 Calculator intent detected:', hasCalculatorIntent);
       
       if (hasCalculatorIntent) {
         console.log('✅ Opening Calculator app...');
-        // Open the Calculator app
         if (onOpenApp) {
           onOpenApp('calculator');
-          console.log('✅ Calculator app opened successfully');
-        } else {
-          console.warn('⚠️ onOpenApp callback is not available');
         }
-
-        const calculatorResponse: Message = {
-          role: 'assistant',
-          content: "Sure! I've opened the Calculator for you. You can now perform your calculations! 🧮"
-        };
-        setMessages(prev => [...prev, calculatorResponse]);
+        addAssistantMessage("Sure! I've opened the Calculator for you. Time to crunch some numbers! 🧮", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
       }
 
       // Check for VS Code intent using AI
-      console.log('⌨️ Starting VS Code intent detection...');
+      console.log('💻 Starting VS Code intent detection...');
       const hasVSCodeIntent = await detectVSCodeIntent(userInput, GROQ_API_KEY);
-      console.log('⌨️ VS Code intent detected:', hasVSCodeIntent);
       
       if (hasVSCodeIntent) {
         console.log('✅ Opening VS Code app...');
-        // Open the VS Code app
         if (onOpenApp) {
           onOpenApp('vscode');
-          console.log('✅ VS Code app opened successfully');
-        } else {
-          console.warn('⚠️ onOpenApp callback is not available');
         }
-
-        const vscodeResponse: Message = {
-          role: 'assistant',
-          content: "Sure! I've opened VS Code for you. Happy coding! ⌨️💻"
-        };
-        setMessages(prev => [...prev, vscodeResponse]);
+        addAssistantMessage("Sure! I've opened VS Code for you. Happy coding! 💻", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
       }
 
-      // Check for Certificate intent using AI
-      console.log('📜 Starting Certificate intent detection...');
-      // Pass last 2 messages as context to understand "the certificate" references
+      // Check for certificate intent using AI
+      console.log('🏆 Starting certificate intent detection...');
       const recentContext = messages.slice(-2).map(m => `${m.role}: ${m.content}`).join('\n');
       const certificateIntent = await detectCertificateIntent(userInput, GROQ_API_KEY, recentContext);
-      console.log('📜 Certificate intent detected:', certificateIntent);
       
       if (certificateIntent.hasIntent) {
         if (certificateIntent.action === 'list') {
           // List all certificates
           console.log('📋 Listing all certificates...');
-          const listResponse: Message = {
-            role: 'assistant',
-            content: formatCertificateList()
-          };
-          setMessages(prev => [...prev, listResponse]);
+          addAssistantMessage(formatCertificateList(), shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
           return;
         } else if (certificateIntent.action === 'info' && certificateIntent.certificate) {
           // Show certificate information
           console.log('ℹ️ Showing certificate info:', certificateIntent.certificate.name);
-          const infoResponse: Message = {
-            role: 'assistant',
-            content: generateCertificateInfoResponse(certificateIntent.certificate)
-          };
-          setMessages(prev => [...prev, infoResponse]);
+          addAssistantMessage(generateCertificateInfoResponse(certificateIntent.certificate), shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
           return;
         } else if (certificateIntent.action === 'show' && certificateIntent.certificate) {
-          // Open the certificate PDF in inline viewer
+          // Open the certificate PDF
           console.log('✅ Opening certificate:', certificateIntent.certificate.name);
           
           // Set PDF viewer state
@@ -271,24 +300,14 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           setPdfTitle(certificateIntent.certificate.displayName);
           setShowPdfViewer(true);
           
-          const showResponse: Message = {
-            role: 'assistant',
-            content: `Sure! I've opened the **${certificateIntent.certificate.displayName}** for you! 📜✨
-
-You can view it below. Click the ❌ button to close it when you're done.`
-          };
-          setMessages(prev => [...prev, showResponse]);
+          addAssistantMessage(`Sure! I've opened the **${certificateIntent.certificate.displayName}** for you! 📜✨\n\nYou can view it below. Click the ❌ button to close it when you're done.`, shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
           return;
         } else if (certificateIntent.action === 'show' || certificateIntent.action === 'info') {
           // Certificate not found
           console.log('❌ Certificate not found');
-          const notFoundResponse: Message = {
-            role: 'assistant',
-            content: generateCertificateNotFoundResponse(certificateIntent.query)
-          };
-          setMessages(prev => [...prev, notFoundResponse]);
+          addAssistantMessage(generateCertificateNotFoundResponse(certificateIntent.query), shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
           return;
@@ -298,89 +317,48 @@ You can view it below. Click the ❌ button to close it when you're done.`
       // Check for folder creation intent using AI
       console.log('📁 Starting folder creation intent detection...');
       const folderIntent = await detectFolderIntent(userInput, GROQ_API_KEY);
-      console.log('📁 Folder intent detected:', folderIntent);
       
       if (folderIntent.hasIntent) {
         if (folderIntent.needsName) {
-          // User wants to create a folder but didn't provide a name
-          console.log('❓ Asking user for folder name...');
-          const askNameResponse: Message = {
-            role: 'assistant',
-            content: generateAskFolderNameResponse()
-          };
-          setMessages(prev => [...prev, askNameResponse]);
-          setIsLoading(false);
-          setIsTyping(false);
-          return;
+          addAssistantMessage(generateAskFolderNameResponse(), shouldSpeak);
         } else if (folderIntent.folderName) {
-          // User provided a folder name, create it
-          console.log('✅ Creating folder:', folderIntent.folderName);
-          const createdResponse: Message = {
-            role: 'assistant',
-            content: generateFolderCreatedResponse(folderIntent.folderName)
-          };
-          setMessages(prev => [...prev, createdResponse]);
-          
-          // Open terminal with mkdir command
+          addAssistantMessage(generateFolderCreatedResponse(folderIntent.folderName), shouldSpeak);
           if (onOpenApp) {
             onOpenApp('terminal', { initialCommand: `mkdir "${folderIntent.folderName}"` });
-            console.log('✅ Terminal opened with mkdir command:', folderIntent.folderName);
           }
-          
-          setIsLoading(false);
-          setIsTyping(false);
-          return;
         }
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
       }
 
       // Check for review intent using AI
       console.log('🎯 Starting review intent detection...');
       const hasReviewIntent = await detectReviewIntent(userInput, GROQ_API_KEY);
-      console.log('🎯 Review intent detected:', hasReviewIntent);
       
       if (hasReviewIntent) {
         console.log('✅ Opening Add Review app...');
-        // Open the Add Review app
         if (onOpenApp) {
           onOpenApp('review');
-          console.log('✅ Add Review app opened successfully');
-        } else {
-          console.warn('⚠️ onOpenApp callback is not available');
         }
-
-        const reviewResponse: Message = {
-          role: 'assistant',
-          content: "Great! I've opened the Add Review app for you. Please fill in all the required fields:\n\n✓ Your Name\n✓ Your Designation\n✓ Rating (1-5 stars)\n✓ Your Review\n\nYour review will be sent directly to Ankit via email and added to the portfolio! 😊"
-        };
-        setMessages(prev => [...prev, reviewResponse]);
+        addAssistantMessage("Great! I've opened the Add Review app for you. Please fill in all the required fields:\n\n✓ Your Name\n✓ Your Designation\n✓ Rating (1-5 stars)\n✓ Your Review\n\nYour review will be sent directly to Ankit via email and added to the portfolio! 😊", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
       }
 
       console.log('💬 Proceeding with normal conversation...');
-      // If not abusive, proceed with normal conversation
-      const conversationHistory = messages
-        .slice(-5)
-        .concat([userMessage]);
-
+      // Normal conversation
+      const conversationHistory = messages.slice(-5).concat([userMessage]);
       const responseText = await callGroqAPI(conversationHistory, GROQ_API_KEY);
 
-      // Simulate typing delay for better UX
+      // Simulate typing delay
       await new Promise(resolve => setTimeout(resolve, 300));
 
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: responseText || "Hmm, not sure about that. Can you rephrase?"
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
+      addAssistantMessage(responseText || "Hmm, not sure about that. Can you rephrase?", shouldSpeak);
     } catch (error) {
-      const errorMessage: Message = {
-        role: 'assistant',
-        content: "Oops, something went wrong! Please try again."
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      console.error('Error:', error);
+      addAssistantMessage("Oops, something went wrong! Please try again.", shouldSpeak);
     } finally {
       setIsLoading(false);
       setIsTyping(false);
@@ -396,11 +374,21 @@ You can view it below. Click the ❌ button to close it when you're done.`
     ]);
     setAbuseWarnings(0);
     setIsBlocked(false);
+    
+    // Speak welcome message
+    setTimeout(() => {
+      speak("Hey! I'm Ankit. Ask me anything about my projects, skills, or experience!");
+    }, 300);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      
+      if (isListening) {
+        stopListening();
+      }
+      
       handleSend();
     }
   };
@@ -458,6 +446,14 @@ You can view it below. Click the ❌ button to close it when you're done.`
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Live Transcription - positioned ABOVE input */}
+      <LiveTranscription
+        isListening={isListening}
+        transcript={transcript}
+        interimTranscript={interimTranscript}
+        accentRgb={accentRgb}
+      />
+
       {/* Input Area */}
       <ChatInput
         value={input}
@@ -470,13 +466,15 @@ You can view it below. Click the ❌ button to close it when you're done.`
         onChange={setInput}
         onSend={handleSend}
         onKeyPress={handleKeyPress}
+        isListening={isListening}
+        onVoiceToggle={handleVoiceToggle}
+        voiceSupported={voiceSupported}
       />
 
       {/* PDF Viewer Modal */}
       {showPdfViewer && (
         <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4">
           <div className="relative w-[95%] h-[92%] bg-gray-900 rounded-lg shadow-2xl flex flex-col overflow-hidden">
-            {/* PDF Header */}
             <div 
               className="flex items-center justify-between px-3 py-2 rounded-t-lg flex-shrink-0"
               style={{ 
@@ -503,8 +501,6 @@ You can view it below. Click the ❌ button to close it when you're done.`
                 </svg>
               </button>
             </div>
-
-            {/* PDF Content */}
             <div className="flex-1 bg-gray-800 rounded-b-lg overflow-hidden">
               <iframe
                 src={pdfUrl}

@@ -36,3 +36,9 @@ export { QuickQuestions } from './QuickQuestions';
 export { ChatMessage } from './ChatMessage';
 export { TypingIndicator } from './TypingIndicator';
 export { ChatInput } from './ChatInput';
+export { VoiceMicButton } from './voice_agent/VoiceMicButton';
+export { LiveTranscription } from './voice_agent/LiveTranscription';
+
+// Voice Hooks
+export { useSpeechRecognition } from './voice_agent/useSpeechRecognition';
+export { useSpeechSynthesis } from './voice_agent/useSpeechSynthesis';

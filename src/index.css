@@ -282,8 +282,27 @@ input[type="range"].slider::-moz-range-thumb:hover {
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .terminal-cursor {
   animation: blink 1.2s step-end infinite;
+}
+
+.animate-blink {
+  animation: blink 1.2s step-end infinite;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease;
 }
 
 /* Custom scrollbar for Applications Grid */
