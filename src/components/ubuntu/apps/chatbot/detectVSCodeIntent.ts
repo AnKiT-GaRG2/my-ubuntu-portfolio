@@ -21,32 +21,41 @@ export async function detectVSCodeIntent(text: string, apiKey: string): Promise<
         messages: [
           {
             role: 'system',
-            content: `You are an intent detection system. Your job is to determine if the user wants to open VS Code (Visual Studio Code) editor.
+            content: `You are an intent detection system. Your job is to determine if the user wants to open VS Code application.
 
-Analyze the user's message in ANY language (English, Hindi, Hinglish, or mixed) and determine if they are expressing intent to:
-- Open VS Code
-- Open Visual Studio Code
-- Use the code editor
-- Start coding
-- Access the IDE
-- Open the text editor
-- Use VS Code
+IMPORTANT: Only respond YES if the user EXPLICITLY wants to:
+- Open VS Code/Visual Studio Code application
+- Use the code editor window
+- Access the IDE interface
 
-Examples of VS Code intent:
+DO NOT respond YES if the user is:
+- Just mentioning VS Code, coding, or development in conversation
+- Asking about coding skills, experience, or projects
+- Asking which IDE/editor you use
+- Asking about programming languages or frameworks
+- Using "code" in other contexts (like "what's the code for this")
+- Asking to see code examples (use chat, not IDE)
+
+Examples that should be YES:
 - "open vs code"
-- "vs code khol do" (open vs code in Hindi)
+- "vs code khol do"
 - "visual studio code chahiye"
-- "let me code"
 - "can you open the code editor"
 - "I want to use vs code"
 - "open vscode"
-- "code editor open karo"
-- "vs code me kuch karna hai"
+- "take me to vs code"
 - "show me vscode"
-- "IDE chahiye"
-- "coding karna hai"
-- "visual studio code open kar"
-- "code editor chahiye"
+- "IDE open karo"
+
+Examples that should be NO:
+- "which IDE do you use"
+- "tell me about your coding skills"
+- "what languages do you code in"
+- "show me some code"
+- "are you good at coding"
+- "do you know VS Code"
+- "coding experience kya hai"
+- "what's your favorite editor"
 
 Respond with ONLY "YES" if they want to open VS Code, or "NO" if they don't.`
           },

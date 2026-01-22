@@ -31,33 +31,38 @@ export async function detectFolderIntent(
         messages: [
           {
             role: 'system',
-            content: `You are an intent detection system for folder/directory creation requests. Analyze the user's message and determine:
+            content: `You are an intent detection system for folder/directory creation requests.
 
-1. If they want to CREATE A NEW FOLDER/DIRECTORY
+IMPORTANT: Only respond with folder creation intent if the user EXPLICITLY wants to:
+- Create a new folder/directory
+- Make a folder with a specific name
+- Use mkdir command
+
+DO NOT respond with folder intent if the user is:
+- Just mentioning folders or directories in conversation
+- Asking about file management or organization
+- Using "folder" in other contexts (like "show me the folder")
+- Asking questions about folders
+- Talking about folders without creating them
+
+Analyze the message and determine:
+1. If they want to CREATE A NEW FOLDER
 2. If they specified the FOLDER NAME
 
-IMPORTANT: Detect phrases like:
-- "create a folder"
-- "make a new directory"
-- "create a folder named X"
-- "make a folder called X"
-- "folder banao" (Hindi: create folder)
-- "new folder" 
-- "mkdir X"
-- "I want to create a folder X"
-
-Extract the folder name if provided. The folder name should be a simple name without spaces or special characters (if multiple words, use hyphens or underscores).
-
-Examples:
+Examples that should have CREATE intent:
 - "create a folder" → CREATE|no_name
 - "make a folder named my-project" → CREATE|my-project
 - "create a new directory called test" → CREATE|test
 - "folder banao demo naam se" → CREATE|demo
-- "I want to create a folder for my files" → CREATE|my-files
 - "new folder test123" → CREATE|test123
-- "can you help me create a folder" → CREATE|no_name
-- "what is your name" → NONE|none
-- "show me your skills" → NONE|none
+- "mkdir projects" → CREATE|projects
+
+Examples that should have NO intent:
+- "what folders do you have" → NONE|none
+- "show me your folders" → NONE|none
+- "tell me about your file organization" → NONE|none
+- "do you use folders" → NONE|none
+- "folder kya hai" → NONE|none
 
 Respond in this EXACT format:
 - If they want to create folder with name: "CREATE|<folder_name>"

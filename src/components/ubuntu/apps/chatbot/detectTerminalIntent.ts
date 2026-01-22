@@ -21,33 +21,40 @@ export async function detectTerminalIntent(text: string, apiKey: string): Promis
         messages: [
           {
             role: 'system',
-            content: `You are an intent detection system. Your job is to determine if the user wants to open Terminal or command line.
+            content: `You are an intent detection system. Your job is to determine if the user wants to open Terminal application.
 
-Analyze the user's message in ANY language (English, Hindi, Hinglish, or mixed) and determine if they are expressing intent to:
-- Open Terminal
-- Open command line
-- Open command prompt
-- Access the terminal
-- Use the shell
-- Run commands
-- Access CLI
-- Open bash/zsh
+IMPORTANT: Only respond YES if the user EXPLICITLY wants to:
+- Open Terminal/command line application
+- Access the terminal window
+- Use the shell/CLI interface
+- Run terminal commands
 
-Examples of Terminal intent:
+DO NOT respond YES if the user is:
+- Just mentioning terminal, commands, or CLI in conversation
+- Asking about terminal skills or experience
+- Asking what commands you know
+- Using "command" in other contexts (like "command me to do something")
+- Asking about coding or development in general
+
+Examples that should be YES:
 - "open terminal"
-- "terminal khol do" (open terminal in Hindi)
+- "terminal khol do"
 - "command line chahiye"
-- "let me use terminal"
 - "can you open the terminal"
-- "I want to run commands"
+- "I want to use terminal"
 - "open command prompt"
-- "terminal me kuch karna hai"
 - "take me to terminal"
 - "show me terminal"
-- "CLI open karo"
-- "bash terminal chahiye"
 - "terminal access chahiye"
-- "command line open kar"
+
+Examples that should be NO:
+- "do you know terminal commands"
+- "tell me about your CLI skills"
+- "what commands can you run"
+- "are you good with terminal"
+- "command me to do something"
+- "terminal experience kya hai"
+- "which shell do you prefer"
 
 Respond with ONLY "YES" if they want to open Terminal, or "NO" if they don't.`
           },

@@ -21,32 +21,39 @@ export async function detectChromeIntent(text: string, apiKey: string): Promise<
         messages: [
           {
             role: 'system',
-            content: `You are an intent detection system. Your job is to determine if the user wants to open Chrome browser or browse the web.
+            content: `You are an intent detection system. Your job is to determine if the user wants to open Chrome browser.
 
-Analyze the user's message in ANY language (English, Hindi, Hinglish, or mixed) and determine if they are expressing intent to:
-- Open Chrome
-- Open the browser
-- Browse the web
-- Search something online
-- Visit a website
-- Use the internet
-- Open Google Chrome
+IMPORTANT: Only respond YES if the user EXPLICITLY wants to:
+- Open Chrome browser/app
+- Open a web browser
+- Browse/search the internet
+- Visit a specific website
 
-Examples of Chrome/browser intent:
+DO NOT respond YES if the user is:
+- Just mentioning Chrome or browser in conversation
+- Asking about browser features or specifications
+- Asking general questions about the web
+- Using words like "browse" in other contexts
+
+Examples that should be YES:
 - "open chrome"
-- "chrome khol do" (open chrome in Hindi)
+- "chrome khol do"
 - "browser open karo"
-- "let me browse"
 - "can you open the browser"
-- "I want to search something"
 - "open google chrome"
-- "chrome me search karna hai"
 - "take me to browser"
 - "show me chrome"
-- "internet pe dekhna hai"
-- "web browser chahiye"
+- "internet browser chahiye"
 
-Respond with ONLY "YES" if they want to open Chrome/browser, or "NO" if they don't.`
+Examples that should be NO:
+- "what browser do you use"
+- "tell me about chrome"
+- "do you support chrome"
+- "chrome is good"
+- "browsing through your projects"
+- "let me browse your skills"
+
+Respond with ONLY "YES" if they want to open Chrome, or "NO" if they don't.`
           },
           {
             role: 'user',

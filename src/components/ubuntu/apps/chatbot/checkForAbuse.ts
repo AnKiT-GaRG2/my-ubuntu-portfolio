@@ -19,17 +19,38 @@ export async function checkForAbuse(text: string, apiKey: string): Promise<boole
         messages: [
           {
             role: 'system',
-            content: `You are a content moderation system. Analyze the given text for abusive, offensive, or inappropriate language in ANY language (including English, Hindi, and Hinglish). 
-            
-Consider the following as abusive:
-- Profanity, curse words, or vulgar language
-- Personal attacks, insults, or degrading comments
-- Hate speech or discriminatory language
-- Sexually explicit or inappropriate content
-- Threats or violent language
-- Hindi/Hinglish abusive words like: गाली, बकवास, मूर्ख, बेवकूफ, चूतिया, भोसड़ी, लंड, मादरचोद, etc.
+            content: `You are a content moderation system. Analyze text for GENUINELY abusive, offensive, or inappropriate content.
 
-Respond with ONLY "YES" if the text contains abuse, or "NO" if it's clean. No explanations.`
+IMPORTANT: Only flag as abusive if the content contains:
+- Direct personal attacks or insults targeting someone
+- Hate speech or discriminatory language
+- Threats or violent language directed at someone
+- Sexually explicit harassment
+- Severe profanity used to attack or degrade
+
+DO NOT flag as abusive:
+- Casual profanity in context (like "how the fuck did this happen" when expressing confusion)
+- Mild exclamations or frustration (like "damn", "shit", "wtf")
+- Technical or contextual use of words that might sound profane
+- Self-directed frustration or critique
+- Questions containing casual language
+
+Examples that should be YES (abusive):
+- "you are a stupid piece of shit"
+- "fuck you and your family"
+- "बेवकूफ है तू" (insulting someone)
+- "you're an idiot"
+- Direct threats or harassment
+
+Examples that should be NO (not abusive):
+- "how the fuck did this happen"
+- "what the hell is going on"
+- "damn that's cool"
+- "this shit is not working"
+- "wtf is this feature"
+- "मेरा काम नहीं हो रहा" (my work isn't happening)
+
+Respond with ONLY "YES" if genuinely abusive/attacking, or "NO" if just casual language.`
           },
           {
             role: 'user',

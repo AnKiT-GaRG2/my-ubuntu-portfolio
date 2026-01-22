@@ -21,29 +21,41 @@ export async function detectReviewIntent(text: string, apiKey: string): Promise<
         messages: [
           {
             role: 'system',
-            content: `You are an intent detection system. Your job is to determine if the user wants to give/add/submit a review or feedback.
+            content: `You are an intent detection system. Your job is to determine if the user wants to SUBMIT/ADD/WRITE a review.
 
-Analyze the user's message in ANY language (English, Hindi, Hinglish, or mixed) and determine if they are expressing intent to:
-- Give a review
-- Add a review
-- Write a review
-- Submit feedback
-- Provide testimonial
-- Share their experience
-- Rate the portfolio/work
+IMPORTANT: Only respond YES if the user EXPLICITLY wants to:
+- Add/submit/write a NEW review
+- Give feedback or testimonial
+- Create a review entry
+- Share their experience/rating
 
-Examples of review intent:
+DO NOT respond YES if the user is:
+- Just asking about reviews (viewing/reading reviews)
+- Asking if you have reviews or testimonials
+- Mentioning reviews in conversation
+- Asking what others said about you
+- Using "review" in other contexts (like "let me review your code")
+
+Examples that should be YES:
 - "I want to give a review"
-- "add krde bhai" (add it brother)
-- "review dena chahta hoon" (want to give review)
+- "add krde bhai"
+- "review dena chahta hoon"
 - "let me write a review"
 - "can I add feedback"
-- "apni website par review add karna hai"
 - "mujhe review dena hai"
-- "can i add the review here?"
-- "My name is ankit i am a developer 4 star and he is good"
+- "can i add the review here"
+- "I want to submit testimonial"
 
-Respond with ONLY "YES" if they want to give a review, or "NO" if they don't.`
+Examples that should be NO:
+- "do you have reviews"
+- "show me reviews"
+- "what do people say about you"
+- "any testimonials"
+- "can I see feedback"
+- "reviews kahan hain"
+- "tell me about your reviews"
+
+Respond with ONLY "YES" if they want to SUBMIT a review, or "NO" if they don't.`
           },
           {
             role: 'user',

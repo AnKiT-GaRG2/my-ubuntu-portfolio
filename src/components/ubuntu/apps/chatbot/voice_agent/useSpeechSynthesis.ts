@@ -125,7 +125,13 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
     synthesisRef.current.cancel();
 
     // Clean text - remove emojis
-    const cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+    let cleanText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+
+    // Remove URLs/links (http://, https://, www., email addresses)
+    cleanText = cleanText.replace(/https?:\/\/[^\s]+/g, ''); // Remove http(s) URLs
+    cleanText = cleanText.replace(/www\.[^\s]+/g, ''); // Remove www URLs
+    cleanText = cleanText.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, ''); // Remove emails
+    cleanText = cleanText.replace(/\s+/g, ' ').trim(); // Clean up extra spaces
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     
