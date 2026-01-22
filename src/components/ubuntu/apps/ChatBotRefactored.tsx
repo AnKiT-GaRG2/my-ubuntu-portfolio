@@ -24,7 +24,7 @@ import {
   ChatInput,
   LiveTranscription,
   useSpeechRecognition,
-  useSpeechSynthesis,
+  useSpeechSynthesisV2AI,
 } from './chatbot';
 
 interface ChatBotProps {
@@ -41,10 +41,10 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hey! I'm Ankit. Ask me anything about my projects, skills, or experience! 👨‍💻"
+      content: "Hey! I'm Ankit Garg. Ask me anything about my projects, skills, or experience! 👨‍💻"
     }
   ]);
-  const [input, setInput] = useState('');
+    const [input, setInput] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [abuseWarnings, setAbuseWarnings] = useState(0);
@@ -70,7 +70,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
     error: voiceError,
   } = useSpeechRecognition();
 
-  const { speak, speaking, cancel: cancelSpeech } = useSpeechSynthesis();
+  const { speak, speaking, cancel: cancelSpeech } = useSpeechSynthesisV2AI();
 
   // Get color variants
   const { accentRgb, lighterRgb, darkerRgb, hexColor } = getColorVariants(accentColor);
@@ -81,7 +81,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   // Speak welcome message on mount
   useEffect(() => {
     const timer = setTimeout(() => {
-      speak("Hey! I'm Ankit. Ask me anything about my projects, skills, or experience!");
+        speak("Hey! I am Ankit Garg. Ask me anything about my projects, skills, or experience!");
     }, 800);
 
     return () => clearTimeout(timer);
@@ -369,7 +369,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
     setMessages([
       {
         role: 'assistant',
-        content: "Hey! I'm Ankit. Ask me anything about my projects, skills, or experience! 👨‍💻"
+          content: "Hey! I am Ankit Garg. Ask me anything about my projects, skills, or experience! 👨‍💻"
       }
     ]);
     setAbuseWarnings(0);
@@ -377,7 +377,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
     
     // Speak welcome message
     setTimeout(() => {
-      speak("Hey! I'm Ankit. Ask me anything about my projects, skills, or experience!");
+        speak("Hey! I am Ankit Garg. Ask me anything about my projects, skills, or experience!");
     }, 300);
   };
 

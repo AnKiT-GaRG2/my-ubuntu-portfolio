@@ -41,4 +41,4 @@ export { LiveTranscription } from './voice_agent/LiveTranscription';
 
 // Voice Hooks
 export { useSpeechRecognition } from './voice_agent/useSpeechRecognition';
-export { useSpeechSynthesis } from './voice_agent/useSpeechSynthesis';
+export { useSpeechSynthesisV2AI } from './voice_agent/useSpeechSynthesisAi';

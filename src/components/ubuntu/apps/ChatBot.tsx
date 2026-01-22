@@ -11,7 +11,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hey! I'm Ankit. Ask me anything about my projects, skills, or experience! 👨‍💻"
+      content: "Hey! I am Ankit Garg. Ask me anything about my projects, skills, or experience! 👨‍💻"
     }
   ]);
   const [input, setInput] = useState('');
@@ -456,7 +456,7 @@ Remember: You're not an AI assistant ABOUT Ankit. You ARE Ankit chatting with so
     setMessages([
       {
         role: 'assistant',
-        content: "Hey! I'm Ankit. Ask me anything about my projects, skills, or experience! 👨‍💻"
+        content: "Hey! I am Ankit Garg. Ask me anything about my projects, skills, or experience! 👨‍💻"
       }
     ]);
     setAbuseWarnings(0);
