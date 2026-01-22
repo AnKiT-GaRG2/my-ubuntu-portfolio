@@ -12,6 +12,7 @@ import { Calculator } from './apps/Calculator';
 import { ContactMe } from './apps/ContactMe';
 import { AddReview } from './apps/AddReview';
 import { ChatBot } from './apps/ChatBotRefactored';
+import { Spotify } from './apps/Spotify';
 import { LockScreen } from './LockScreen';
 import { LogoutScreen } from './LogoutScreen';
 import { ContextMenu } from './ContextMenu';
@@ -288,6 +289,8 @@ export function Desktop() {
         return <ContactMe />;
       case 'review':
         return <AddReview />;
+      case 'spotify':
+        return <Spotify />;
       case 'chatbot':
         return <ChatBot accentColor={accentColor} onOpenApp={openWindow} />;
       default:

@@ -70,6 +70,12 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     position: { x: 200, y: 80 },
     size: getResponsiveSize(0.6, 0.8, 700, 650),
   },
+  spotify: {
+    title: 'Spotify',
+    icon: '🎵',
+    position: { x: 200, y: 80 },
+    size: getResponsiveSize(0.7, 0.8, 800, 650),
+  },
   chatbot: {
     title: 'AnkiTalk',
     icon: '🤖',

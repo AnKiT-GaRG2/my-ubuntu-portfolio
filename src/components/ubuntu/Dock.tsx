@@ -14,6 +14,7 @@ const dockApps = [
   { id: 'files', icon: '/icons/files.jpg', name: 'Files', type: 'image' },
   { id: 'chrome', icon: '/icons/Google_Chrome_icon.jpg', name: 'Chrome', type: 'image' },
   { id: 'vscode', icon: '/icons/Visual_Studio_Code_icon.jpg', name: 'VS Code', type: 'image' },
+  { id: 'spotify', icon: '/icons/Spotify_icon.png', name: 'Spotify', type: 'image' },
   { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', type: 'image' },
   { id: 'calculator', icon: '/icons/Calculator.jpg', name: 'Calculator', type: 'image' },
   { id: 'review', icon: '/icons/reviewapp.jpg', name: 'Add Review', type: 'image' },
