@@ -66,8 +66,8 @@ export function Window({
         top: 28,
         left: 0,
         width: '100%',
-        height: 'calc(100vh - 28px - 72px)',
-        zIndex: window.zIndex,
+        height: 'calc(100vh - 28px)',
+        zIndex: 999, // Higher than dock (z-50) to overlap it
       }
     : {
         top: window.position.y,

@@ -1,66 +1,80 @@
 import { useState, useCallback } from 'react';
 import { WindowState } from '@/types/ubuntu';
 
+// Helper function to calculate responsive window size
+const getResponsiveSize = (widthPercent: number, heightPercent: number, minWidth: number, minHeight: number) => {
+  const width = Math.max(minWidth, Math.floor(window.innerWidth * widthPercent));
+  const height = Math.max(minHeight, Math.floor(window.innerHeight * heightPercent));
+  return { width, height };
+};
+
+// Helper function to calculate centered position
+const getCenteredPosition = (width: number, height: number) => {
+  const x = Math.floor((window.innerWidth - width) / 2);
+  const y = Math.floor((window.innerHeight - height) / 2);
+  return { x: Math.max(100, x), y: Math.max(60, y) };
+};
+
 const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMinimized' | 'isMaximized' | 'zIndex'>> = {
   terminal: {
     title: 'Terminal',
     icon: '🖥️',
     position: { x: 100, y: 100 },
-    size: { width: 800, height: 550 },
+    size: getResponsiveSize(0.6, 0.65, 700, 500), // 60% width, 65% height, min 700x500
   },
   vscode: {
     title: 'Visual Studio Code',
     icon: '💻',
     position: { x: 150, y: 80 },
-    size: { width: 1000, height: 700 },
+    size: getResponsiveSize(0.75, 0.8, 800, 650), // 75% width, 80% height
   },
   chrome: {
     title: 'Google Chrome',
     icon: '🌐',
     position: { x: 200, y: 60 },
-    size: { width: 1000, height: 700 },
+    size: getResponsiveSize(0.75, 0.8, 800, 650),
   },
   about: {
     title: 'About Me',
     icon: '👤',
     position: { x: 150, y: 60 },
-    size: { width: 1100, height: 800 },
+    size: getResponsiveSize(0.8, 0.85, 800, 700), // 80% width, 85% height
   },
   files: {
     title: 'Files',
     icon: '📁',
     position: { x: 100, y: 80 },
-    size: { width: 1200, height: 800 },
+    size: getResponsiveSize(0.85, 0.85, 800, 700), // 85% width, 85% height
   },
   settings: {
     title: 'Settings',
     icon: '⚙️',
     position: { x: 150, y: 60 },
-    size: { width: 1000, height: 700 },
+    size: getResponsiveSize(0.7, 0.8, 900, 650),
   },
   calculator: {
     title: 'Calculator',
     icon: '🔢',
     position: { x: 300, y: 150 },
-    size: { width: 350, height: 500 },
+    size: { width: 350, height: 500 }, // Fixed size for calculator
   },
   contact: {
     title: 'Contact Me',
     icon: '✉️',
     position: { x: 280, y: 110 },
-    size: { width: 750, height: 650 },
+    size: getResponsiveSize(0.55, 0.75, 650, 600),
   },
   review: {
     title: 'Add Review',
     icon: '⭐',
     position: { x: 200, y: 80 },
-    size: { width: 800, height: 700 },
+    size: getResponsiveSize(0.6, 0.8, 700, 650),
   },
   chatbot: {
     title: 'AnkiTalk',
     icon: '🤖',
     position: { x: 250, y: 90 },
-    size: { width: 900, height: 750 },
+    size: getResponsiveSize(0.65, 0.85, 800, 700),
   },
 };
 
@@ -91,12 +105,16 @@ export function useWindowManager() {
         return prev;
       }
 
+      // Calculate better centered position based on window size
+      const position = getCenteredPosition(config.size.width, config.size.height);
+
       setMaxZIndex((z) => z + 1);
       return [
         ...prev,
         {
           id,
           ...config,
+          position, // Use calculated centered position
           isOpen: true,
           isMinimized: false,
           isMaximized: false,
