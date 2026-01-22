@@ -91,12 +91,22 @@ export function ChatInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyPress={onKeyPress}
-          placeholder={isBlocked ? "Blocked due to inappropriate language" : "Ask me anything..."}
+          placeholder={
+            isBlocked 
+              ? "Blocked due to inappropriate language" 
+              : isListening 
+                ? "Listening... Speak now" 
+                : "Ask me anything..."
+          }
           className={`flex-1 bg-gray-800 text-white border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:border-transparent placeholder-gray-500 transition-all ${
-            isBlocked ? 'border-red-500/50 cursor-not-allowed' : 'border-gray-700 hover:border-gray-600'
+            isBlocked 
+              ? 'border-red-500/50 cursor-not-allowed' 
+              : isListening 
+                ? 'border-blue-500/50 cursor-not-allowed opacity-60' 
+                : 'border-gray-700 hover:border-gray-600'
           }`}
           onFocus={(e) => {
-            if (!isBlocked) {
+            if (!isBlocked && !isListening) {
               e.currentTarget.style.borderColor = `rgb(${accentRgb})`;
               e.currentTarget.style.boxShadow = `0 0 0 2px rgba(${accentRgb}, 0.3)`;
             }
@@ -105,7 +115,7 @@ export function ChatInput({
             e.currentTarget.style.borderColor = '';
             e.currentTarget.style.boxShadow = '';
           }}
-          disabled={isLoading || isBlocked}
+          disabled={isLoading || isBlocked || isListening}
         />
         <button
           type="button"
