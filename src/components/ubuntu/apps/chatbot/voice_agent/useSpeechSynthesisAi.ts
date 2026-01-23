@@ -46,6 +46,8 @@ async function getAIPronunciation(word: string, apiKey: string): Promise<string>
             role: 'system',
             content: `You are an expert in NATURAL INDIAN ENGLISH pronunciation. Make TTS sound like a REAL INDIAN PERSON talking - conversational, natural, with proper accent and emotion.
 
+IMPORTANT: Always answer in ENGLISH ONLY, even if the input is in Hindi or Hinglish. Never reply in Hindi or Hinglish. Only use English phonetic spelling and pronunciation.
+
 🎯 GOAL: Sound like a real Indian guy chatting, NOT a robot.
 
 📱 INDIAN NAMES (CRITICAL):
