@@ -17,8 +17,8 @@ const dockApps = [
   { id: 'spotify', icon: '/icons/Spotify_icon.png', name: 'Spotify', type: 'image' },
   { id: 'terminal', icon: '/icons/terminal-icon.jpg', name: 'Terminal', type: 'image' },
   { id: 'calculator', icon: '/icons/Calculator.jpg', name: 'Calculator', type: 'image' },
-  { id: 'review', icon: '/icons/reviewapp.jpg', name: 'Add Review', type: 'image' },
-  { id: 'chatbot', icon: '/icons/assistant.png', name: 'Talk With Ankit 2.0', type: 'image' },
+  { id: 'review', icon: '/icons/reviewapp.jpg', name: 'Review', type: 'image' },
+  { id: 'chatbot', icon: '/WebIcon.png', name: 'Ankit 2.0', type: 'image' },
   { id: 'settings', icon: '/icons/settings.jpg', name: 'Settings', type: 'image' },
 ];
 
