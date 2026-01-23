@@ -2,7 +2,7 @@
  * Groq API integration for ChatBot conversations
  */
 
-import { ANKIT_CONTEXT } from './ankitContext.ts';
+import { ANKIT_CONTEXT } from './context/ankitContext.ts';
 
 interface Message {
   role: string;

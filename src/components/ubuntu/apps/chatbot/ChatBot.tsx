@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, Sparkles, Bot, User, Trash2, RefreshCw } from 'lucide-react';
-import { detectReviewIntent, checkForAbuse } from './chatbot';
+import { detectReviewIntent, checkForAbuse } from '.';
 
 interface ChatBotProps {
   accentColor: string;

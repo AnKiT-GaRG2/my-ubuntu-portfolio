@@ -1,4 +1,4 @@
-import { findCertificate, formatCertificateList, Certificate } from './certificatesData';
+import { findCertificate, formatCertificateList, Certificate } from '../context/certificatesData';
 
 /**
  * Result of certificate intent detection

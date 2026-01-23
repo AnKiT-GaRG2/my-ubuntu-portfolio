@@ -27,7 +27,7 @@ import {
   useSpeechRecognition,
   useSpeechSynthesisV2AI,
   
-} from './chatbot';
+} from '.';
 
 interface ChatBotProps {
   accentColor: string;

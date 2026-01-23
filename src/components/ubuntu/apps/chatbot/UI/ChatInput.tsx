@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
-import { VoiceMicButton } from './voice_agent/VoiceMicButton';
+import { VoiceMicButton } from './VoiceMicButton';
 
 interface ChatInputProps {
   value: string;

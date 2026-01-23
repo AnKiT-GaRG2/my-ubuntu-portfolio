@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Star, Send, X } from 'lucide-react';
-import { ReviewForm } from '../ReviewForm';
+import { ReviewForm } from '../../AddReview/ReviewForm';
 
 const reviews = [
   {

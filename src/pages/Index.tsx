@@ -1,4 +1,4 @@
-import { Desktop } from '@/components/ubuntu/Desktop';
+import { Desktop } from '@/components/ubuntu/Dekstop/Desktop';
 import { DesktopProvider } from '@/contexts/DesktopContext';
 
 const Index = () => {

@@ -11,7 +11,7 @@ import {
   SocialCommand,
   ReviewsCommand,
   WelcomeCommand,
-} from './terminal';
+} from '.';
 
 interface TerminalProps {
   onOpenApp?: (id: string) => void;

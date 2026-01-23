@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Search, Grid, List, Folder, FileText, Image, Music, Video, Download, FileCode, X, FileType, Trash2 } from 'lucide-react';
-import { desktopApps, specialFolders } from '../desktopConfig';
+import { desktopApps, specialFolders } from '../../Dekstop/desktopConfig';
 import { useDesktop } from '@/hooks/useDesktop';
 
 interface FileItem {
