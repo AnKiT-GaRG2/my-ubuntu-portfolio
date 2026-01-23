@@ -36,8 +36,8 @@ export function DesktopIcon({ icon, name, position, onDoubleClick, type = 'emoji
   // Each icon needs: icon (48px) + label (20px) + padding (16px) = ~84px minimum
   const calculatedSpacing = Math.max(84, Math.floor(availableHeight / maxIcons));
   
-  // Top offset to start below the top bar with small margin
-  const topOffset = 56;
+  // Top offset - minimal space below top bar
+  const topOffset = 24;
 
   return (
     <button
