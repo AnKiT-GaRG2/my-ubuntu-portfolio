@@ -3,27 +3,27 @@ import { Star, Send, X } from 'lucide-react';
 import { ReviewForm } from '../../AddReview/ReviewForm';
 
 const reviews = [
-  {
-    name: 'John Doe',
-    role: 'Senior Developer at Tech Corp',
-    rating: 5,
-    comment: 'Excellent developer with great problem-solving skills. Delivered projects on time and exceeded expectations.',
-    avatar: '👨‍💼',
-  },
-  {
-    name: 'Sarah Smith',
-    role: 'Project Manager at StartupXYZ',
-    rating: 5,
-    comment: 'Amazing team player! Great communication skills and always willing to help others. Highly recommended!',
-    avatar: '👩‍💼',
-  },
-  {
-    name: 'Mike Johnson',
-    role: 'CTO at InnovateLabs',
-    rating: 5,
-    comment: 'Outstanding technical skills and creativity. Brought innovative solutions to complex challenges.',
-    avatar: '👨‍💻',
-  },
+  // {
+  //   name: '',
+  //   role: 'Senior Developer at Tech Corp',
+  //   rating: 5,
+  //   comment: 'Excellent developer with great problem-solving skills. Delivered projects on time and exceeded expectations.',
+  //   avatar: '👨‍💼',
+  // },
+  // // {
+  // //   name: 'Sarah Smith',
+  // //   role: 'Project Manager at StartupXYZ',
+  // //   rating: 5,
+  // //   comment: 'Amazing team player! Great communication skills and always willing to help others. Highly recommended!',
+  // //   avatar: '👩‍💼',
+  // // },
+  // // {
+  // //   name: 'Mike Johnson',
+  // //   role: 'CTO at InnovateLabs',
+  // //   rating: 5,
+  // //   comment: 'Outstanding technical skills and creativity. Brought innovative solutions to complex challenges.',
+  // //   avatar: '👨‍💻',
+  // // },
 ];
 
 export function ReviewsSection() {
