@@ -15,7 +15,7 @@ import { ChatBot } from '../apps/chatbot/ChatBotRefactored';
 import { Spotify } from '../apps/Spotify/Spotify';
 import { LockScreen } from '../Screens/LockScreen';
 import { LogoutScreen } from '../Screens/LogoutScreen';
-import { ContextMenu } from '../ContextMenu';
+import { ContextMenu } from '../Menu/RightClickMenu/ContextMenu';
 import { NewFolderDialog } from '../NewFolderDialog';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useState, useEffect } from 'react';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Wifi, Volume2, Battery, ChevronDown } from 'lucide-react';
-import { SystemMenu } from './SystemMenu';
+import { SystemMenu } from './Menu/TopRightMenu/SystemMenu';
 
 interface TopBarProps {
   onLock?: () => void;
