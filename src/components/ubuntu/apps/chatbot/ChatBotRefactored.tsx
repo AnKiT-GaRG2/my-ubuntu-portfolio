@@ -25,7 +25,7 @@ import {
   ChatInput,
   LiveTranscription,
   useSpeechRecognition,
-  useSpeechSynthesisV2AI,
+  useSpeechSynthesisAzure,
   
 } from '.';
 
@@ -72,7 +72,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
     error: voiceError,
   } = useSpeechRecognition();
 
-  const { speak, speaking, cancel: cancelSpeech } = useSpeechSynthesisV2AI();
+  const { speak, speaking, cancel: cancelSpeech } = useSpeechSynthesisAzure();
 
   // Get color variants
   const { accentRgb, lighterRgb, darkerRgb, hexColor } = getColorVariants(accentColor);

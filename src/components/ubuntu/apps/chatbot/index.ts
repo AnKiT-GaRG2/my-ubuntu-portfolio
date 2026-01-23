@@ -42,4 +42,4 @@ export { LiveTranscription } from './voice_agent/LiveTranscription';
 
 // Voice Hooks
 export { useSpeechRecognition } from './voice_agent/useSpeechRecognition';
-export { useSpeechSynthesisV2AI } from './voice_agent/useSpeechSynthesisAi';
+export { useSpeechSynthesisAzure } from './voice_agent/useSpeechSynthesisAzureAi';
