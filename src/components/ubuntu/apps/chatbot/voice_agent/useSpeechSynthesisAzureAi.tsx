@@ -195,22 +195,22 @@ async function processTextWithAI(text: string, apiKey: string): Promise<string> 
 
 function analyzeEmotion(text: string): { rate: string; pitch: string } {
   // Excited/Happy
-  if (text.includes('!') || /\b(great|awesome|amazing|excellent|wonderful|fantastic|sure|yes)\b/i.test(text)) {
-    return { rate: '+10%', pitch: '+5%' };
-  }
+  // if (text.includes('!') || /\b(great|awesome|amazing|excellent|wonderful|fantastic|sure|yes)\b/i.test(text)) {
+  //   return { rate: '+10%', pitch: '+5%' };
+  // }
   
-  // Warning/Serious
-  if (text.includes('⚠️') || text.includes('❌') || /\b(warning|caution|stop|blocked|error|critical|urgent)\b/i.test(text)) {
-    return { rate: '-10%', pitch: '-5%' };
-  }
+  // // Warning/Serious
+  // if (text.includes('⚠️') || text.includes('❌') || /\b(warning|caution|stop|blocked|error|critical|urgent)\b/i.test(text)) {
+  //   return { rate: '-10%', pitch: '-5%' };
+  // }
   
-  // Question (slightly slower, more thoughtful)
-  if (text.includes('?')) {
-    return { rate: '-5%', pitch: 'default' };
-  }
+  // // Question (slightly slower, more thoughtful)
+  // if (text.includes('?')) {
+  //   return { rate: '', pitch: 'default' };
+  // }
   
   // Default: Natural conversation
-  return { rate: 'default', pitch: 'default' };
+  return { rate: '+5%', pitch: 'default' };
 }
 
 // Top Indian male voices from Azure (Neural voices)
