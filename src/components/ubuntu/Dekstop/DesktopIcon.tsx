@@ -11,18 +11,30 @@ export function DesktopIcon({ icon, name, position, onDoubleClick, type = 'emoji
   return (
     <button
       onDoubleClick={onDoubleClick}
-      className="desktop-icon absolute flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-white/10 focus:bg-white/20 transition-colors cursor-pointer select-none w-20"
+      className="desktop-icon absolute flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-white/10 focus:bg-white/20 transition-colors cursor-pointer select-none"
       style={{
-        top: `${position.row * 100 + 20}px`,
-        right: `${position.col * 100 + 20}px`,
+        top: `calc(${position.row * 9}vh + 1.5rem)`,
+        right: `calc(${position.col * 7}vw + 1.5rem)`,
+        width: 'clamp(70px, 6vw, 90px)',
       }}
     >
       {type === 'image' ? (
-        <img src={icon} alt={name} className="w-12 h-12 object-contain drop-shadow-lg" />
+        <img 
+          src={icon} 
+          alt={name} 
+          className="object-contain drop-shadow-lg" 
+          style={{
+            width: 'clamp(40px, 4vw, 56px)',
+            height: 'clamp(40px, 4vw, 56px)',
+          }}
+        />
       ) : (
-        <span className="text-4xl drop-shadow-lg">{icon}</span>
+        <span className="drop-shadow-lg" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.5rem)' }}>{icon}</span>
       )}
-      <span className="icon-label text-xs text-center text-white drop-shadow-md px-1 py-0.5 rounded line-clamp-2">
+      <span 
+        className="icon-label text-center text-white drop-shadow-md px-1 py-0.5 rounded line-clamp-2"
+        style={{ fontSize: 'clamp(0.65rem, 0.8vw, 0.75rem)' }}
+      >
         {name}
       </span>
     </button>
