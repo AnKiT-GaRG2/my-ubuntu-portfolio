@@ -24,7 +24,7 @@ export async function detectCertificateIntent(
   apiKey: string,
   conversationContext?: string
 ): Promise<CertificateIntentResult> {
-  console.log('🔍 Checking Certificate intent for:', text);
+  //console.log('🔍 Checking Certificate intent for:', text);
   
   try {
     const contextPrompt = conversationContext 

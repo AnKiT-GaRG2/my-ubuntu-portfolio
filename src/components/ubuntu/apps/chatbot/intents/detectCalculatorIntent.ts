@@ -7,7 +7,7 @@
  * @returns Promise<boolean> - true if Calculator intent is detected, false otherwise
  */
 export async function detectCalculatorIntent(text: string, apiKey: string): Promise<boolean> {
-  console.log('🔍 Checking Calculator intent for:', text);
+  //console.log('🔍 Checking Calculator intent for:', text);
   
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

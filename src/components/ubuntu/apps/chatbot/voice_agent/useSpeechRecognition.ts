@@ -62,13 +62,13 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
 
       if (interim) {
         setInterimTranscript(interim);
-        console.log('🎤 Interim:', interim);
+        //console.log('🎤 Interim:', interim);
       }
       
       if (final) {
         setTranscript(final);
         setInterimTranscript('');
-        console.log('✅ Final:', final);
+        //console.log('✅ Final:', final);
       }
     };
 

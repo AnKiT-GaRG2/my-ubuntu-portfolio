@@ -17,7 +17,7 @@ export async function detectFolderIntent(
   text: string,
   apiKey: string
 ): Promise<FolderIntentResult> {
-  console.log('🔍 Checking Folder creation intent for:', text);
+  //console.log('🔍 Checking Folder creation intent for:', text);
   
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

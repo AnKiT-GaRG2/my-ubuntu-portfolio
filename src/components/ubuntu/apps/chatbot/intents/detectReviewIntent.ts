@@ -7,7 +7,7 @@
  * @returns Promise<boolean> - true if review intent is detected, false otherwise
  */
 export async function detectReviewIntent(text: string, apiKey: string): Promise<boolean> {
-  console.log('🔍 Checking review intent for:', text);
+  //console.log('🔍 Checking review intent for:', text);
   
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

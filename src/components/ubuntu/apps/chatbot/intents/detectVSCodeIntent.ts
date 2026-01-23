@@ -7,7 +7,7 @@
  * @returns Promise<boolean> - true if VS Code intent is detected, false otherwise
  */
 export async function detectVSCodeIntent(text: string, apiKey: string): Promise<boolean> {
-  console.log('🔍 Checking VS Code intent for:', text);
+  //console.log('🔍 Checking VS Code intent for:', text);
   
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

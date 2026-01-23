@@ -43,7 +43,7 @@ export function Desktop() {
         <span style={{ fontWeight: 500 }}>Just speak and watch it work 🚀</span>
       </div>,
       {
-        duration: 7000,
+        duration: 5000,
         position: 'top-center',
         className: 'bg-orange-600 text-white text-lg font-semibold shadow-2xl',
       }
@@ -124,7 +124,7 @@ export function Desktop() {
   } = useWindowManager();
 
   useEffect(() => {
-    console.log('isLocked state changed:', isLocked);
+    //console.log('isLocked state changed:', isLocked);
   }, [isLocked]);
 
   const handleIconDoubleClick = (app: typeof desktopApps[0]) => {
@@ -136,22 +136,22 @@ export function Desktop() {
   };
 
   const handleLockScreen = () => {
-    console.log('handleLockScreen called');
+    //console.log('handleLockScreen called');
     setIsLocked(true);
   };
 
   const handleUnlock = () => {
-    console.log('handleUnlock called');
+    //console.log('handleUnlock called');
     setIsLocked(false);
   };
 
   const handleLogout = () => {
-    console.log('handleLogout called');
+    //console.log('handleLogout called');
     setIsLoggedOut(true);
   };
 
   const handlePowerOn = () => {
-    console.log('handlePowerOn called');
+    //console.log('handlePowerOn called');
     setIsLoggedOut(false);
   };
 
@@ -404,7 +404,7 @@ export function Desktop() {
       {/* Context Menu */}
       {contextMenu && (
         <>
-          {console.log('✅ Rendering ContextMenu component with state:', contextMenu)}
+          {/* {console.log('✅ Rendering ContextMenu component with state:', contextMenu)} */}
           <ContextMenu 
             x={contextMenu.x} 
             y={contextMenu.y} 

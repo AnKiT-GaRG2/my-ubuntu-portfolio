@@ -326,7 +326,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
 
     utterance.onstart = () => {
       setSpeaking(true);
-      console.log(`🎙️ [V2] Speaking (AI-enhanced)`);
+     // console.log(`🎙️ [V2] Speaking (AI-enhanced)`);
     };
     
     utterance.onend = () => setSpeaking(false);
@@ -347,7 +347,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
 
   const clearCache = useCallback(() => {
     pronunciationCache.clear();
-    console.log('🗑️ [V2] Cache cleared');
+   // console.log('🗑️ [V2] Cache cleared');
   }, []);
 
   return {

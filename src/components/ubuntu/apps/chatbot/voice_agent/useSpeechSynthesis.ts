@@ -141,7 +141,7 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
     
     // 1. Has "male" in name (but not "female")
     if (name.includes('male') && !name.includes('female')) {
-      console.log(`✅ Male voice found (has 'male'): ${voice.name}`);
+      //console.log(`✅ Male voice found (has 'male'): ${voice.name}`);
       return true;
     }
     
@@ -152,7 +152,7 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
       'michael', 'paul', 'lee', 'martin', 'oliver', 'oscar'
     ];
     if (maleNames.some(male => name.includes(male))) {
-      console.log(`✅ Male voice found (known name): ${voice.name}`);
+      //console.log(`✅ Male voice found (known name): ${voice.name}`);
       return true;
     }
     
@@ -168,15 +168,15 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
     const availableVoices = synthesisRef.current.getVoices();
     
     if (availableVoices.length === 0) {
-      console.log('⏳ Loading voices...');
+      //console.log('⏳ Loading voices...');
       return;
     }
 
-    console.log(`🔊 Found ${availableVoices.length} voices`);
+    //console.log(`🔊 Found ${availableVoices.length} voices`);
     
     // Filter to ONLY male voices
     const maleVoices = availableVoices.filter(isMaleVoice);
-    console.log(`👨 Found ${maleVoices.length} male voices`);
+    //console.log(`👨 Found ${maleVoices.length} male voices`);
     
     setVoices(maleVoices);
 
@@ -249,13 +249,13 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
       for (const check of voiceChecks) {
         bestVoice = maleVoices.find(check);
         if (bestVoice) {
-          console.log('🎤 ===== VOICE SELECTED =====');
-          console.log(`✅ Name: ${bestVoice.name}`);
-          console.log(`🌍 Language: ${bestVoice.lang}`);
-          console.log(`📍 URI: ${bestVoice.voiceURI}`);
-          console.log(`💻 Type: ${bestVoice.localService ? 'Local (Device-based)' : 'Cloud (Online - Better Quality)'}`);
-          console.log(`👨 Gender: MALE`);
-          console.log('============================');
+          // console.log('🎤 ===== VOICE SELECTED =====');
+          // console.log(`✅ Name: ${bestVoice.name}`);
+          // console.log(`🌍 Language: ${bestVoice.lang}`);
+          // console.log(`📍 URI: ${bestVoice.voiceURI}`);
+          // console.log(`💻 Type: ${bestVoice.localService ? 'Local (Device-based)' : 'Cloud (Online - Better Quality)'}`);
+          // console.log(`👨 Gender: MALE`);
+          // console.log('============================');
           break;
         }
       }

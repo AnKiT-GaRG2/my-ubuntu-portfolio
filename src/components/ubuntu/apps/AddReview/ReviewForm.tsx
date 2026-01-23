@@ -21,13 +21,13 @@ export function ReviewForm({ onClose, isModal = false }: ReviewFormProps) {
     setSubmitting(true);
     setSubmitMessage(null);
     
-    console.log('=== REVIEW FORM SUBMISSION STARTED ===');
-    console.log('Form Data:', {
-      name: reviewForm.name,
-      designation: reviewForm.designation,
-      rating: reviewForm.rating,
-      comment: reviewForm.comment
-    });
+    // console.log('=== REVIEW FORM SUBMISSION STARTED ===');
+    // console.log('Form Data:', {
+    //   name: reviewForm.name,
+    //   designation: reviewForm.designation,
+    //   rating: reviewForm.rating,
+    //   comment: reviewForm.comment
+    // });
     
     try {
       const payload = {
@@ -39,7 +39,7 @@ export function ReviewForm({ onClose, isModal = false }: ReviewFormProps) {
         _template: 'table'
       };
       
-      console.log('Sending payload to FormSubmit:', payload);
+      //console.log('Sending payload to FormSubmit:', payload);
       
       const response = await fetch('https://formsubmit.co/ajax/anki88520@gmail.com', {
         method: 'POST',
@@ -50,14 +50,14 @@ export function ReviewForm({ onClose, isModal = false }: ReviewFormProps) {
         body: JSON.stringify(payload)
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response ok:', response.ok);
+      //console.log('Response status:', response.status);
+      //console.log('Response ok:', response.ok);
       
       const responseData = await response.json();
-      console.log('Response data:', responseData);
+      //console.log('Response data:', responseData);
 
       if (response.ok) {
-        console.log('✅ Review submitted successfully!');
+        //console.log('✅ Review submitted successfully!');
         setSubmitMessage({ type: 'success', text: 'Thanks for your feedback! Your review has been sent to Ankit Garg and will be added to the site soon.' });
         setReviewForm({ name: '', designation: '', comment: '', rating: 5 });
         if (isModal && onClose) {
@@ -74,7 +74,7 @@ export function ReviewForm({ onClose, isModal = false }: ReviewFormProps) {
       setSubmitMessage({ type: 'error', text: 'Failed to submit review. Please try again.' });
     } finally {
       setSubmitting(false);
-      console.log('=== REVIEW FORM SUBMISSION ENDED ===');
+      //console.log('=== REVIEW FORM SUBMISSION ENDED ===');
     }
   };
 

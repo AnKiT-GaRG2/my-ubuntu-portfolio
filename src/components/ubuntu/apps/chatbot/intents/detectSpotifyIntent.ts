@@ -7,7 +7,7 @@
  * @returns Promise<boolean> - true if Spotify/music intent is detected, false otherwise
  */
 export async function detectSpotifyIntent(text: string, apiKey: string): Promise<boolean> {
-  console.log('🔍 Checking Spotify intent for:', text);
+  //console.log('🔍 Checking Spotify intent for:', text);
   
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

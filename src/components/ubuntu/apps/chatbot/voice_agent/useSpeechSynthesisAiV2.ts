@@ -25,14 +25,14 @@ function containsHindi(text: string): boolean {
 async function getAIPronunciation(word: string, apiKey: string): Promise<string> {
   const cacheKey = word.toLowerCase();
   if (pronunciationCache.has(cacheKey)) {
-    console.log(`💾 [V2] Cache: "${word}"`);
+    //console.log(`💾 [V2] Cache: "${word}"`);
     return pronunciationCache.get(cacheKey)!;
   }
 
   if (!apiKey) return word;
 
   try {
-    console.log(`🤖 [V2] AI: "${word}"`);
+   // console.log(`🤖 [V2] AI: "${word}"`);
     
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -190,7 +190,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
     if (availableVoices.length === 0) return;
 
     const maleVoices = availableVoices.filter(isMaleVoice);
-    console.log(`🔊 [V2] ${maleVoices.length} male voices`);
+    //console.log(`🔊 [V2] ${maleVoices.length} male voices`);
     setVoices(maleVoices);
 
     if (!selectedVoice && maleVoices.length > 0) {
@@ -201,7 +201,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
       if (!best) best = maleVoices.find(v => v.lang.startsWith('en'));
       
       if (best) {
-        console.log(`✅ [V2] Voice: ${best.name} (${best.lang})`);
+       // console.log(`✅ [V2] Voice: ${best.name} (${best.lang})`);
         setSelectedVoice(best);
       }
     }
