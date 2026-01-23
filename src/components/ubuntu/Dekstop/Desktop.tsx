@@ -33,6 +33,39 @@ export function Desktop() {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [iconLayout, setIconLayout] = useState({ iconSize: 48, iconSpacing: 88 });
+
+  // Calculate responsive icon layout based on viewport height
+  useEffect(() => {
+    const calculateIconLayout = () => {
+      const viewportHeight = window.innerHeight;
+      const topBarHeight = 28; // TopBar height (h-7 = 28px)
+      const topPadding = 8;
+      // Remove dock and bottom padding - use full height to bottom
+      const availableHeight = viewportHeight - topBarHeight - topPadding;
+      
+      // Count total icons in first column
+      const totalIcons = desktopApps.length + specialFolders.length + userFolders.filter(f => f.position.col === 0).length;
+      
+      // Calculate spacing to fill entire height
+      const availableSpacing = Math.floor(availableHeight / totalIcons);
+      
+      // Each icon needs: icon size + text (24px) + button padding (16px) + gap
+      const minIconSize = 32;
+      const fixedOverhead = 44; // text + padding + gap
+      
+      // Calculate icon size that will fit
+      const calculatedIconSize = availableSpacing - fixedOverhead;
+      const iconSize = Math.max(minIconSize, calculatedIconSize);
+      
+      // Use the calculated spacing to fill the screen
+      setIconLayout({ iconSize, iconSpacing: availableSpacing });
+    };
+    
+    calculateIconLayout();
+    window.addEventListener('resize', calculateIconLayout);
+    return () => window.removeEventListener('resize', calculateIconLayout);
+  }, [userFolders]);
 
   // Show welcome notification on mount
   useEffect(() => {
@@ -345,6 +378,8 @@ export function Desktop() {
             position={app.position}
             type={app.type as 'emoji' | 'image'}
             onDoubleClick={() => handleIconDoubleClick(app)}
+            iconSize={iconLayout.iconSize}
+            iconSpacing={iconLayout.iconSpacing}
           />
         ))}
         
@@ -362,6 +397,8 @@ export function Desktop() {
                 openWindow('files', { initialPath: '/home/guest/.local/share/Trash' });
               }
             }}
+            iconSize={iconLayout.iconSize}
+            iconSpacing={iconLayout.iconSpacing}
           />
         ))}
         
@@ -375,6 +412,8 @@ export function Desktop() {
             position={folder.position}
             type="image"
             onDoubleClick={() => {}}
+            iconSize={iconLayout.iconSize}
+            iconSpacing={iconLayout.iconSpacing}
           />
         ))}
       </div>
