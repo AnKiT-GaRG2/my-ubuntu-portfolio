@@ -28,29 +28,32 @@ export function NewFolderDialog({ onConfirm, onCancel }: NewFolderDialogProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[600] flex items-center justify-center bg-black/50">
-      <div className="bg-[#3c3c3c] rounded-lg shadow-2xl w-[500px] overflow-hidden">
+    <div className="fixed inset-0 z-[600] flex items-center justify-center bg-black/50 p-2">
+      <div
+        className="bg-[#3c3c3c] rounded-lg shadow-2xl w-full max-w-[90vw] sm:max-w-[400px] md:max-w-[500px] overflow-hidden"
+        style={{ boxSizing: 'border-box' }}
+      >
         {/* Dialog Header */}
         <div className="bg-[#2d2d2d] px-4 py-3 border-b border-gray-600">
-          <h2 className="text-white text-sm font-medium">New folder name</h2>
+          <h2 className="text-white text-base font-medium">New folder name</h2>
         </div>
 
         {/* Dialog Content */}
-        <form onSubmit={handleSubmit} className="p-6">
+        <form onSubmit={handleSubmit} className="p-4 md:p-6">
           <input
             ref={inputRef}
             type="text"
             value={folderName}
             onChange={(e) => setFolderName(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full bg-[#2d2d2d] text-white border-2 border-accent-dynamic rounded px-3 py-2 focus:outline-none focus:border-accent-dynamic"
+            className="w-full bg-[#2d2d2d] text-white border-2 border-accent-dynamic rounded px-3 py-2 focus:outline-none focus:border-accent-dynamic text-base"
             placeholder=""
             maxLength={50}
           />
         </form>
 
         {/* Dialog Footer */}
-        <div className="flex justify-end gap-3 px-6 pb-6">
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 px-4 md:px-6 pb-4 md:pb-6">
           <button
             type="button"
             onClick={onCancel}
