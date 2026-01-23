@@ -50,7 +50,7 @@ async function getAIPronunciation(word: string, apiKey: string): Promise<string>
 
 📱 INDIAN NAMES (CRITICAL):
 - "Ankit" → "Un-kit" (short 'u' like "under", stress first syllable)
-- "Garg" → "Garg" (guttural 'g', short 'a' like "father", stress on 'gaa')
+- "Garg" → "Gerg" (guttural 'g', short 'e' like "father", stress on 'gaa')
 - "Sharma" → "Shur-maa" (rolling 'r', long 'aa')
 - "Kumar" → "Koo-maar" (long 'oo' like "food", long 'aa')
 - "Singh" → "Sing" (silent 'h', hard 'g')
@@ -107,7 +107,7 @@ EDUCATION:
 
 ⚡ EXAMPLES:
 Robotic: "I am Ankit Garg"
-Natural: "I'm Un-kit Gaarg"
+Natural: "I'm Un-kit Grg"
 
 Robotic: "Check my API"
 Natural: "Check my ay pee ai"
