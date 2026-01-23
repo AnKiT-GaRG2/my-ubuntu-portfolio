@@ -19,6 +19,7 @@ import { ContextMenu } from '../Menu/RightClickMenu/ContextMenu';
 import { NewFolderDialog } from '../NewFolderDialog';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useState, useEffect } from 'react';
+import { toast } from '@/components/ui/sonner';
 import { desktopApps, specialFolders } from './desktopConfig';
 import { useDesktop } from '@/hooks/useDesktop';
 
@@ -32,6 +33,22 @@ export function Desktop() {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  // Show welcome notification on mount
+  useEffect(() => {
+    toast(
+      <div style={{ fontSize: '1.1rem', fontWeight: 600, lineHeight: 1.5 }}>
+        <span role="img" aria-label="wave">👋</span> Say hello to Ankit 2.0!<br />
+        Talk to my <b>AI voice assistant</b> and control things using your voice.<br />
+        <span style={{ fontWeight: 500 }}>Just speak and watch it work 🚀</span>
+      </div>,
+      {
+        duration: 7000,
+        position: 'top-center',
+        className: 'bg-orange-600 text-white text-lg font-semibold shadow-2xl',
+      }
+    );
+  }, []);
 
   // Helper function to convert hex to HSL
   const hexToHSL = (hex: string): string => {
