@@ -282,10 +282,24 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
     synthesisRef.current.cancel();
 
     const cleanText = text
-      .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-      .replace(/https?:\/\/[^\s]+/g, '')
-      .replace(/www\.[^\s]+/g, '')
-      .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '')
+     .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+
+  // 2️⃣ Remove URLs & emails
+      .replace(/https?:\/\/\S+/gi, '')
+      .replace(/www\.\S+/gi, '')
+      .replace(/\S+@\S+\.\S+/gi, '')
+
+  // 3️⃣ Remove code blocks & inline code
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/`[^`]*`/g, '')
+
+  // 4️⃣ Remove markdown syntax
+      .replace(/[*_~^=#|<>[\]{}()]/g, '')
+
+  // 5️⃣ Remove leftover symbols (keep . , ? !)
+      .replace(/[^\w\s.,?!]/g, '')
+
+  // 6️⃣ Normalize spaces
       .replace(/\s+/g, ' ')
       .trim();
 
