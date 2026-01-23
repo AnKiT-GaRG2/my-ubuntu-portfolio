@@ -4,6 +4,7 @@ export { detectChromeIntent } from './detectChromeIntent';
 export { detectTerminalIntent } from './detectTerminalIntent';
 export { detectCalculatorIntent } from './detectCalculatorIntent';
 export { detectVSCodeIntent } from './detectVSCodeIntent';
+export { detectSpotifyIntent } from './detectSpotifyIntent';
 export { 
   detectFolderIntent,
   generateAskFolderNameResponse,

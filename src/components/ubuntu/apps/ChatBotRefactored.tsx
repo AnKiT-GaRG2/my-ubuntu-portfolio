@@ -6,6 +6,7 @@ import {
   detectCalculatorIntent,
   detectVSCodeIntent,
   detectFolderIntent,
+  detectSpotifyIntent,
   generateAskFolderNameResponse,
   generateFolderCreatedResponse,
   detectCertificateIntent,
@@ -25,6 +26,7 @@ import {
   LiveTranscription,
   useSpeechRecognition,
   useSpeechSynthesisV2AI,
+  
 } from './chatbot';
 
 interface ChatBotProps {
@@ -332,7 +334,20 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         return;
       }
 
-      // Check for review intent using AI
+      // Check for Spotify intent using AI
+      console.log('🎯 Starting Spotify intent detection...');
+      const hasSpotifyIntent = await detectSpotifyIntent(userInput, GROQ_API_KEY);
+
+      if (hasSpotifyIntent) {
+        console.log('✅ Opening Spotify app...');
+        if (onOpenApp) {
+          onOpenApp('spotify');
+        }
+        addAssistantMessage("Great! I've opened the Spotify app for you. Enjoy your music! 🎶", shouldSpeak);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
       console.log('🎯 Starting review intent detection...');
       const hasReviewIntent = await detectReviewIntent(userInput, GROQ_API_KEY);
       
@@ -346,7 +361,6 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         setIsTyping(false);
         return;
       }
-
       console.log('💬 Proceeding with normal conversation...');
       // Normal conversation
       const conversationHistory = messages.slice(-5).concat([userMessage]);
