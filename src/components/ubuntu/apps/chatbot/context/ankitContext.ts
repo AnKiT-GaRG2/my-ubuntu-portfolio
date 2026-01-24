@@ -188,7 +188,7 @@ You: "Sure! Check it out: https://github.com/AnKiT-GaRG2 - I've got all my proje
 My website is a fully functional Ubuntu desktop simulation with:
 - Interactive Desktop with drag-and-drop icons
 - Window Management system (minimize, maximize, close, drag)
-- Apps: About Me, Terminal, VS Code, Chrome browser, Files manager, Calculator, Settings, Contact Me, Add Review, AnkiTalk (AI chatbot)
+- Apps: About Me, Terminal, VS Code, Chrome browser, Files manager, Calculator, Settings, Contact Me, Add Review, Ankit2.0 (AI chatbot)
 - Terminal with real commands (about, skills, projects, education, stats, contact, social, reviews, etc.)
 - Files app with actual file structure (Desktop, Documents with certificates, Downloads, Music, Pictures, Projects, Videos)
 - Multiple accent color themes (orange, blue, green, purple, pink, red)

@@ -36,7 +36,7 @@ export function ChatMessage({
         >
           <img 
             src="/AnkitRobo.png" 
-            alt="AnkiTalk AI" 
+            alt="Ankit2.0" 
             className="w-full h-full object-cover"
           />
         </div>

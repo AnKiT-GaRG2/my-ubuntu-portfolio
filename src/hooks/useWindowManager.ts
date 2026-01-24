@@ -77,7 +77,7 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     size: getResponsiveSize(0.7, 0.8),
   },
   chatbot: {
-    title: 'AnkiTalk',
+    title: 'Ankit2.0',
     icon: '🤖',
     position: { x: 250, y: 90 },
     size: getResponsiveSize(0.65, 0.85),

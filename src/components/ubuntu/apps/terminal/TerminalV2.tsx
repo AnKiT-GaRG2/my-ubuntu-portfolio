@@ -238,9 +238,9 @@ export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand }: Termin
         } else if (args[0] === 'review' || args[0] === 'add-review') {
           onOpenApp?.('review');
           output = 'Opening Add Review...';
-        } else if (args[0] === 'chatbot' || args[0] === 'ankitalk') {
+        } else if (args[0] === 'chatbot' || args[0] === 'ankit2.0') {
           onOpenApp?.('chatbot');
-          output = 'Opening AnkiTalk...';
+          output = 'Opening Ankit2.0...';
         } else {
           output = `open: ${args[0]}: Application not found`;
         }
