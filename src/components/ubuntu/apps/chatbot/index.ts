@@ -1,3 +1,5 @@
+import { detectAppearanceIntent } from './intents/detectAppearanceIntent';
+
 // Central export file for chatbot utilities
 export { detectReviewIntent } from './intents/detectReviewIntent';
 export { detectChromeIntent } from './intents/detectChromeIntent';
@@ -31,6 +33,7 @@ export { getColorVariants } from './UI/colorUtils';
 export { renderMessageWithLinks } from './UI/renderMessageWithLinks';
 export { ANKIT_CONTEXT } from './context/ankitContext';
 export { detectBackgroundIntent } from './intents/detectBackgroundIntent';
+export { detectAppearanceIntent } from './intents/detectAppearanceIntent';
 // UI Components
 export { ChatHeader } from './UI/ChatHeader';
 export { QuickQuestions } from './UI/QuickQuestions';

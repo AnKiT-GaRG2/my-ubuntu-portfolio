@@ -8,6 +8,7 @@ import {
   detectFolderIntent,
   detectSpotifyIntent,
   detectBackgroundIntent,
+  detectAppearanceIntent,
   generateAskFolderNameResponse,
   generateFolderCreatedResponse,
   detectCertificateIntent,
@@ -283,6 +284,19 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
           onOpenApp('settings', { initialSection: 'background' });
         }
         addAssistantMessage("Sure! I've opened the Settings with the Background section for you. Choose a wallpaper you like! 🖼️", shouldSpeak);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
+      // Check for Appearance change intent using AI
+      console.log('🎨 Starting Appearance intent detection...');
+      const hasAppearanceIntent = await detectAppearanceIntent(userInput, GROQ_API_KEY);
+      if (hasAppearanceIntent) {
+        console.log('✅ Opening Settings with Appearance section...');
+        if (onOpenApp) {
+          onOpenApp('settings', { initialSection: 'appearance' });
+        }
+        addAssistantMessage("Sure! I've opened the Settings with the Appearance section for you. Customize your look! 🎨", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
