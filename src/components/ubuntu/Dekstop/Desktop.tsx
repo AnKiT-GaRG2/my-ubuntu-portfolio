@@ -350,7 +350,7 @@ export function Desktop() {
 
   return (
     <div 
-      className="h-screen w-screen overflow-hidden select-none relative transition-all duration-300"
+      className="h-screen w-screen overflow-auto select-none relative transition-all duration-300"
       style={{
         backgroundImage: `url(${background})`,
         backgroundSize: 'cover',
