@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Wifi, Bluetooth, Bell, Moon, Volume2, Monitor, Keyboard, Mouse, User, Lock, Info, Palette, Image } from 'lucide-react';
 import { WiFiSettings } from './WiFiSettings';
+import { UsersSettings } from './UsersSettings';
 interface SettingItem {
   id: string;
   icon: React.ElementType;
@@ -79,6 +80,8 @@ export function Settings({
     switch (activeSection) {
       case 'wifi':
         return <WiFiSettings />;
+       case 'users':
+        return <UsersSettings />; 
       case 'about':
         return (
           <div className="p-6 space-y-6">
