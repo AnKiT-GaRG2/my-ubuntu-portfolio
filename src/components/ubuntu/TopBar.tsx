@@ -70,9 +70,9 @@ export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout }:
             setShowSystemMenu(false);
             onLock?.();
           }}
-          onOpenSettings={() => {
+          onOpenSettings={(section) => {
             setShowSystemMenu(false);
-            onOpenSettings?.();
+            onOpenSettings?.(section);
           }}
           onBrightnessChange={onBrightnessChange}
           onLogout={() => {
