@@ -362,7 +362,13 @@ export function Desktop() {
     >
       <TopBar 
         onLock={handleLockScreen} 
-        onOpenSettings={() => openWindow('settings')}
+        onOpenSettings={(section?: string) => {
+          if (section) {
+            openWindow('settings', { initialSection: section });
+          } else {
+            openWindow('settings');
+          }
+        }}
         onBrightnessChange={handleBrightnessChange}
         onLogout={handleLogout}
       />

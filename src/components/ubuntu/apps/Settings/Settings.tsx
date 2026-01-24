@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Wifi, Bluetooth, Bell, Moon, Volume2, Monitor, Keyboard, Mouse, User, Lock, Info, Palette, Image } from 'lucide-react';
 import { WiFiSettings } from './WiFiSettings';
 interface SettingItem {
@@ -50,6 +50,11 @@ export function Settings({
   const [activeSection, setActiveSection] = useState(initialSection);
   const [selectedBg, setSelectedBg] = useState(currentBackground);
   const [selectedAccentColor, setSelectedAccentColor] = useState(currentAccentColor);
+
+  // Sync activeSection with initialSection prop changes
+  useEffect(() => {
+    setActiveSection(initialSection);
+  }, [initialSection]);
 
   const handleBackgroundSelect = (bg: string) => {
     setSelectedBg(bg);

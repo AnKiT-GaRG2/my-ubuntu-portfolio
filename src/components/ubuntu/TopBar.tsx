@@ -4,7 +4,7 @@ import { SystemMenu } from './Menu/TopRightMenu/SystemMenu';
 
 interface TopBarProps {
   onLock?: () => void;
-  onOpenSettings?: () => void;
+  onOpenSettings?: (section?: string) => void;
   onBrightnessChange?: (level: number) => void;
   onLogout?: () => void;
 }

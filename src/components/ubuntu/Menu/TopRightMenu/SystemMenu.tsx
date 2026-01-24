@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 interface SystemMenuProps {
   onClose: () => void;
   onLock?: () => void;
-  onOpenSettings?: () => void;
+  onOpenSettings?: (section?: string) => void;
   onBrightnessChange?: (level: number) => void;
   onLogout?: () => void;
 }
@@ -71,7 +71,10 @@ export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange
             icon={<Wifi className="w-4 h-4" />}
             label="Ubuntu Portfolio Network"
             hasArrow
-            disabled
+            onClick={() => {
+              onOpenSettings?.('wifi');
+              onClose();
+            }}
           />
           <MenuItem 
             icon={<Bluetooth className="w-4 h-4" />}
