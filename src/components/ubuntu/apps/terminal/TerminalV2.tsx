@@ -18,9 +18,10 @@ interface TerminalProps {
   onCreateFolder?: (name: string) => void;
   initialCommand?: string;
   onClose?: () => void;
+  autoClose?: boolean;
 }
 
-export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand, onClose }: TerminalProps) {
+export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand, onClose, autoClose }: TerminalProps) {
   const [lines, setLines] = useState<TerminalLine[]>([
     { type: 'output', content: <WelcomeCommand /> },
   ]);
@@ -281,6 +282,12 @@ export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand, onClose 
       // Small delay to ensure terminal is ready
       setTimeout(() => {
         processCommand(initialCommand);
+        // Auto-close terminal after command execution if autoClose is enabled
+        if (autoClose && onClose) {
+          setTimeout(() => {
+            onClose();
+          }, 1500); // Wait 1.5s to show the output before closing
+        }
       }, 100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
