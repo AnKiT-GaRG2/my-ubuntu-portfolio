@@ -141,8 +141,6 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const quickQuestions = [
     "What projects have you built?",
     "Tell me about your skills",
-    "What's your experience?",
-    "Show me your GitHub"
   ];
 
   const handleQuickQuestion = (question: string) => {
@@ -274,6 +272,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         setIsTyping(false);
         return;
       }
+
       // Check for Background change intent using AI
       console.log('🖼️ Starting Background intent detection...');
       const hasBackgroundIntent = await detectBackgroundIntent(userInput, GROQ_API_KEY);
@@ -288,19 +287,22 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         setIsTyping(false);
         return;
       }
+
       // Check for Appearance change intent using AI
       console.log('🎨 Starting Appearance intent detection...');
       const hasAppearanceIntent = await detectAppearanceIntent(userInput, GROQ_API_KEY);
+      
       if (hasAppearanceIntent) {
         console.log('✅ Opening Settings with Appearance section...');
         if (onOpenApp) {
           onOpenApp('settings', { initialSection: 'appearance' });
         }
-        addAssistantMessage("Sure! I've opened the Settings with the Appearance section for you. Customize your look! 🎨", shouldSpeak);
+        addAssistantMessage("Sure! I've opened the Settings with the Appearance section for you. Customize the UI to your liking! 🎨", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
         return;
       }
+
       // Check for VS Code intent using AI
       console.log('💻 Starting VS Code intent detection...');
       const hasVSCodeIntent = await detectVSCodeIntent(userInput, GROQ_API_KEY);
@@ -456,14 +458,16 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
       data-accent-color={accentColor}
       data-hex-color={hexColor}
     >
-      {/* Header */}
-      <ChatHeader
-        accentRgb={accentRgb}
-        lighterRgb={lighterRgb}
-        darkerRgb={darkerRgb}
-        onClearChat={handleClearChat}
-        onRefresh={() => window.location.reload()}
-      />
+      {/* Header - Show when quick questions are hidden */}
+      {messages.length > 1 && (
+        <ChatHeader
+          accentRgb={accentRgb}
+          lighterRgb={lighterRgb}
+          darkerRgb={darkerRgb}
+          onClearChat={handleClearChat}
+          onRefresh={() => window.location.reload()}
+        />
+      )}
 
       {/* Quick Questions */}
       {messages.length === 1 && (
