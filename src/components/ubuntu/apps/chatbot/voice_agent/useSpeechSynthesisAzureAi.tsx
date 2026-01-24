@@ -22,7 +22,7 @@ const pronunciationCache = new Map<string, string>();
 async function getAIPronunciation(word: string, apiKey: string): Promise<string> {
   const cacheKey = word.toLowerCase();
   if (pronunciationCache.has(cacheKey)) {
-    console.log(`💾 [Azure] Cache hit: "${word}"`);
+    // console.log(`💾 [Azure] Cache hit: "${word}"`);
     return pronunciationCache.get(cacheKey)!;
   }
 
@@ -148,7 +148,7 @@ Remember: Azure's Indian neural voices are already excellent - you're just helpi
     const pronunciation = data.choices[0]?.message?.content?.trim() || word;
     
     pronunciationCache.set(cacheKey, pronunciation);
-    console.log(`✨ [Azure] "${word}" → "${pronunciation}"`);
+   // console.log(`✨ [Azure] "${word}" → "${pronunciation}"`);
     
     return pronunciation;
   } catch (error) {
@@ -252,8 +252,8 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
       playerRef.current = new sdk.SpeakerAudioDestination();
       const audioConfig = sdk.AudioConfig.fromSpeakerOutput(playerRef.current);
       synthesizerRef.current = new sdk.SpeechSynthesizer(speechConfigRef.current, audioConfig);
-      
-      console.log(`✅ [Azure] Initialized with voice: ${selectedVoice}`);
+
+      // console.log(`✅ [Azure] Initialized with voice: ${selectedVoice}`);
     } catch (error) {
       console.error('❌ [Azure] Initialization error:', error);
     }
@@ -270,7 +270,7 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
   }, [azureKey, azureRegion, selectedVoice, supported]);
 
   const cancel = useCallback(() => {
-    console.log('🛑 [Azure] Cancel function called');
+   // console.log('🛑 [Azure] Cancel function called');
     
     // Stop the player immediately - this is the key!
     if (playerRef.current) {
@@ -286,21 +286,21 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
       try {
         // Close and reinitialize the synthesizer
         synthesizerRef.current.close();
-        console.log('🛑 [Azure] Synthesizer closed');
+       // console.log('🛑 [Azure] Synthesizer closed');
         
         // Reinitialize for future use with a new player
         if (speechConfigRef.current) {
           playerRef.current = new sdk.SpeakerAudioDestination();
           const audioConfig = sdk.AudioConfig.fromSpeakerOutput(playerRef.current);
           synthesizerRef.current = new sdk.SpeechSynthesizer(speechConfigRef.current, audioConfig);
-          console.log('🔄 [Azure] Synthesizer reinitialized');
+         // console.log('🔄 [Azure] Synthesizer reinitialized');
         }
       } catch (error) {
         console.error('❌ [Azure] Cancel error:', error);
       }
       setSpeaking(false);
     } else {
-      console.log('⚠️ [Azure] Cancel called but no synthesizer found');
+     // console.log('⚠️ [Azure] Cancel called but no synthesizer found');
     }
   }, []);
 
@@ -335,13 +335,13 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
 
     if (!cleanText) return;
 
-    console.log(`🎤 [Azure] Original: "${cleanText.substring(0, 80)}..."`);
+    //console.log(`🎤 [Azure] Original: "${cleanText.substring(0, 80)}..."`);
 
     // Process with AI for technical terms
     const enhancedText = await processTextWithAI(cleanText, groqApiKey);
     
     if (enhancedText !== cleanText) {
-      console.log(`✨ [Azure] Enhanced: "${enhancedText.substring(0, 80)}..."`);
+      //console.log(`✨ [Azure] Enhanced: "${enhancedText.substring(0, 80)}..."`);
     }
 
     const emotion = analyzeEmotion(text);
@@ -363,7 +363,7 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
       ssml,
       (result) => {
         if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-          console.log('🎙️ [Azure] Speech completed successfully');
+          //console.log('🎙️ [Azure] Speech completed successfully');
         } else if (result.reason === sdk.ResultReason.Canceled) {
           const cancellation = sdk.CancellationDetails.fromResult(result);
           console.error('❌ [Azure] Speech canceled:', cancellation.reason);
@@ -382,7 +382,7 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
 
   const clearCache = useCallback(() => {
     pronunciationCache.clear();
-    console.log('🗑️ [Azure] Pronunciation cache cleared');
+    //console.log('🗑️ [Azure] Pronunciation cache cleared');
   }, []);
 
   return {

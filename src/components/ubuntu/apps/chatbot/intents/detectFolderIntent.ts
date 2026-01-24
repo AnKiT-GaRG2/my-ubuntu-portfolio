@@ -88,9 +88,9 @@ Use lowercase and hyphens/underscores for folder names. Remove special character
 
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
-    
-    console.log('🤖 Folder intent detection result:', result);
-    
+
+   // console.log('🤖 Folder intent detection result:', result);
+
     if (!result || result.startsWith('NONE')) {
       return { hasIntent: false, folderName: null, needsName: false };
     }
@@ -119,7 +119,7 @@ Use lowercase and hyphens/underscores for folder names. Remove special character
     return { hasIntent: false, folderName: null, needsName: false };
     
   } catch (error) {
-    console.error('❌ Error detecting Folder intent:', error);
+  //  console.error('❌ Error detecting Folder intent:', error);
     return { hasIntent: false, folderName: null, needsName: false };
   }
 }

@@ -38,7 +38,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
-      console.log('🎤 Listening started');
+     // console.log('🎤 Listening started');
       setIsListening(true);
       setError(null);
       setTranscript('');
@@ -74,7 +74,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onerror = (event: any) => {
-      console.error('❌ Speech error:', event.error);
+      //console.error('❌ Speech error:', event.error);
       
       let errorMessage = '';
       switch (event.error) {
@@ -129,7 +129,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
         setError(null);
         recognitionRef.current.start();
       } catch (error) {
-        console.error('Error starting recognition:', error);
+       // console.error('Error starting recognition:', error);
         setError('Failed to start listening. Please try again.');
       }
     }
@@ -140,7 +140,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
       try {
         recognitionRef.current.stop();
       } catch (error) {
-        console.error('Error stopping recognition:', error);
+       // console.error('Error stopping recognition:', error);
       }
     }
   };

@@ -63,7 +63,7 @@ Respond with ONLY "YES" if genuinely abusive/attacking, or "NO" if just casual l
     });
 
     if (!response.ok) {
-      console.error('Abuse detection API error');
+     // console.error('Abuse detection API error');
       return false; // If API fails, allow the message
     }
 
@@ -71,7 +71,7 @@ Respond with ONLY "YES" if genuinely abusive/attacking, or "NO" if just casual l
     const result = data.choices[0].message.content.trim().toUpperCase();
     return result === 'YES';
   } catch (error) {
-    console.error('Error checking for abuse:', error);
+    //console.error('Error checking for abuse:', error);
     return false; // If error, allow the message
   }
 }

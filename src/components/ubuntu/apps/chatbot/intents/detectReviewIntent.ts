@@ -67,7 +67,7 @@ Respond with ONLY "YES" if they want to SUBMIT a review, or "NO" if they don't.`
       })
     });
 
-    console.log('📡 Review intent API response status:', response.status, response.ok);
+   // console.log('📡 Review intent API response status:', response.status, response.ok);
     
     if (!response.ok) {
       const errorData = await response.json();
@@ -76,18 +76,18 @@ Respond with ONLY "YES" if they want to SUBMIT a review, or "NO" if they don't.`
     }
 
     const data = await response.json();
-    console.log('🤖 Groq response for intent detection:', data);
+    //console.log('🤖 Groq response for intent detection:', data);
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('❌ Invalid response structure from Groq API:', data);
+    //  console.error('❌ Invalid response structure from Groq API:', data);
       return false;
     }
     
     const result = data.choices[0].message.content.trim().toUpperCase();
-    console.log('📊 Review intent result:', result, '→', result === 'YES');
+   // console.log('📊 Review intent result:', result, '→', result === 'YES');
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting review intent:', error);
+    //console.error('❌ Error detecting review intent:', error);
     return false; // If error, don't trigger review
   }
 }

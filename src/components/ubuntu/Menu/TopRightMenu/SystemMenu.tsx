@@ -105,7 +105,7 @@ export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange
             icon={<Lock className="w-4 h-4" />}
             label="Lock"
             onClick={() => {
-              console.log('Lock Screen');
+              //console.log('Lock Screen');
               onLock?.();
             }}
           />

@@ -44,7 +44,7 @@ interface Message {
 }
 
 export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
-  console.log('🎬 [ChatBot] Component rendering/created');
+ // console.log('🎬 [ChatBot] Component rendering/created');
   
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -99,9 +99,9 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
 
   // Cleanup: Stop voice agent immediately when component unmounts (chatbot closed)
   useEffect(() => {
-    console.log('🎬 [ChatBot] Component mounted');
+   // console.log('🎬 [ChatBot] Component mounted');
     return () => {
-      console.log('🛑 [ChatBot] Component unmounting - stopping voice agent');
+      // console.log('🛑 [ChatBot] Component unmounting - stopping voice agent');
       // Immediately cancel any ongoing speech when chatbot is closed
       // This will stop the voice agent mid-sentence if needed
       cancelSpeech();
@@ -175,7 +175,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
   // Voice toggle handler
   const handleVoiceToggle = () => {
     // Always stop any ongoing speech when mic button is clicked (same logic as exit)
-    console.log('🎤 [ChatBot] Mic button clicked - stopping voice agent');
+    //console.log('🎤 [ChatBot] Mic button clicked - stopping voice agent');
     cancelSpeech();
     
     if (isListening) {
@@ -189,7 +189,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
     if (!input.trim() || isLoading) return;
 
     // Stop speaking when user sends message (same logic as exit)
-    console.log('📤 [ChatBot] Sending message - stopping voice agent');
+    //console.log('📤 [ChatBot] Sending message - stopping voice agent');
     cancelSpeech();
 
     // Check if user is blocked
@@ -238,11 +238,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for Chrome intent using AI
-      console.log('🌐 Starting Chrome intent detection...');
+      //console.log('🌐 Starting Chrome intent detection...');
       const hasChromeIntent = await detectChromeIntent(userInput, GROQ_API_KEY);
       
       if (hasChromeIntent) {
-        console.log('✅ Opening Chrome app...');
+        //console.log('✅ Opening Chrome app...');
         if (onOpenApp) {
           onOpenApp('chrome');
         }
@@ -253,11 +253,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for Terminal intent using AI
-      console.log('💻 Starting Terminal intent detection...');
+      //console.log('💻 Starting Terminal intent detection...');
       const hasTerminalIntent = await detectTerminalIntent(userInput, GROQ_API_KEY);
       
       if (hasTerminalIntent) {
-        console.log('✅ Opening Terminal app...');
+        //console.log('✅ Opening Terminal app...');
         if (onOpenApp) {
           onOpenApp('terminal');
         }
@@ -268,11 +268,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for Calculator intent using AI
-      console.log('🧮 Starting Calculator intent detection...');
+      //console.log('🧮 Starting Calculator intent detection...');
       const hasCalculatorIntent = await detectCalculatorIntent(userInput, GROQ_API_KEY);
       
       if (hasCalculatorIntent) {
-        console.log('✅ Opening Calculator app...');
+        //console.log('✅ Opening Calculator app...');
         if (onOpenApp) {
           onOpenApp('calculator');
         }
@@ -283,11 +283,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for Background change intent using AI
-      console.log('🖼️ Starting Background intent detection...');
+      //console.log('🖼️ Starting Background intent detection...');
       const hasBackgroundIntent = await detectBackgroundIntent(userInput, GROQ_API_KEY);
       
       if (hasBackgroundIntent) {
-        console.log('✅ Opening Settings with Background section...');
+        //console.log('✅ Opening Settings with Background section...');
         if (onOpenApp) {
           onOpenApp('settings', { initialSection: 'background' });
         }
@@ -302,7 +302,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       const hasAppearanceIntent = await detectAppearanceIntent(userInput, GROQ_API_KEY);
       
       if (hasAppearanceIntent) {
-        console.log('✅ Opening Settings with Appearance section...');
+        //console.log('✅ Opening Settings with Appearance section...');
         if (onOpenApp) {
           onOpenApp('settings', { initialSection: 'appearance' });
         }
@@ -313,11 +313,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for VS Code intent using AI
-      console.log('💻 Starting VS Code intent detection...');
+      //console.log('💻 Starting VS Code intent detection...');
       const hasVSCodeIntent = await detectVSCodeIntent(userInput, GROQ_API_KEY);
       
       if (hasVSCodeIntent) {
-        console.log('✅ Opening VS Code app...');
+        //console.log('✅ Opening VS Code app...');
         if (onOpenApp) {
           onOpenApp('vscode');
         }
@@ -328,28 +328,28 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for certificate intent using AI
-      console.log('🏆 Starting certificate intent detection...');
+      //console.log('🏆 Starting certificate intent detection...');
       const recentContext = messages.slice(-2).map(m => `${m.role}: ${m.content}`).join('\n');
       const certificateIntent = await detectCertificateIntent(userInput, GROQ_API_KEY, recentContext);
       
       if (certificateIntent.hasIntent) {
         if (certificateIntent.action === 'list') {
           // List all certificates
-          console.log('📋 Listing all certificates...');
+          //console.log('📋 Listing all certificates...');
           addAssistantMessage(formatCertificateList(), shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
           return;
         } else if (certificateIntent.action === 'info' && certificateIntent.certificate) {
           // Show certificate information
-          console.log('ℹ️ Showing certificate info:', certificateIntent.certificate.name);
+          //console.log('ℹ️ Showing certificate info:', certificateIntent.certificate.name);
           addAssistantMessage(generateCertificateInfoResponse(certificateIntent.certificate), shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
           return;
         } else if (certificateIntent.action === 'show' && certificateIntent.certificate) {
           // Open the certificate PDF
-          console.log('✅ Opening certificate:', certificateIntent.certificate.name);
+          //console.log('✅ Opening certificate:', certificateIntent.certificate.name);
           
           // Set PDF viewer state
           setPdfUrl(certificateIntent.certificate.filePath);
@@ -362,7 +362,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
           return;
         } else if (certificateIntent.action === 'show' || certificateIntent.action === 'info') {
           // Certificate not found
-          console.log('❌ Certificate not found');
+          //console.log('❌ Certificate not found');
           addAssistantMessage(generateCertificateNotFoundResponse(certificateIntent.query), shouldSpeak);
           setIsLoading(false);
           setIsTyping(false);
@@ -371,7 +371,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for folder creation intent using AI
-      console.log('📁 Starting folder creation intent detection...');
+      //console.log('📁 Starting folder creation intent detection...');
       const folderIntent = await detectFolderIntent(userInput, GROQ_API_KEY);
       
       if (folderIntent.hasIntent) {
@@ -389,7 +389,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
       }
 
       // Check for Spotify intent using AI
-      console.log('🎯 Starting Spotify intent detection...');
+      //console.log('🎯 Starting Spotify intent detection...');
       const hasSpotifyIntent = await detectSpotifyIntent(userInput, GROQ_API_KEY);
 
       if (hasSpotifyIntent) {
@@ -403,11 +403,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
         return;
       }
       // Check for Power Off intent using AI
-      console.log('⚡ Starting Power Off intent detection...');
+      //console.log('⚡ Starting Power Off intent detection...');
       const hasPowerOffIntent = await detectPowerOffIntent(userInput, GROQ_API_KEY);
       
       if (hasPowerOffIntent) {
-        console.log('✅ Triggering power off...');
+        //console.log('✅ Triggering power off...');
         addAssistantMessage("Powering off the system... Goodbye! 👋", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
@@ -419,11 +419,11 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
         }, 1500);
         return;
       }
-      console.log('🎯 Starting review intent detection...');
+      //console.log('🎯 Starting review intent detection...');
       const hasReviewIntent = await detectReviewIntent(userInput, GROQ_API_KEY);
       
       if (hasReviewIntent) {
-        console.log('✅ Opening Add Review app...');
+        //console.log('✅ Opening Add Review app...');
         if (onOpenApp) {
           onOpenApp('review');
         }
@@ -432,7 +432,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
         setIsTyping(false);
         return;
       }
-      console.log('💬 Proceeding with normal conversation...');
+     // console.log('💬 Proceeding with normal conversation...');
       // Normal conversation
       const conversationHistory = messages.slice(-5).concat([userMessage]);
       const responseText = await callGroqAPI(conversationHistory, GROQ_API_KEY);

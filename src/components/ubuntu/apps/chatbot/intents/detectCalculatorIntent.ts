@@ -66,11 +66,11 @@ Respond with ONLY "YES" if they want to open Calculator, or "NO" if they don't.`
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
     
-    console.log('🤖 Calculator intent detection result:', result);
+   // console.log('🤖 Calculator intent detection result:', result);
     
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting Calculator intent:', error);
+    // console.error('❌ Error detecting Calculator intent:', error);
     return false;
   }
 }

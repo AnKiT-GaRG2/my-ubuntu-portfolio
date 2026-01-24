@@ -263,10 +263,10 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
       if (bestVoice) {
         setSelectedVoice(bestVoice);
       } else {
-        console.warn('⚠️ No male voice found, using first available');
+       // console.warn('⚠️ No male voice found, using first available');
         const fallbackVoice = maleVoices[0] || availableVoices[0];
         if (fallbackVoice) {
-          console.log('🎤 Fallback voice:', fallbackVoice.name, fallbackVoice.lang);
+         // console.log('🎤 Fallback voice:', fallbackVoice.name, fallbackVoice.lang);
         }
         setSelectedVoice(fallbackVoice);
       }
@@ -275,7 +275,7 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
 
   useEffect(() => {
     if (!supported) {
-      console.warn('⚠️ Speech synthesis not supported');
+      // console.warn('⚠️ Speech synthesis not supported');
       return;
     }
 
@@ -313,7 +313,7 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
       return;
     }
 
-    console.log(`🔊 Queue: Speaking chunk "${chunk.substring(0, 50)}..." with ${selectedVoice.name}`);
+    // console.log(`🔊 Queue: Speaking chunk "${chunk.substring(0, 50)}..." with ${selectedVoice.name}`);
 
     const utterance = new SpeechSynthesisUtterance(chunk);
     const emotion = analyzeEmotion(chunk);
@@ -375,13 +375,13 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
 
     if (!cleanText) return;
 
-    console.log('🎙️ ===== VOICE SPEECH STARTING =====');
-    console.log(`📝 Text: "${cleanText.substring(0, 100)}${cleanText.length > 100 ? '...' : ''}"`);
-    console.log(`🔊 Voice Name: ${selectedVoice?.name || 'default/system voice'}`);
-    console.log(`🌍 Language: ${selectedVoice?.lang || 'unknown'}`);
-    console.log(`📍 Voice URI: ${selectedVoice?.voiceURI || 'N/A'}`);
-    console.log(`💻 Local/Cloud: ${selectedVoice?.localService ? 'Local (Device)' : 'Cloud-based (Online)'}`);
-    console.log('========================================');
+    // console.log('🎙️ ===== VOICE SPEECH STARTING =====');
+    // console.log(`📝 Text: "${cleanText.substring(0, 100)}${cleanText.length > 100 ? '...' : ''}"`);
+    // console.log(`🔊 Voice Name: ${selectedVoice?.name || 'default/system voice'}`);
+    // console.log(`🌍 Language: ${selectedVoice?.lang || 'unknown'}`);
+    // console.log(`📍 Voice URI: ${selectedVoice?.voiceURI || 'N/A'}`);
+    // console.log(`💻 Local/Cloud: ${selectedVoice?.localService ? 'Local (Device)' : 'Cloud-based (Online)'}`);
+    // console.log('========================================');
 
     // For short text, speak directly
     if (cleanText.length < 100) {
@@ -399,7 +399,7 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
       utterance.onstart = () => setSpeaking(true);
       utterance.onend = () => setSpeaking(false);
       utterance.onerror = (e) => {
-        console.error('❌ Speech error:', e.error);
+       // console.error('❌ Speech error:', e.error);
         setSpeaking(false);
       };
 

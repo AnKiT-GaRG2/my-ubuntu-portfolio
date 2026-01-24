@@ -33,7 +33,7 @@ export function Desktop() {
   const { userFolders, addFolder } = useDesktop();
 
   useEffect(() => {
-    console.log('🔷 Desktop - WiFi state changed:', wifiEnabled);
+    //console.log('🔷 Desktop - WiFi state changed:', wifiEnabled);
   }, [wifiEnabled]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
@@ -139,7 +139,7 @@ export function Desktop() {
   }, [accentColor]);
   
   useEffect(() => {
-    console.log('📍 Context menu state changed:', contextMenu);
+    //console.log('📍 Context menu state changed:', contextMenu);
   }, [contextMenu]);
 
   useEffect(() => {

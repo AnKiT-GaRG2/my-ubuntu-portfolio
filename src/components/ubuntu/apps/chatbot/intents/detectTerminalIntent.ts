@@ -76,11 +76,11 @@ Respond with ONLY "YES" if they want to open Terminal, or "NO" if they don't.`
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
     
-    console.log('🤖 Terminal intent detection result:', result);
+   // console.log('🤖 Terminal intent detection result:', result);
     
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting Terminal intent:', error);
+    //console.error('❌ Error detecting Terminal intent:', error);
     return false;
   }
 }

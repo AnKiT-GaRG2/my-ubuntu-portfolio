@@ -66,11 +66,11 @@ export function ReviewForm({ onClose, isModal = false }: ReviewFormProps) {
           }, 3000);
         }
       } else {
-        console.error('❌ Response not ok:', responseData);
+        //console.error('❌ Response not ok:', responseData);
         throw new Error('Failed to submit review');
       }
     } catch (error) {
-      console.error('❌ Error submitting review:', error);
+     // console.error('❌ Error submitting review:', error);
       setSubmitMessage({ type: 'error', text: 'Failed to submit review. Please try again.' });
     } finally {
       setSubmitting(false);

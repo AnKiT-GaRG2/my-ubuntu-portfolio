@@ -88,11 +88,11 @@ Respond with ONLY "YES" if they want to CHANGE/MODIFY appearance settings, or "N
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
     
-    console.log('🤖 Appearance intent detection result:', result);
+    //console.log('🤖 Appearance intent detection result:', result);
     
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting Appearance intent:', error);
+   // console.error('❌ Error detecting Appearance intent:', error);
     return false;
   }
 }

@@ -102,7 +102,7 @@ Use lowercase for certificate names. Extract the certificate name from the query
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
     
-    console.log('🤖 Certificate intent detection result:', result);
+   // console.log('🤖 Certificate intent detection result:', result);
     
     if (!result || result.startsWith('NONE')) {
       return { hasIntent: false, action: null, certificate: null, query: text };
@@ -147,7 +147,7 @@ Use lowercase for certificate names. Extract the certificate name from the query
     return { hasIntent: false, action: null, certificate: null, query: text };
     
   } catch (error) {
-    console.error('❌ Error detecting Certificate intent:', error);
+   // console.error('❌ Error detecting Certificate intent:', error);
     return { hasIntent: false, action: null, certificate: null, query: text };
   }
 }

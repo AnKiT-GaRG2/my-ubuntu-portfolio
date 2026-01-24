@@ -33,7 +33,7 @@ export function ContextMenu({ x, y, onClose, onOpenTerminal, onOpenSettings, onN
       const handleClickOutside = (e: MouseEvent) => {
        // console.log('👆 Click detected, checking if outside menu');
         if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-          console.log('👆 Click was outside menu, closing');
+         // console.log('👆 Click was outside menu, closing');
           onClose();
         }
       };
@@ -49,7 +49,7 @@ export function ContextMenu({ x, y, onClose, onOpenTerminal, onOpenSettings, onN
     }, 100);
 
     return () => {
-      console.log('🎨 ContextMenu cleanup');
+      //console.log('🎨 ContextMenu cleanup');
       clearTimeout(timeoutId);
     };
   }, [onClose]);

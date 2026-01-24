@@ -107,11 +107,11 @@ Examples:
     pronunciation = pronunciation.replace(/['"]/g, '').trim();
     
     pronunciationCache.set(cacheKey, pronunciation);
-    console.log(`✨ [V2] "${word}" → "${pronunciation}"`);
+    //console.log(`✨ [V2] "${word}" → "${pronunciation}"`);
     
     return pronunciation;
   } catch (error) {
-    console.error('❌ [V2] Error:', error);
+    //console.error('❌ [V2] Error:', error);
     return word;
   }
 }
@@ -119,7 +119,7 @@ Examples:
 async function processTextWithAI(text: string, apiKey: string): Promise<string> {
   // If Hindi script detected, process entire text
   if (containsHindi(text)) {
-    console.log('🇮🇳 [V2] Hindi detected');
+    //console.log('🇮🇳 [V2] Hindi detected');
     return await getAIPronunciation(text, apiKey);
   }
 
@@ -237,12 +237,12 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
 
     if (!clean) return;
 
-    console.log(`🎤 [V2] "${clean.substring(0, 50)}..."`);
+    //console.log(`🎤 [V2] "${clean.substring(0, 50)}..."`);
 
     const enhanced = await processTextWithAI(clean, apiKey);
     
     if (enhanced !== clean) {
-      console.log(`✨ [V2] → "${enhanced.substring(0, 50)}..."`);
+      //console.log(`✨ [V2] → "${enhanced.substring(0, 50)}..."`);
     }
 
     const utterance = new SpeechSynthesisUtterance(enhanced);
@@ -258,12 +258,12 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
 
     utterance.onstart = () => {
       setSpeaking(true);
-      console.log(`🎙️ [V2] Speaking`);
+      //console.log(`🎙️ [V2] Speaking`);
     };
     
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = (e) => {
-      console.error('❌ [V2]:', e.error);
+      //console.error('❌ [V2]:', e.error);
       setSpeaking(false);
     };
 
@@ -279,7 +279,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
 
   const clearCache = useCallback(() => {
     pronunciationCache.clear();
-    console.log('🗑️ [V2] Cache cleared');
+   // console.log('🗑️ [V2] Cache cleared');
   }, []);
 
   return {

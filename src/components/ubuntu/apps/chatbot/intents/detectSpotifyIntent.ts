@@ -63,11 +63,11 @@ Respond with ONLY "YES" if they want to OPEN SPOTIFY or LISTEN TO MUSIC, or "NO"
       })
     });
 
-    console.log('📡 Spotify intent API response status:', response.status, response.ok);
+   // console.log('📡 Spotify intent API response status:', response.status, response.ok);
     
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('❌ Spotify intent API error:', response.status, errorData);
+      //console.error('❌ Spotify intent API error:', response.status, errorData);
       return false; // If API fails, don't trigger Spotify
     }
 
@@ -75,15 +75,15 @@ Respond with ONLY "YES" if they want to OPEN SPOTIFY or LISTEN TO MUSIC, or "NO"
     console.log('🤖 Groq response for Spotify intent detection:', data);
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('❌ Invalid response structure from Groq API:', data);
+      //console.error('❌ Invalid response structure from Groq API:', data);
       return false;
     }
     
     const result = data.choices[0].message.content.trim().toUpperCase();
-    console.log('📊 Spotify intent result:', result, '→', result === 'YES');
+    //console.log('📊 Spotify intent result:', result, '→', result === 'YES');
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting Spotify intent:', error);
+    //console.error('❌ Error detecting Spotify intent:', error);
     return false; // If error, don't trigger Spotify
   }
 }

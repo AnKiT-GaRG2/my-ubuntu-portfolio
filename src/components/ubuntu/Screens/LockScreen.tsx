@@ -27,7 +27,7 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
   const handleUnlockTrigger = () => {
     if (!isReady) return;
     
-    console.log('Unlock triggered, starting animation');
+    //console.log('Unlock triggered, starting animation');
     setIsUnlocking(true);
     
     // Wait for animation to complete before actually unlocking
@@ -41,13 +41,13 @@ export function LockScreen({ onUnlock }: LockScreenProps) {
 
     const handleKeyPress = (e: KeyboardEvent) => {
       e.preventDefault();
-      console.log('Key pressed, unlocking');
+     // console.log('Key pressed, unlocking');
       handleUnlockTrigger();
     };
 
     const handleClick = (e: MouseEvent) => {
       e.preventDefault();
-      console.log('Click detected, unlocking');
+     // console.log('Click detected, unlocking');
       handleUnlockTrigger();
     };
 

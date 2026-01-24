@@ -21,17 +21,17 @@ const pronunciationCache = new Map<string, string>();
 async function getAIPronunciation(word: string, apiKey: string): Promise<string> {
   const cacheKey = word.toLowerCase();
   if (pronunciationCache.has(cacheKey)) {
-    console.log(`💾 [V2] Cache hit: "${word}"`);
+   // console.log(`💾 [V2] Cache hit: "${word}"`);
     return pronunciationCache.get(cacheKey)!;
   }
 
   if (!apiKey) {
-    console.warn('⚠️ [V2] No API key');
+   // console.warn('⚠️ [V2] No API key');
     return word;
   }
 
   try {
-    console.log(`🤖 [V2] Getting AI pronunciation: "${word}"`);
+    //console.log(`🤖 [V2] Getting AI pronunciation: "${word}"`);
     
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -139,11 +139,11 @@ Sound natural, conversational, human - like a friend talking!`
     const pronunciation = data.choices[0]?.message?.content?.trim() || word;
     
     pronunciationCache.set(cacheKey, pronunciation);
-    console.log(`✨ [V2] "${word}" → "${pronunciation}"`);
+   // console.log(`✨ [V2] "${word}" → "${pronunciation}"`);
     
     return pronunciation;
   } catch (error) {
-    console.error('❌ [V2] Error:', error);
+    //console.error('❌ [V2] Error:', error);
     return word;
   }
 }
@@ -230,7 +230,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
     if (availableVoices.length === 0) return;
 
     const maleVoices = availableVoices.filter(isMaleVoice);
-    console.log(`🔊 [V2] ${availableVoices.length} voices (${maleVoices.length} male)`);
+    //console.log(`🔊 [V2] ${availableVoices.length} voices (${maleVoices.length} male)`);
     setVoices(maleVoices);
 
     if (!selectedVoice && maleVoices.length > 0) {
@@ -249,7 +249,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
       for (const check of checks) {
         bestVoice = maleVoices.find(check);
         if (bestVoice) {
-          console.log(`✅ [V2 AI] Voice: "${bestVoice.name}" (${bestVoice.lang})`);
+          // console.log(`✅ [V2 AI] Voice: "${bestVoice.name}" (${bestVoice.lang})`);
           break;
         }
       }
@@ -305,12 +305,12 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
 
     if (!cleanText) return;
 
-    console.log(`🎤 [V2] Original: "${cleanText.substring(0, 60)}..."`);
+    //console.log(`🎤 [V2] Original: "${cleanText.substring(0, 60)}..."`);
 
     const enhancedText = await processTextWithAI(cleanText, apiKey);
     
     if (enhancedText !== cleanText) {
-      console.log(`✨ [V2] Enhanced: "${enhancedText.substring(0, 60)}..."`);
+      //console.log(`✨ [V2] Enhanced: "${enhancedText.substring(0, 60)}..."`);
     }
 
     const utterance = new SpeechSynthesisUtterance(enhancedText);
@@ -331,7 +331,7 @@ export function useSpeechSynthesisV2AI(): UseSpeechSynthesisV2Return {
     
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = (e) => {
-      console.error('❌ [V2] Error:', e.error);
+      //console.error('❌ [V2] Error:', e.error);
       setSpeaking(false);
     };
 

@@ -80,11 +80,11 @@ Respond with ONLY "YES" if they want to POWER OFF/SHUTDOWN/LOGOUT, or "NO" other
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
     
-    console.log('🤖 Power Off intent detection result:', result);
+    //console.log('🤖 Power Off intent detection result:', result);
     
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting Power Off intent:', error);
+    //console.error('❌ Error detecting Power Off intent:', error);
     return false;
   }
 }

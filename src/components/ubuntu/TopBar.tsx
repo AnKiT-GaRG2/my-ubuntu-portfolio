@@ -48,7 +48,7 @@ export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout, w
 
         <button 
           onClick={() => {
-            console.log('Button clicked, current state:', showSystemMenu);
+           // console.log('Button clicked, current state:', showSystemMenu);
             setShowSystemMenu(!showSystemMenu);
           }}
           className="flex items-center gap-3 hover:bg-white/10 px-2 py-1 rounded cursor-pointer transition-colors"
@@ -67,7 +67,7 @@ export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout, w
         <SystemMenu 
           onClose={() => setShowSystemMenu(false)} 
           onLock={() => {
-            console.log('TopBar onLock called');
+            //console.log('TopBar onLock called');
             setShowSystemMenu(false);
             onLock?.();
           }}

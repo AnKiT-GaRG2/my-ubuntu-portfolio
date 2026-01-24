@@ -73,11 +73,11 @@ Respond with ONLY "YES" if they want to open Chrome, or "NO" if they don't.`
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
     
-    console.log('🤖 Chrome intent detection result:', result);
+    //console.log('🤖 Chrome intent detection result:', result);
     
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting Chrome intent:', error);
+   // console.error('❌ Error detecting Chrome intent:', error);
     return false;
   }
 }

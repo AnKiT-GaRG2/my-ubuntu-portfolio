@@ -76,12 +76,12 @@ Respond with ONLY "YES" if they want to open VS Code, or "NO" if they don't.`
 
     const data = await response.json();
     const result = data.choices?.[0]?.message?.content?.trim().toUpperCase();
-    
-    console.log('🤖 VS Code intent detection result:', result);
-    
+
+   // //console.log('🤖 VS Code intent detection result:', result);
+
     return result === 'YES';
   } catch (error) {
-    console.error('❌ Error detecting VS Code intent:', error);
+    //console.error('❌ Error detecting VS Code intent:', error);
     return false;
   }
 }
