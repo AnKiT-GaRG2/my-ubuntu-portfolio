@@ -5,8 +5,8 @@ export function UsersSettings() {
   const [autoLogin, setAutoLogin] = useState(true);
 
   return (
-    <div className="p-6 max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-foreground">Users</h2>
         <button className="px-4 py-2 text-sm text-foreground hover:bg-muted/20 rounded-lg transition-colors">
           Add User...
