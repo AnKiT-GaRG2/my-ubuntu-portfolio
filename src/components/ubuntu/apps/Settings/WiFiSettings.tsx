@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Wifi, ChevronDown, Settings as SettingsIcon, RefreshCw } from 'lucide-react';
 
 interface Network {
@@ -7,11 +7,17 @@ interface Network {
   strength: number;
   secured: boolean;
 }
-
-export function WiFiSettings() {
-  const [wifiEnabled, setWifiEnabled] = useState(true);
+interface WiFiSettingsProps {
+  wifiEnabled?: boolean;
+  onWifiChange?: (enabled: boolean) => void;
+}
+export function WiFiSettings({ wifiEnabled: externalWifiEnabled=true, onWifiChange }: WiFiSettingsProps) {
+  const [wifiEnabled, setWifiEnabled] = useState(externalWifiEnabled);
   const [airplaneMode, setAirplaneMode] = useState(false);
   const [showNetworks, setShowNetworks] = useState(true);
+  useEffect(() => {
+    setWifiEnabled(externalWifiEnabled);
+  }, [externalWifiEnabled]);
 
   const networks: Network[] = [
     { name: 'Ubuntu Portfolio Network', connected: true, strength: 90, secured: true },
@@ -30,7 +36,11 @@ export function WiFiSettings() {
             <span className="text-lg font-medium text-foreground">Wi-Fi</span>
           </div>
           <button
-            onClick={() => setWifiEnabled(!wifiEnabled)}
+            onClick={() => {
+              const newState = !wifiEnabled;
+              setWifiEnabled(newState);
+              onWifiChange?.(newState);
+            }}
             className={`relative w-12 h-6 rounded-full transition-colors ${
               wifiEnabled ? 'bg-primary' : 'bg-muted-foreground/30'
             }`}

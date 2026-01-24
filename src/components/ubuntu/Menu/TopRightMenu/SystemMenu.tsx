@@ -7,9 +7,10 @@ interface SystemMenuProps {
   onOpenSettings?: (section?: string) => void;
   onBrightnessChange?: (level: number) => void;
   onLogout?: () => void;
+  wifiEnabled?: boolean;
 }
 
-export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange, onLogout }: SystemMenuProps) {
+export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange, onLogout, wifiEnabled=true }: SystemMenuProps) {
   const [volumeLevel, setVolumeLevel] = useState(75);
   const [brightnessLevel, setBrightnessLevel] = useState(80);
 
@@ -69,7 +70,7 @@ export function SystemMenu({ onClose, onLock, onOpenSettings, onBrightnessChange
         <div className="p-2 border-b border-gray-700">
           <MenuItem 
             icon={<Wifi className="w-4 h-4" />}
-            label="Ubuntu Portfolio Network"
+            label={wifiEnabled ? "Ubuntu Portfolio Network":" Off"}
             hasArrow
             onClick={() => {
               onOpenSettings?.('wifi');

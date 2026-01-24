@@ -29,7 +29,12 @@ export function Desktop() {
   const [brightness, setBrightness] = useState(80);
   const [background, setBackground] = useState('/images/ubuntu-bg2.jpg');
   const [accentColor, setAccentColor] = useState('orange');
+  const [wifiEnabled, setWifiEnabled] = useState(true);
   const { userFolders, addFolder } = useDesktop();
+
+  useEffect(() => {
+    console.log('🔷 Desktop - WiFi state changed:', wifiEnabled);
+  }, [wifiEnabled]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showNewFolderDialog, setShowNewFolderDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -334,6 +339,8 @@ export function Desktop() {
           initialSection={metadata?.initialSection as string}
           currentAccentColor={accentColor}
           onAccentColorChange={setAccentColor}
+          wifiEnabled={wifiEnabled}
+          onWifiChange={setWifiEnabled}
         />;
       case 'calculator':
         return <Calculator />;
@@ -352,7 +359,7 @@ export function Desktop() {
 
   return (
     <div 
-      className="h-screen w-screen overflow-auto select-none relative transition-all duration-300"
+      className="h-screen w-screen overflow-auto select-none relative transition-all duration-300 scrollbar-hide"
       style={{
         backgroundImage: `url(${background})`,
         backgroundSize: 'cover',
@@ -373,6 +380,7 @@ export function Desktop() {
         }}
         onBrightnessChange={handleBrightnessChange}
         onLogout={handleLogout}
+        wifiEnabled={wifiEnabled}
       />
 
       {/* Desktop Icons */}

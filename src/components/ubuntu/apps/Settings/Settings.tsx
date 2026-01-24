@@ -12,7 +12,7 @@ interface SettingItem {
 
 const settingsCategories: SettingItem[] = [
   { id: 'wifi', icon: Wifi, title: 'Wi-Fi', description: 'Connected' },
-  { id: 'bluetooth', icon: Bluetooth, title: 'Bluetooth', description: 'On' },
+  { id: 'bluetooth', icon: Bluetooth, title: 'Bluetooth', description: 'Off' },
   { id: 'notifications', icon: Bell, title: 'Notifications' },
   { id: 'background', icon: Image, title: 'Background' },
   { id: 'appearance', icon: Palette, title: 'Appearance' },
@@ -40,6 +40,8 @@ interface SettingsProps {
   initialSection?: string;
   currentAccentColor?: string;
   onAccentColorChange?: (color: string) => void;
+  wifiEnabled?: boolean;
+  onWifiChange?: (enabled: boolean) => void;
 }
 
 export function Settings({ 
@@ -47,7 +49,8 @@ export function Settings({
   onBackgroundChange, 
   initialSection = 'about',
   currentAccentColor = 'orange',
-  onAccentColorChange 
+  onAccentColorChange, wifiEnabled = true,
+  onWifiChange
 }: SettingsProps) {
   const [activeSection, setActiveSection] = useState(initialSection);
   const [selectedBg, setSelectedBg] = useState(currentBackground);
@@ -80,7 +83,7 @@ export function Settings({
   const renderContent = () => {
     switch (activeSection) {
       case 'wifi':
-        return <WiFiSettings />;
+        return <WiFiSettings  wifiEnabled={wifiEnabled} onWifiChange={onWifiChange} />;
        case 'users':
         return <UsersSettings />; 
       case 'bluetooth':

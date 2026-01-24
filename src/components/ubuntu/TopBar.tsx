@@ -7,9 +7,10 @@ interface TopBarProps {
   onOpenSettings?: (section?: string) => void;
   onBrightnessChange?: (level: number) => void;
   onLogout?: () => void;
+  wifiEnabled?: boolean;
 }
 
-export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout }: TopBarProps) {
+export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout, wifiEnabled=true }: TopBarProps) {
   const [time, setTime] = useState(new Date());
   const [showSystemMenu, setShowSystemMenu] = useState(false);
 
@@ -53,7 +54,7 @@ export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout }:
           className="flex items-center gap-3 hover:bg-white/10 px-2 py-1 rounded cursor-pointer transition-colors"
         >
           <div className="flex items-center gap-2">
-            <Wifi className="w-4 h-4" />
+            {wifiEnabled && <Wifi className="w-4 h-4" />}
             <Volume2 className="w-4 h-4" />
             <Battery className="w-4 h-4" />
           </div>
@@ -79,6 +80,7 @@ export function TopBar({ onLock, onOpenSettings, onBrightnessChange, onLogout }:
             setShowSystemMenu(false);
             onLogout?.();
           }}
+          wifiEnabled={wifiEnabled}
         />
       )}
     </>
