@@ -132,7 +132,12 @@ export function useWindowManager() {
   }, [maxZIndex]);
 
   const closeWindow = useCallback((id: string) => {
-    setWindows((prev) => prev.filter((w) => w.id !== id));
+    console.log('🗑️ [WindowManager] Closing window:', id);
+    setWindows((prev) => {
+      const filtered = prev.filter((w) => w.id !== id);
+      console.log('🗑️ [WindowManager] Windows after close:', filtered.map(w => w.id));
+      return filtered;
+    });
   }, []);
 
   const minimizeWindow = useCallback((id: string) => {

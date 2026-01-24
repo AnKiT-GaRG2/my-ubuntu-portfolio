@@ -227,6 +227,7 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
   const [selectedVoice, setSelectedVoice] = useState<string>(INDIAN_MALE_VOICES[0]);
   const synthesizerRef = useRef<sdk.SpeechSynthesizer | null>(null);
   const speechConfigRef = useRef<sdk.SpeechConfig | null>(null);
+  const playerRef = useRef<sdk.SpeakerAudioDestination | null>(null);
   
   const azureKey = import.meta.env.VITE_AZURE_SPEECH_KEY || '';
   const azureRegion = import.meta.env.VITE_AZURE_SPEECH_REGION || 'centralindia';
@@ -247,7 +248,9 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
       // Set output format for better quality
       speechConfigRef.current.speechSynthesisOutputFormat = sdk.SpeechSynthesisOutputFormat.Audio24Khz48KBitRateMonoMp3;
       
-      const audioConfig = sdk.AudioConfig.fromDefaultSpeakerOutput();
+      // Create a player that we can control
+      playerRef.current = new sdk.SpeakerAudioDestination();
+      const audioConfig = sdk.AudioConfig.fromSpeakerOutput(playerRef.current);
       synthesizerRef.current = new sdk.SpeechSynthesizer(speechConfigRef.current, audioConfig);
       
       console.log(`✅ [Azure] Initialized with voice: ${selectedVoice}`);
@@ -259,22 +262,45 @@ export function useSpeechSynthesisAzure(): UseSpeechSynthesisAzureReturn {
       if (synthesizerRef.current) {
         synthesizerRef.current.close();
       }
+      if (playerRef.current) {
+        playerRef.current.pause();
+        playerRef.current.close();
+      }
     };
   }, [azureKey, azureRegion, selectedVoice, supported]);
 
   const cancel = useCallback(() => {
+    console.log('🛑 [Azure] Cancel function called');
+    
+    // Stop the player immediately - this is the key!
+    if (playerRef.current) {
+      try {
+        playerRef.current.pause();
+        console.log('🔇 [Azure] Player paused (audio stopped)');
+      } catch (error) {
+        console.error('❌ [Azure] Error pausing player:', error);
+      }
+    }
+    
     if (synthesizerRef.current) {
       try {
+        // Close and reinitialize the synthesizer
         synthesizerRef.current.close();
-        // Reinitialize
+        console.log('🛑 [Azure] Synthesizer closed');
+        
+        // Reinitialize for future use with a new player
         if (speechConfigRef.current) {
-          const audioConfig = sdk.AudioConfig.fromDefaultSpeakerOutput();
+          playerRef.current = new sdk.SpeakerAudioDestination();
+          const audioConfig = sdk.AudioConfig.fromSpeakerOutput(playerRef.current);
           synthesizerRef.current = new sdk.SpeechSynthesizer(speechConfigRef.current, audioConfig);
+          console.log('🔄 [Azure] Synthesizer reinitialized');
         }
       } catch (error) {
         console.error('❌ [Azure] Cancel error:', error);
       }
       setSpeaking(false);
+    } else {
+      console.log('⚠️ [Azure] Cancel called but no synthesizer found');
     }
   }, []);
 

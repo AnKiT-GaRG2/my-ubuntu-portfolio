@@ -40,6 +40,8 @@ interface Message {
 }
 
 export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
+  console.log('🎬 [ChatBot] Component rendering/created');
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -89,6 +91,20 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Cleanup: Stop voice agent immediately when component unmounts (chatbot closed)
+  useEffect(() => {
+    console.log('🎬 [ChatBot] Component mounted');
+    return () => {
+      console.log('🛑 [ChatBot] Component unmounting - stopping voice agent');
+      // Immediately cancel any ongoing speech when chatbot is closed
+      // This will stop the voice agent mid-sentence if needed
+      cancelSpeech();
+      // Also stop listening if microphone is active
+      stopListening();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array - only run on mount/unmount
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
@@ -149,13 +165,13 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
 
   // Voice toggle handler
   const handleVoiceToggle = () => {
+    // Always stop any ongoing speech when mic button is clicked (same logic as exit)
+    console.log('🎤 [ChatBot] Mic button clicked - stopping voice agent');
+    cancelSpeech();
+    
     if (isListening) {
       stopListening();
     } else {
-      // Stop any ongoing speech before listening
-      if (speaking) {
-        cancelSpeech();
-      }
       startListening();
     }
   };
@@ -163,10 +179,9 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // Stop speaking when user sends message
-    if (speaking) {
-      cancelSpeech();
-    }
+    // Stop speaking when user sends message (same logic as exit)
+    console.log('📤 [ChatBot] Sending message - stopping voice agent');
+    cancelSpeech();
 
     // Check if user is blocked
     if (isBlocked) {
