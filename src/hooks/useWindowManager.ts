@@ -2,9 +2,9 @@ import { useState, useCallback } from 'react';
 import { WindowState } from '@/types/ubuntu';
 
 // Helper function to calculate responsive window size
-const getResponsiveSize = (widthPercent: number, heightPercent: number, minWidth: number, minHeight: number) => {
-  const width = Math.max(minWidth, Math.floor(window.innerWidth * widthPercent));
-  const height = Math.max(minHeight, Math.floor(window.innerHeight * heightPercent));
+const getResponsiveSize = (widthPercent: number, heightPercent: number) => {
+  const width = Math.floor(window.innerWidth * widthPercent);
+  const height = Math.floor(window.innerHeight * heightPercent);
   return { width, height };
 };
 
@@ -20,37 +20,37 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     title: 'Terminal',
     icon: '🖥️',
     position: { x: 100, y: 100 },
-    size: getResponsiveSize(0.6, 0.65, 700, 500), // 60% width, 65% height, min 700x500
+    size: getResponsiveSize(0.6, 0.65), // 60% width, 65% height
   },
   vscode: {
     title: 'Visual Studio Code',
     icon: '💻',
     position: { x: 150, y: 80 },
-    size: getResponsiveSize(0.75, 0.8, 800, 650), // 75% width, 80% height
+    size: getResponsiveSize(0.75, 0.8), // 75% width, 80% height
   },
   chrome: {
     title: 'Google Chrome',
     icon: '🌐',
     position: { x: 200, y: 60 },
-    size: getResponsiveSize(0.75, 0.8, 800, 650),
+    size: getResponsiveSize(0.75, 0.8),
   },
   about: {
     title: 'About Me',
     icon: '👤',
     position: { x: 150, y: 60 },
-    size: getResponsiveSize(0.8, 0.85, 800, 700), // 80% width, 85% height
+    size: getResponsiveSize(0.8, 0.85), // 80% width, 85% height
   },
   files: {
     title: 'Files',
     icon: '📁',
     position: { x: 100, y: 80 },
-    size: getResponsiveSize(0.85, 0.85, 800, 700), // 85% width, 85% height
+    size: getResponsiveSize(0.85, 0.85), // 85% width, 85% height
   },
   settings: {
     title: 'Settings',
     icon: '⚙️',
     position: { x: 150, y: 60 },
-    size: getResponsiveSize(0.7, 0.8, 900, 650),
+    size: getResponsiveSize(0.7, 0.8),
   },
   calculator: {
     title: 'Calculator',
@@ -62,25 +62,25 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
     title: 'Contact Me',
     icon: '✉️',
     position: { x: 280, y: 110 },
-    size: getResponsiveSize(0.55, 0.75, 650, 600),
+    size: getResponsiveSize(0.55, 0.75),
   },
   review: {
     title: 'Add Review',
     icon: '⭐',
     position: { x: 200, y: 80 },
-    size: getResponsiveSize(0.6, 0.8, 700, 650),
+    size: getResponsiveSize(0.6, 0.8),
   },
   spotify: {
     title: 'Spotify',
     icon: '🎵',
     position: { x: 200, y: 80 },
-    size: getResponsiveSize(0.7, 0.8, 800, 650),
+    size: getResponsiveSize(0.7, 0.8),
   },
   chatbot: {
     title: 'AnkiTalk',
     icon: '🤖',
     position: { x: 250, y: 90 },
-    size: getResponsiveSize(0.65, 0.85, 800, 700),
+    size: getResponsiveSize(0.65, 0.85),
   },
 };
 
