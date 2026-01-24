@@ -17,9 +17,10 @@ interface TerminalProps {
   onOpenApp?: (id: string) => void;
   onCreateFolder?: (name: string) => void;
   initialCommand?: string;
+  onClose?: () => void;
 }
 
-export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand }: TerminalProps) {
+export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand, onClose }: TerminalProps) {
   const [lines, setLines] = useState<TerminalLine[]>([
     { type: 'output', content: <WelcomeCommand /> },
   ]);
@@ -238,9 +239,9 @@ export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand }: Termin
         } else if (args[0] === 'review' || args[0] === 'add-review') {
           onOpenApp?.('review');
           output = 'Opening Add Review...';
-        } else if (args[0] === 'chatbot' || args[0] === 'ankit2.0') {
+        } else if (args[0] === 'chatbot' || args[0] === 'ankitalk') {
           onOpenApp?.('chatbot');
-          output = 'Opening Ankit2.0...';
+          output = 'Opening Ankit 2.0...';
         } else {
           output = `open: ${args[0]}: Application not found`;
         }
@@ -250,7 +251,12 @@ export function TerminalV2({ onOpenApp, onCreateFolder, initialCommand }: Termin
         break;
       case 'exit':
       case 'quit':
-        output = "This terminal cannot be closed using 'exit'. Use the window controls.";
+        if (onClose) {
+          onClose();
+          return;
+        } else {
+          output = "This terminal cannot be closed using 'exit'. Use the window controls.";
+        }
         break;
       case '':
         break;

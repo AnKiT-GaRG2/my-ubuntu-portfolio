@@ -316,6 +316,7 @@ export function Desktop() {
           onOpenApp={openWindow} 
           onCreateFolder={handleCreateFolder}
           initialCommand={metadata?.initialCommand as string}
+          onClose={() => closeWindow(id)}
         />;
       case 'vscode':
         return <VSCode />;
