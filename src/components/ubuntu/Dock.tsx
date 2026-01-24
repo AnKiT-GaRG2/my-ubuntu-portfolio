@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WindowState } from '@/types/ubuntu';
 import { ApplicationsGrid } from './ApplicationsGrid';
 
@@ -24,6 +24,38 @@ const dockApps = [
 
 export function Dock({ openWindows, onOpenApp, desktopApps = [], userFolders = [] }: DockProps) {
   const [showApplications, setShowApplications] = useState(false);
+  const [iconSize, setIconSize] = useState(40); // Default icon size
+
+  // Calculate responsive icon size based on viewport height
+  useEffect(() => {
+    const calculateIconSize = () => {
+      const viewportHeight = window.innerHeight;
+      const topBarHeight = 28; // TopBar height
+      const availableHeight = viewportHeight - topBarHeight;
+      
+      // Total dock items: dockApps + separator + Show Applications button
+      const totalItems = dockApps.length + 2; // +2 for separator and show applications
+      
+      // Calculate available space per item
+      const paddingAndGaps = 16 * 2 + (totalItems * 8); // padding + gaps
+      const availableSpace = (availableHeight - paddingAndGaps) / totalItems;
+      
+      // Calculate icon size (constrain between 32 and 56 pixels)
+      const minIconSize = 32;
+      const maxIconSize = 56;
+      const calculatedSize = Math.floor(availableSpace * 0.7); // Use 70% of available space
+      const finalSize = Math.max(minIconSize, Math.min(maxIconSize, calculatedSize));
+      
+      setIconSize(finalSize);
+    };
+    
+    calculateIconSize();
+    window.addEventListener('resize', calculateIconSize);
+    return () => window.removeEventListener('resize', calculateIconSize);
+  }, []);
+
+  const containerSize = iconSize + 8; // Icon size + padding
+  const indicatorHeight = Math.floor(iconSize * 0.6); // Indicator proportional to icon
 
   return (
     <>
@@ -36,16 +68,27 @@ export function Dock({ openWindows, onOpenApp, desktopApps = [], userFolders = [
               <button
                 key={app.id}
                 onClick={() => onOpenApp(app.id)}
-                className="dock-icon relative w-14 h-14 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors group"
+                className="dock-icon relative flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors group"
+                style={{ width: containerSize, height: containerSize }}
                 title={app.name}
               >
                 {app.type === 'image' ? (
-                  <img src={app.icon} alt={app.name} className="w-10 h-10 object-contain opacity-70 group-hover:opacity-100 transition-opacity" />
+                  <img 
+                    src={app.icon} 
+                    alt={app.name} 
+                    className="object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
+                    style={{ width: iconSize, height: iconSize }}
+                  />
                 ) : (
-                  <span className="text-2xl opacity-70 group-hover:opacity-100">{app.icon}</span>
+                  <span className="opacity-70 group-hover:opacity-100" style={{ fontSize: iconSize }}>
+                    {app.icon}
+                  </span>
                 )}
                 {isOpen && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r bg-accent-dynamic" />
+                  <span 
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-r bg-accent-dynamic" 
+                    style={{ height: indicatorHeight }}
+                  />
                 )}
                 <div className="absolute left-16 ml-2 bg-gray-800 text-gray-200 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                   {app.name}
@@ -63,13 +106,15 @@ export function Dock({ openWindows, onOpenApp, desktopApps = [], userFolders = [
           {/* Show Applications button */}
           <button
             onClick={() => setShowApplications(true)}
-            className="dock-icon relative w-14 h-14 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors group"
+            className="dock-icon relative flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors group"
+            style={{ width: containerSize, height: containerSize }}
             title="Show Applications"
           >
             <img
               src="/icons/ShowApplications.jpg"
               alt="Show Applications"
-              className="w-10 h-10 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+              className="object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+              style={{ width: iconSize, height: iconSize }}
             />
             <div className="absolute left-16 ml-2 bg-gray-800 text-gray-200 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
               Show Applications
