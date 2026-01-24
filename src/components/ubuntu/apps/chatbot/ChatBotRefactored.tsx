@@ -7,6 +7,7 @@ import {
   detectVSCodeIntent,
   detectFolderIntent,
   detectSpotifyIntent,
+  detectBackgroundIntent,
   generateAskFolderNameResponse,
   generateFolderCreatedResponse,
   detectCertificateIntent,
@@ -272,7 +273,20 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         setIsTyping(false);
         return;
       }
-
+      // Check for Background change intent using AI
+      console.log('🖼️ Starting Background intent detection...');
+      const hasBackgroundIntent = await detectBackgroundIntent(userInput, GROQ_API_KEY);
+      
+      if (hasBackgroundIntent) {
+        console.log('✅ Opening Settings with Background section...');
+        if (onOpenApp) {
+          onOpenApp('settings', { initialSection: 'background' });
+        }
+        addAssistantMessage("Sure! I've opened the Settings with the Background section for you. Choose a wallpaper you like! 🖼️", shouldSpeak);
+        setIsLoading(false);
+        setIsTyping(false);
+        return;
+      }
       // Check for VS Code intent using AI
       console.log('💻 Starting VS Code intent detection...');
       const hasVSCodeIntent = await detectVSCodeIntent(userInput, GROQ_API_KEY);

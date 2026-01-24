@@ -30,7 +30,7 @@ export { callGroqAPI } from './callGroqAPI';
 export { getColorVariants } from './UI/colorUtils';
 export { renderMessageWithLinks } from './UI/renderMessageWithLinks';
 export { ANKIT_CONTEXT } from './context/ankitContext';
-
+export { detectBackgroundIntent } from './intents/detectBackgroundIntent';
 // UI Components
 export { ChatHeader } from './UI/ChatHeader';
 export { QuickQuestions } from './UI/QuickQuestions';
