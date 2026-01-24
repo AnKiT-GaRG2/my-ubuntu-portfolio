@@ -60,6 +60,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
   const [pdfTitle, setPdfTitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   // Track if the current message was from voice input
   const [wasVoiceInput, setWasVoiceInput] = useState(false);
@@ -145,6 +146,12 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
 
   const handleQuickQuestion = (question: string) => {
     setInput(question);
+    // Focus the input after setting the question
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
   };
 
   // Helper function to add assistant message with CONDITIONAL voice
@@ -517,6 +524,7 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
 
       {/* Input Area */}
       <ChatInput
+        ref={inputRef}
         value={input}
         isLoading={isLoading}
         isBlocked={isBlocked}

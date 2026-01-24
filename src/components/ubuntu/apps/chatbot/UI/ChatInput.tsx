@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Send, Loader2 } from 'lucide-react';
 import { VoiceMicButton } from './VoiceMicButton';
 
@@ -19,7 +19,7 @@ interface ChatInputProps {
   voiceSupported?: boolean;
 }
 
-export function ChatInput({
+export const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
   value,
   isLoading,
   isBlocked,
@@ -33,8 +33,11 @@ export function ChatInput({
   isListening = false,
   onVoiceToggle,
   voiceSupported = false,
-}: ChatInputProps) {
+}, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Expose the internal ref to parent component
+  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
   // Keep input focused
   useEffect(() => {
@@ -161,4 +164,4 @@ export function ChatInput({
       </div>
     </div>
   );
-}
+});
