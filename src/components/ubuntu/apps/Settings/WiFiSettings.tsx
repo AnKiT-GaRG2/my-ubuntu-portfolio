@@ -21,7 +21,7 @@ export function WiFiSettings() {
   ];
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6">
       <div className="bg-ubuntu-window-header rounded-lg">
         {/* Header with Wi-Fi toggle */}
         <div className="flex items-center justify-between p-4 border-b border-border/50">

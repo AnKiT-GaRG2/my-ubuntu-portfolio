@@ -4,8 +4,8 @@ export function BluetoothSettings() {
   const bluetoothEnabled = false;
 
   return (
-    <div className="h-full flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl bg-ubuntu-window-header rounded-lg overflow-hidden">
+    <div className="h-full flex items-top justify-center p-6">
+      <div className="w-full bg-ubuntu-window-header rounded-lg overflow-hidden">
         {/* Header with Bluetooth toggle */}
         <div className="flex items-center justify-between p-4 border-b border-border/50">
           <div className="flex items-center gap-3">
