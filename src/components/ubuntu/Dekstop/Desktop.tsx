@@ -344,7 +344,7 @@ export function Desktop() {
       case 'spotify':
         return <Spotify />;
       case 'chatbot':
-        return <ChatBot accentColor={accentColor} onOpenApp={openWindow} />;
+        return <ChatBot accentColor={accentColor} onOpenApp={openWindow} onPowerOff={handleLogout} />;
       default:
         return <div className="p-4">App content for {id}</div>;
     }

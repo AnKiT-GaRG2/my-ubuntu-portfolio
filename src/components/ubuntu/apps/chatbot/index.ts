@@ -34,6 +34,7 @@ export { renderMessageWithLinks } from './UI/renderMessageWithLinks';
 export { ANKIT_CONTEXT } from './context/ankitContext';
 export { detectBackgroundIntent } from './intents/detectBackgroundIntent';
 export { detectAppearanceIntent } from './intents/detectAppearanceIntent';
+export { detectPowerOffIntent } from './intents/detectPoweroffIntent';
 // UI Components
 export { ChatHeader } from './UI/ChatHeader';
 export { QuickQuestions } from './UI/QuickQuestions';

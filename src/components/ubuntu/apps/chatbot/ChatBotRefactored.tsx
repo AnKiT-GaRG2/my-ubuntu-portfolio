@@ -9,6 +9,7 @@ import {
   detectSpotifyIntent,
   detectBackgroundIntent,
   detectAppearanceIntent,
+  detectPowerOffIntent,
   generateAskFolderNameResponse,
   generateFolderCreatedResponse,
   detectCertificateIntent,
@@ -34,6 +35,7 @@ import {
 interface ChatBotProps {
   accentColor: string;
   onOpenApp?: (appId: string, metadata?: Record<string, string | number | boolean>) => void;
+  onPowerOff?: () => void;
 }
 
 interface Message {
@@ -41,7 +43,7 @@ interface Message {
   content: string;
 }
 
-export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
+export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
   console.log('🎬 [ChatBot] Component rendering/created');
   
   const [messages, setMessages] = useState<Message[]>([
@@ -398,6 +400,23 @@ export function ChatBot({ accentColor, onOpenApp }: ChatBotProps) {
         addAssistantMessage("Great! I've opened the Spotify app for you. Enjoy your music! 🎶", shouldSpeak);
         setIsLoading(false);
         setIsTyping(false);
+        return;
+      }
+      // Check for Power Off intent using AI
+      console.log('⚡ Starting Power Off intent detection...');
+      const hasPowerOffIntent = await detectPowerOffIntent(userInput, GROQ_API_KEY);
+      
+      if (hasPowerOffIntent) {
+        console.log('✅ Triggering power off...');
+        addAssistantMessage("Powering off the system... Goodbye! 👋", shouldSpeak);
+        setIsLoading(false);
+        setIsTyping(false);
+        // Trigger power off after a short delay
+        setTimeout(() => {
+          if (onPowerOff) {
+            onPowerOff();
+          }
+        }, 1500);
         return;
       }
       console.log('🎯 Starting review intent detection...');
