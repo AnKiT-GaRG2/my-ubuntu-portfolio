@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+# 🖥️ My Ubuntu Portfolio — Ankit Garg
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img src="public/WebIcon.png" alt="Ubuntu Portfolio Logo" width="140" />
+</p>
 
-Currently, two official plugins are available:
+A **desktop-style portfolio website** built with **React + TypeScript + Vite**, designed to mimic a real **Ubuntu operating system experience**.  
+The project features draggable windows, desktop icons, system controls, and a **voice-controlled AI assistant** that can interact with the UI like a real desktop assistant.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🌐 **Live Demo:** https://ankit-ubuntu-portfolio.vercel.app/
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Project Overview
 
-## Expanding the ESLint configuration
+This portfolio is not a traditional website — it behaves like an **operating system UI**.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+You can:
+- Open applications
+- Manage windows
+- Use a terminal
+- Interact via **voice commands**
+- Control UI behavior like fullscreen, themes, and power actions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The goal of this project is to explore **voice-first interfaces**, **human–computer interaction**, and **OS-like behavior on the web**.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ⭐ Ankit 2.0 — AI Desktop Assistant
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Ankit 2.0** is the built-in AI voice assistant designed to behave like a **desktop controller**, not just a chatbot.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🎙️ Voice Capabilities
+Using voice commands, you can:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Create folders  
+- Open my resume  
+- Open certificates by simply saying the **certificate name**  
+- Add a review using the Review application  
+- Change background and accent color of the UI  
+- Open Calculator  
+- Launch VS Code, Terminal, and Spotify  
+- Power off the Ubuntu portfolio  
+
+### 🧑‍💻 Terminal Commands
+The terminal supports a built-in command system.
+
+```bash
+help
