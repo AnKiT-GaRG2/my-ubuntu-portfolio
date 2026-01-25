@@ -35,14 +35,14 @@ export async function detectResumeIntent(
             content: `You are a strict intent detection system for resume-related queries. Analyze the user's message and determine:
 
 1. If they want to SHOW/OPEN the resume (view/display/open the PDF file)
-2. If they want INFO about the resume (general questions about experience, skills, background)
+2. If they want INFO about the resume not skills (details about education, experience,) 
 
 IMPORTANT - BE STRICT:
 - SHOW: ONLY if user explicitly wants to VIEW/OPEN/DISPLAY/SEE the actual resume file
   Keywords: "show resume", "open resume", "display resume", "view resume", "see your resume", "show me your resume", "let me see resume"
-  
-- INFO: If user asks about details, experience, skills, background WITHOUT explicitly asking to open/show
-  Keywords: "what's in your resume", "tell me about your resume", "resume details", "your experience", "your skills"
+
+- INFO: If user asks about details, background WITHOUT explicitly asking to open/show it does not includes my skills
+  Keywords: "what's in your resume", "tell me about your resume", "resume details", "your experience"
 
 - NONE: If not resume-related at all
 
@@ -57,7 +57,6 @@ Examples:
 - "what's in your resume?" → INFO
 - "tell me about your resume" → INFO
 - "what experience do you have?" → INFO
-- "your skills" → INFO
 - "resume details" → INFO
 - "what's your background?" → INFO
 - "hello" → NONE

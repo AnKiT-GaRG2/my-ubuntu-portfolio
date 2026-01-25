@@ -46,6 +46,16 @@ Examples of Calculator intent:
 - "math karna hai"
 - "calculator se kuch karna hai"
 
+Examples of NO Calculator intent:
+- "open browser"
+- "play music"
+- "tell me about your skills"
+- "skills chahiye"
+- "what are your features"
+- "open settings"
+- "what are your capabilities"
+- "skills bata apne"
+- 
 Respond with ONLY "YES" if they want to open Calculator, or "NO" if they don't.`
           },
           {
