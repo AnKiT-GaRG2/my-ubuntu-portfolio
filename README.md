@@ -42,8 +42,18 @@ Using voice commands, you can:
 - Launch VS Code, Terminal, and Spotify  
 - Power off the Ubuntu portfolio  
 
+### 👤 About Me Application
+The desktop also includes an About Me application.
+
+- Available directly on the desktop
+
+- Contains all my personal, academic, and professional information
+
+- Acts as a quick profile overview inside the OS-style environment
 ### 🧑‍💻 Terminal Commands
 The terminal supports a built-in command system.
+check all the commands using help command in the terminal.
+
 
 ```bash
 help
