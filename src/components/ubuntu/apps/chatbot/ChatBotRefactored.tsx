@@ -411,7 +411,7 @@ export function ChatBot({ accentColor, onOpenApp, onPowerOff }: ChatBotProps) {
         } else if (folderIntent.folderName) {
           addAssistantMessage(generateFolderCreatedResponse(folderIntent.folderName), shouldSpeak);
           if (onOpenApp) {
-            onOpenApp('terminal', { initialCommand: `mkdir "${folderIntent.folderName}"`, autoClose: true });
+            onOpenApp('terminal', { initialCommand: `mkdir ${folderIntent.folderName}`, autoClose: true });
           }
         }
         setIsLoading(false);
