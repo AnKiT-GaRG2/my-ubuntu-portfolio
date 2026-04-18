@@ -85,7 +85,22 @@ const defaultWindows: Record<string, Omit<WindowState, 'id' | 'isOpen' | 'isMini
 };
 
 export function useWindowManager() {
-  const [windows, setWindows] = useState<WindowState[]>([]);
+  const [windows, setWindows] = useState<WindowState[]>(() => {
+    const aboutConfig = defaultWindows.about;
+    const aboutPosition = getCenteredPosition(aboutConfig.size.width, aboutConfig.size.height);
+
+    return [
+      {
+        id: 'about',
+        ...aboutConfig,
+        position: aboutPosition,
+        isOpen: true,
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: 1,
+      },
+    ];
+  });
   const [maxZIndex, setMaxZIndex] = useState(1);
 
   const openWindow = useCallback((id: string, metadata?: Record<string, string | number | boolean>) => {
